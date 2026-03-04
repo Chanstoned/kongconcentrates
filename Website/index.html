@@ -387,7 +387,7 @@ async function sendForm(){
   btn.textContent = 'Sending...';
 
   try{
-    const res = await fetch('/', {
+    const res = await fetch(window.location.pathname, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
