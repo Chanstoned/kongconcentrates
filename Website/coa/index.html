@@ -128,7 +128,7 @@ body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif
 header{
   padding:28px 40px 24px;
   border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:18px;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
 }
 .hdr-logo{
   width:52px;height:52px;
@@ -144,8 +144,8 @@ header{
 }
 .hdr-sub{
   font-family:'DM Mono',monospace;
-  font-size:9px;
-  letter-spacing:3px;
+  font-size:11px;
+  letter-spacing:2px;
   color:var(--gold);
   margin-top:5px;
   text-transform:uppercase;
@@ -153,7 +153,7 @@ header{
 .hdr-meta{
   margin-left:auto;
   font-family:'DM Mono',monospace;
-  font-size:9px;
+  font-size:11px;
   color:#888;
   line-height:2;
   letter-spacing:0.5px;
@@ -169,7 +169,7 @@ header{
 .section-lbl .ln{flex:1;height:1px;background:var(--border);}
 .section-lbl span{
   font-family:'DM Mono',monospace;
-  font-size:9px;letter-spacing:3px;
+  font-size:11px;letter-spacing:2px;
   text-transform:uppercase;color:var(--gold);
   white-space:nowrap;
 }
@@ -199,7 +199,7 @@ header{
 
 .card-type{
   font-family:'DM Mono',monospace;
-  font-size:9px;letter-spacing:3px;
+  font-size:11px;letter-spacing:2px;
   text-transform:uppercase;color:var(--gold);
   margin-bottom:7px;opacity:1;
 }
@@ -210,7 +210,7 @@ header{
 }
 .card-batch{
   font-family:'DM Mono',monospace;
-  font-size:9px;color:#666;
+  font-size:11px;color:#666;
   letter-spacing:0.5px;margin-bottom:18px;
 }
 
@@ -229,7 +229,7 @@ header{
 }
 .stat-l{
   font-family:'DM Mono',monospace;
-  font-size:8px;letter-spacing:1.5px;
+  font-size:10px;letter-spacing:1px;
   text-transform:uppercase;color:#888;
   margin-top:2px;
 }
@@ -237,7 +237,7 @@ header{
 /* terpenes */
 .terps-lbl{
   font-family:'DM Mono',monospace;
-  font-size:7px;letter-spacing:2px;
+  font-size:10px;letter-spacing:1.5px;
   text-transform:uppercase;color:#777;
   margin-bottom:6px;
 }
@@ -245,24 +245,24 @@ header{
 .terp{display:flex;align-items:center;gap:7px;}
 .t-name{
   font-family:'DM Mono',monospace;
-  font-size:8px;color:#aaa;
-  width:110px;flex-shrink:0;
+  font-size:11px;color:#aaa;
+  width:120px;flex-shrink:0;
 }
 .t-track{flex:1;height:3px;background:#222;position:relative;}
 .t-bar{position:absolute;left:0;top:0;height:100%;background:var(--gold);opacity:0.75;}
 .t-pct{
   font-family:'DM Mono',monospace;
-  font-size:8px;color:#aaa;
-  width:30px;text-align:right;flex-shrink:0;
+  font-size:11px;color:#aaa;
+  width:36px;text-align:right;flex-shrink:0;
 }
 
 /* pass chips */
 .chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:18px;}
 .chip{
   font-family:'DM Mono',monospace;
-  font-size:8px;letter-spacing:1.5px;
+  font-size:10px;letter-spacing:1px;
   text-transform:uppercase;
-  padding:3px 6px;
+  padding:3px 8px;
   border:1px solid #2a5a3a;
   color:#5aaa72;border-radius:1px;
 }
@@ -275,7 +275,7 @@ header{
   border:1px solid #333;
   color:#888;
   font-family:'DM Mono',monospace;
-  font-size:8px;letter-spacing:3px;
+  font-size:11px;letter-spacing:2px;
   text-transform:uppercase;
   cursor:pointer;
   transition:all 0.2s;
@@ -285,7 +285,7 @@ header{
 
 .card-date{
   font-family:'DM Mono',monospace;
-  font-size:8px;color:#555;
+  font-size:10px;color:#555;
   margin-top:8px;letter-spacing:0.5px;
 }
 
@@ -372,8 +372,9 @@ header{
 @media(max-width:700px){
   .pdf-embed{display:none;}
   .pdf-mobile{display:flex;}
-  header{padding:20px;flex-wrap:wrap;}
-  .hdr-meta{margin-left:0;text-align:left;}
+  header{padding:14px 16px;flex-wrap:wrap;gap:12px;}
+  .hdr-meta{margin-left:0;text-align:left;font-size:10px;}
+  .hdr-sub{font-size:10px;}
   .section-lbl{padding:32px 20px 0;}
   .coa-grid{grid-template-columns:1fr;}
 }
@@ -388,7 +389,7 @@ footer{
 }
 footer p{
   font-family:'DM Mono',monospace;
-  font-size:9px;color:#666;letter-spacing:0.5px;
+  font-size:11px;color:#666;letter-spacing:0.5px;
 }
 footer a{color:#888;text-decoration:none;}
 </style>

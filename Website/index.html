@@ -40,12 +40,12 @@ body{background:var(--black);font-family:'Barlow Condensed',sans-serif;color:var
 #site.show{display:flex}
 
 /* header */
-header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;}
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;flex-wrap:wrap;}
 .hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
 .htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
-.htext p{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-top:3px;}
-.hnav{margin-left:auto;display:flex;gap:8px;}
-.hnav a{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:9px 16px;border:1px solid #242424;transition:all 0.2s;}
+.htext p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-top:3px;}
+.hnav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+.hnav a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;}
 .hnav a:hover{color:var(--gold);border-color:rgba(201,168,76,0.4);}
 
 /* ━━ HERO ━━ */
@@ -66,10 +66,10 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 .nav-card:hover{border-color:rgba(201,168,76,0.45);background:#111;transform:translateY(-3px);}
 .nc-icon{width:36px;height:36px;border:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;margin-bottom:20px;flex-shrink:0;}
 .nc-icon svg{width:16px;height:16px;stroke:rgba(201,168,76,0.65);}
-.nc-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;opacity:0.75;}
+.nc-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;opacity:0.75;}
 .nc-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:0.08em;line-height:1;margin-bottom:12px;}
-.nc-desc{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.05em;color:rgba(240,234,216,0.5);line-height:2;flex:1;}
-.nc-arrow{margin-top:22px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(201,168,76,0.5);display:flex;align-items:center;gap:8px;transition:color 0.2s;}
+.nc-desc{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.05em;color:rgba(240,234,216,0.5);line-height:2;flex:1;}
+.nc-arrow{margin-top:22px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(201,168,76,0.5);display:flex;align-items:center;gap:8px;transition:color 0.2s;}
 .nav-card:hover .nc-arrow{color:var(--gold);}
 .nc-arrow svg{width:12px;height:12px;stroke:currentColor;transition:transform 0.2s;}
 .nav-card:hover .nc-arrow svg{transform:translateX(4px);}
@@ -77,14 +77,14 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 /* DIVIDER */
 .divider{display:flex;align-items:center;gap:18px;padding:0 40px;margin:72px 0 0;}
 .divider .ln{flex:1;height:1px;background:#1e1e1e;}
-.divider span{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:#444;white-space:nowrap;}
+.divider span{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:#444;white-space:nowrap;}
 
 /* BRAND STRIP */
 .brand-strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #181818;border-bottom:1px solid #181818;}
 .bs-item{padding:36px 20px;text-align:center;border-right:1px solid #181818;}
 .bs-item:last-child{border-right:none}
 .bs-val{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,5vw,48px);color:var(--gold2);line-height:1;}
-.bs-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(240,234,216,0.35);margin-top:7px;}
+.bs-lbl{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.35);margin-top:7px;}
 
 /* LOCATIONS - COMING SOON */
 #locations{scroll-margin-top:72px;}
@@ -94,7 +94,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
   border-top:1px solid #181818;border-bottom:1px solid #181818;
 }
 .cs-badge{
-  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.4em;
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.3em;
   text-transform:uppercase;color:var(--gold);opacity:0.6;
   border:1px solid rgba(201,168,76,0.2);padding:7px 18px;
   margin-bottom:24px;
@@ -105,8 +105,8 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
   color:var(--off-white);margin-bottom:14px;
 }
 .cs-sub{
-  font-family:'DM Mono',monospace;font-size:11px;
-  letter-spacing:0.2em;color:rgba(240,234,216,0.4);
+  font-family:'DM Mono',monospace;font-size:13px;
+  letter-spacing:0.15em;color:rgba(240,234,216,0.4);
   text-transform:uppercase;line-height:2.2;max-width:420px;
 }
 
@@ -122,8 +122,8 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
   margin-bottom:8px;
 }
 .contact-lead{
-  font-family:'DM Mono',monospace;font-size:11px;
-  letter-spacing:0.15em;color:rgba(240,234,216,0.45);
+  font-family:'DM Mono',monospace;font-size:13px;
+  letter-spacing:0.12em;color:rgba(240,234,216,0.45);
   text-transform:uppercase;line-height:2;
   margin-bottom:40px;
 }
@@ -131,8 +131,8 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
 .form-group{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
 label{
-  font-family:'DM Mono',monospace;font-size:9px;
-  letter-spacing:0.25em;text-transform:uppercase;color:rgba(240,234,216,0.45);
+  font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.45);
 }
 input,textarea,select{
   background:#0e0e0e;border:1px solid #262626;
@@ -185,13 +185,15 @@ select option{background:#0e0e0e;}
 
 /* FOOTER */
 footer{margin-top:auto;padding:28px 40px;border-top:1px solid #181818;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-footer p{font-family:'DM Mono',monospace;font-size:9px;color:#363636;letter-spacing:0.05em;}
+footer p{font-family:'DM Mono',monospace;font-size:11px;color:#363636;letter-spacing:0.05em;}
 footer a{color:#555;text-decoration:none;}
 footer a:hover{color:var(--gold)}
 
 @media(max-width:620px){
-  header{padding:10px 16px;}
+  header{padding:10px 16px;gap:10px;}
   .hnav .hide-mobile{display:none}
+  .hnav{gap:6px;}
+  .hnav a{padding:7px 10px;font-size:10px;letter-spacing:0.1em;}
   .hero{padding:60px 20px 44px;}
   .divider{padding:0 20px;}
   .brand-strip{grid-template-columns:1fr;}
