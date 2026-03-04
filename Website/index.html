@@ -157,6 +157,15 @@ select option{background:#0e0e0e;}
 .submit-btn:hover{background:var(--gold);color:var(--black);box-shadow:0 0 24px rgba(201,168,76,0.25)}
 .submit-btn:disabled{opacity:0.4;cursor:not-allowed}
 
+.form-error{
+  display:none;
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:0.1em;color:#c0392b;
+  border:1px solid rgba(192,57,43,0.35);
+  padding:14px 16px;margin-top:14px;line-height:1.8;
+  text-align:center;
+}
+
 .form-success{
   display:none;
   text-align:center;padding:40px 20px;
@@ -303,20 +312,22 @@ footer a:hover{color:var(--gold)}
     <h3>Get in Touch</h3>
     <p class="contact-lead">Wholesale inquiries, retail partnerships,<br>or general questions - we'd love to hear from you.</p>
 
-    <div id="contact-form">
+    <form id="contact-form" name="contact" netlify data-netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contact">
+      <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
       <div class="form-row">
         <div class="form-group">
           <label for="f-name">Name</label>
-          <input type="text" id="f-name" placeholder="Your name" required>
+          <input type="text" id="f-name" name="name" placeholder="Your name" required>
         </div>
         <div class="form-group">
           <label for="f-email">Email</label>
-          <input type="email" id="f-email" placeholder="your@email.com" required>
+          <input type="email" id="f-email" name="email" placeholder="your@email.com" required>
         </div>
       </div>
       <div class="form-group">
         <label for="f-subject">Inquiry Type</label>
-        <select id="f-subject">
+        <select id="f-subject" name="subject">
           <option value="">Select a topic</option>
           <option value="Wholesale / Retail Partnership">Wholesale / Retail Partnership</option>
           <option value="Carry Our Products">Carry Our Products</option>
@@ -327,10 +338,11 @@ footer a:hover{color:var(--gold)}
       </div>
       <div class="form-group">
         <label for="f-msg">Message</label>
-        <textarea id="f-msg" placeholder="Tell us how we can help..."></textarea>
+        <textarea id="f-msg" name="message" placeholder="Tell us how we can help..."></textarea>
       </div>
-      <button class="submit-btn" id="submit-btn" onclick="sendForm()">Send Message</button>
-    </div>
+      <button class="submit-btn" id="submit-btn" type="button" onclick="sendForm()">Send Message</button>
+      <div class="form-error" id="form-error"></div>
+    </form>
 
     <div class="form-success" id="form-success">
       <div class="check">&#10003;</div>
@@ -361,8 +373,12 @@ async function sendForm(){
   const subject = document.getElementById('f-subject').value;
   const msg     = document.getElementById('f-msg').value.trim();
 
+  const errEl = document.getElementById('form-error');
+  errEl.style.display = 'none';
+
   if(!name || !email || !msg){
-    alert('Please fill in your name, email, and message.');
+    errEl.textContent = 'Please fill in your name, email, and message.';
+    errEl.style.display = 'block';
     return;
   }
 
@@ -370,30 +386,25 @@ async function sendForm(){
   btn.disabled = true;
   btn.textContent = 'Sending...';
 
-  // Send via Formspree - replace YOUR_FORM_ID with your Formspree endpoint
   try{
-    const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
-      method:'POST',
-      headers:{'Content-Type':'application/json', 'Accept':'application/json'},
-      body: JSON.stringify({
+    const res = await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        'form-name': 'contact',
         name, email,
         subject: subject || 'General Inquiry',
-        message: msg,
-        _replyto: email,
-        _subject: 'Kong Concentrates - ' + (subject || 'New Inquiry')
-      })
+        message: msg
+      }).toString()
     });
-
-    if(res.ok){
-      document.getElementById('contact-form').style.display='none';
-      document.getElementById('form-success').style.display='block';
-    } else {
-      throw new Error('Send failed');
-    }
+    if(!res.ok) throw new Error(res.status);
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
   } catch(e){
-    // fallback to mailto if fetch fails
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nTopic: ${subject}\n\n${msg}`);
-    window.location.href = `mailto:process@kongconcentrates.com?subject=Kong Concentrates - ${subject || 'Inquiry'}&body=${body}`;
+    btn.disabled = false;
+    btn.textContent = 'Send Message';
+    errEl.textContent = 'Something went wrong. Please try again or email us directly at process@kongconcentrates.com';
+    errEl.style.display = 'block';
   }
 }
 </script>
