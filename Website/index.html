@@ -387,7 +387,7 @@ async function sendForm(){
   btn.textContent = 'Sending...';
 
   try{
-    const res = await fetch('/', {
+    const res = await fetch(window.location.pathname, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
@@ -397,13 +397,13 @@ async function sendForm(){
         message: msg
       }).toString()
     });
-    if(!res.ok) throw new Error(res.status);
+    if(!res.ok) throw new Error('HTTP ' + res.status);
     document.getElementById('contact-form').style.display = 'none';
     document.getElementById('form-success').style.display = 'block';
   } catch(e){
     btn.disabled = false;
     btn.textContent = 'Send Message';
-    errEl.textContent = 'Something went wrong. Please try again or email us directly at process@kongconcentrates.com';
+    errEl.textContent = 'Something went wrong (' + e.message + '). Please email us directly at process@kongconcentrates.com';
     errEl.style.display = 'block';
   }
 }
