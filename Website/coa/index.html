@@ -150,16 +150,7 @@ header{
   margin-top:5px;
   text-transform:uppercase;
 }
-.hdr-meta{
-  margin-left:auto;
-  font-family:'DM Mono',monospace;
-  font-size:11px;
-  color:#888;
-  line-height:2;
-  letter-spacing:0.5px;
-  text-align:right;
-}
-.hdr-meta span{color:#aaa;}
+
 
 /* Section label */
 .section-lbl{
@@ -373,7 +364,6 @@ header{
   .pdf-embed{display:none;}
   .pdf-mobile{display:flex;}
   header{padding:14px 16px;flex-wrap:wrap;gap:12px;}
-  .hdr-meta{margin-left:0;text-align:left;font-size:10px;}
   .hdr-sub{font-size:10px;}
   .section-lbl{padding:32px 20px 0;}
   .coa-grid{grid-template-columns:1fr;}
@@ -422,23 +412,24 @@ footer a{color:#888;text-decoration:none;}
         <div class="hdr-sub">Certificates of Analysis &nbsp;&middot;&nbsp; 2026</div>
       </div>
     </a>
-    <div class="hdr-meta">
-      <div>Tested by <span>Sunrise Labs</span></div>
-      <div>Edmond, OK &nbsp;&middot;&nbsp; License <span>PAAA-NYSE-PYO4</span></div>
-    </div>
+    <nav style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="/" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(200,169,110,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c';this.style.borderColor='rgba(201,168,76,0.4)'" onmouseout="this.style.color='rgba(200,169,110,0.55)';this.style.borderColor='#242424'">Home</a>
+      <a href="/menu" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(200,169,110,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c';this.style.borderColor='rgba(201,168,76,0.4)'" onmouseout="this.style.color='rgba(200,169,110,0.55)';this.style.borderColor='#242424'">Menu</a>
+      <a href="/coa" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(200,169,110,0.55);text-decoration:none;padding:8px 14px;border:1px solid rgba(201,168,76,0.35);" aria-current="page">Lab Results</a>
+    </nav>
   </header>
 
   <!-- HASH ROSIN -->
   <div class="section-lbl">
     <div class="ln"></div>
-    <span>Hash Rosin Badders &nbsp;&middot;&nbsp; Non-Solvent</span>
+    <span>Live Rosins &nbsp;&middot;&nbsp; Non-Solvent</span>
     <div class="ln"></div>
   </div>
   <div class="coa-grid">
 
     
     <div class="coa-card" onclick="openPDF('pink_runtz', 'Pink Runtz', 'KC-26-ECE-01 &middot; #114400-01')">
-      <div class="card-type">Hash Rosin Badder</div>
+      <div class="card-type">Live Rosin</div>
       <div class="card-name">Pink Runtz</div>
       <div class="card-batch">KC-26-ECE-01 &middot; #114400-01</div>
       <div class="stats">
@@ -481,7 +472,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
     
     <div class="coa-card" onclick="openPDF('bacio_mints', 'Bacio Mints', 'KC-26-KC-01 &middot; #114399-01')">
-      <div class="card-type">Hash Rosin Badder</div>
+      <div class="card-type">Live Rosin</div>
       <div class="card-name">Bacio Mints</div>
       <div class="card-batch">KC-26-KC-01 &middot; #114399-01</div>
       <div class="stats">
@@ -524,7 +515,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
     
     <div class="coa-card" onclick="openPDF('hooch_white_rainbow', 'Hooch x White Rainbow', 'KC-26-ECE-03 &middot; #114402-01')">
-      <div class="card-type">Hash Rosin Badder</div>
+      <div class="card-type">Live Rosin</div>
       <div class="card-name">Hooch x White Rainbow</div>
       <div class="card-batch">KC-26-ECE-03 &middot; #114402-01</div>
       <div class="stats">
@@ -567,7 +558,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
     
     <div class="coa-card" onclick="openPDF('sticky_buns', 'Sticky Buns', 'KC-26-ECE-02 &middot; #114401-01')">
-      <div class="card-type">Hash Rosin Badder</div>
+      <div class="card-type">Live Rosin</div>
       <div class="card-name">Sticky Buns</div>
       <div class="card-batch">KC-26-ECE-02 &middot; #114401-01</div>
       <div class="stats">
@@ -610,7 +601,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
     
     <div class="coa-card" onclick="openPDF('devil_driver', 'Devil Driver', 'KC-26-ECE-05 &middot; #114404-01')">
-      <div class="card-type">Hash Rosin Badder</div>
+      <div class="card-type">Live Rosin</div>
       <div class="card-name">Devil Driver</div>
       <div class="card-batch">KC-26-ECE-05 &middot; #114404-01</div>
       <div class="stats">
@@ -653,7 +644,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
     
     <div class="coa-card" onclick="openPDF('grape_pie', 'Grape Pie', 'KC-26-ECE-04 &middot; #114403-01')">
-      <div class="card-type">Hash Rosin Badder</div>
+      <div class="card-type">Live Rosin</div>
       <div class="card-name">Grape Pie</div>
       <div class="card-batch">KC-26-ECE-04 &middot; #114403-01</div>
       <div class="stats">
@@ -796,7 +787,6 @@ footer a{color:#888;text-decoration:none;}
 
   <footer>
     <p>Kong Concentrates LLC &nbsp;&middot;&nbsp; Grove, OK 74344 &nbsp;&middot;&nbsp; <a href="https://kongconcentrates.com">kongconcentrates.com</a></p>
-    <p>Tested by Sunrise Labs, Edmond OK &nbsp;&middot;&nbsp; Lab Director Alex Tang</p>
   </footer>
 </div>
 
@@ -805,7 +795,7 @@ footer a{color:#888;text-decoration:none;}
   <div class="modal-header">
     <div>
       <div class="modal-title" id="modal-title">Certificate of Analysis</div>
-      <div class="modal-sub" id="modal-sub">Sunrise Labs &nbsp;&middot;&nbsp; 2026</div>
+      <div class="modal-sub" id="modal-sub">2026</div>
     </div>
     <button class="modal-close" onclick="closePDF()">&#x2715; Close</button>
   </div>
@@ -846,7 +836,7 @@ const pdfs = {
 function openPDF(key, name, batch){
   const modal = document.getElementById('pdf-modal');
   document.getElementById('modal-title').textContent = name;
-  document.getElementById('modal-sub').textContent = batch + ' \u00b7 Sunrise Labs \u00b7 2026';
+  document.getElementById('modal-sub').textContent = batch + ' \u00b7 2026';
   const src = pdfs[key];
   const absUrl = new URL(src, window.location.href).href;
   // Google Docs viewer renders PDFs inline in all browsers without download prompts
