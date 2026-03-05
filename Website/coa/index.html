@@ -341,6 +341,9 @@ header{
 .pdf-mobile a:hover{background:rgba(200,169,110,0.08);}
 
 @media(max-width:700px){
+  .hide-mobile{display:none}
+  .hnav{gap:6px;}
+  .hnav a{padding:7px 10px;font-size:10px;letter-spacing:0.1em;}
   .pdf-embed{display:none;}
   .pdf-mobile{display:flex;}
   header{padding:14px 16px;flex-wrap:wrap;gap:12px;}
@@ -349,6 +352,10 @@ header{
   .coa-grid{grid-template-columns:1fr;}
 }
 
+.hnav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.hnav a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;}
+.hnav a:hover,.hnav a.active{color:var(--gold);border-color:rgba(201,168,76,0.4);}
+.hnav-ig{display:flex;align-items:center;justify-content:center;padding:8px 10px;}
 /* footer */
 footer{
   padding:28px 40px;
@@ -391,11 +398,12 @@ footer a{color:#888;text-decoration:none;}
         <div class="hdr-sub">Certificates of Analysis &nbsp;&middot;&nbsp; 2026</div>
       </div>
     </a>
-    <nav style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;">
-      <a href="/" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(200,169,110,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c';this.style.borderColor='rgba(201,168,76,0.4)'" onmouseout="this.style.color='rgba(200,169,110,0.55)';this.style.borderColor='#242424'">Home</a>
-      <a href="/menu" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(200,169,110,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c';this.style.borderColor='rgba(201,168,76,0.4)'" onmouseout="this.style.color='rgba(200,169,110,0.55)';this.style.borderColor='#242424'">Menu</a>
-      <a href="/coa" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(200,169,110,0.55);text-decoration:none;padding:8px 14px;border:1px solid rgba(201,168,76,0.35);" aria-current="page">Lab Results</a>
-      <a href="/contact" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(200,169,110,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c';this.style.borderColor='rgba(201,168,76,0.4)'" onmouseout="this.style.color='rgba(200,169,110,0.55)';this.style.borderColor='#242424'">Contact</a>
+    <nav class="hnav">
+      <a href="/menu">Menu</a>
+      <a href="/coa" class="active">Lab Results</a>
+      <a href="/#locations" class="hide-mobile">Locations</a>
+      <a href="/contact">Contact</a>
+      <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
     </nav>
   </header>
 
