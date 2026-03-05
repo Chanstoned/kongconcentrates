@@ -29,8 +29,7 @@ body{background:var(--black);font-family:'Barlow Condensed',sans-serif;color:var
 .ring3{inset:-52px;animation-delay:0.9s;border-color:rgba(201,168,76,0.05)}
 .intro-tagline{margin-top:32px;font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,6vw,42px);letter-spacing:0.15em;color:var(--off-white);opacity:0;animation:fadeUp 0.7s ease 1.2s forwards;text-align:center;}
 .intro-sub{margin-top:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0;animation:fadeUp 0.7s ease 1.5s forwards;text-align:center;}
-.enter-btn{margin-top:40px;padding:14px 44px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.4em;text-transform:uppercase;cursor:pointer;opacity:0;animation:fadeUp 0.7s ease 1.9s forwards;transition:background 0.25s,color 0.25s,box-shadow 0.25s;-webkit-tap-highlight-color:transparent;}
-.enter-btn:hover{background:var(--gold);color:var(--black);box-shadow:0 0 28px rgba(201,168,76,0.3)}
+
 @keyframes logoIn{to{opacity:1;transform:scale(1)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{from{opacity:0.2;transform:scale(1)}to{opacity:0.7;transform:scale(1.015)}}
@@ -92,7 +91,6 @@ footer a:hover{color:var(--gold);}
   </div>
   <div class="intro-tagline">Kong Concentrates</div>
   <div class="intro-sub">Current Menu</div>
-  <button class="enter-btn" onclick="enterSite()">View Menu</button>
 </div>
 
 <!-- SITE -->
@@ -126,6 +124,7 @@ footer a:hover{color:var(--gold);}
 </div><!-- /#site -->
 
 <script>
+setTimeout(()=>enterSite(), 2500);
 function enterSite(){
   document.getElementById('intro').classList.add('hide');
   const site = document.getElementById('site');
