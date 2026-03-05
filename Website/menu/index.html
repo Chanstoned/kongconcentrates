@@ -40,95 +40,39 @@ body{background:var(--black);font-family:'Barlow Condensed',sans-serif;color:var
 #site.show{display:flex}
 
 /* header */
-header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;}
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;flex-wrap:wrap;}
 .hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
 .htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
-.htext p{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-top:3px;}
-.hnav{margin-left:auto;display:flex;gap:8px;}
-.hnav a{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:9px 16px;border:1px solid #242424;transition:all 0.2s;}
+.htext p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-top:3px;}
+.hnav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+.hnav a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;}
 .hnav a:hover,.hnav a.active{color:var(--gold);border-color:rgba(201,168,76,0.4);}
 
-/* ━━ PAGE HEADER ━━ */
-.page-header{
-  padding:72px 40px 48px;
-  text-align:center;
-  border-bottom:1px solid #181818;
-  position:relative;
-  overflow:hidden;
-}
-.page-header::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,0.06) 0%,transparent 65%);
-  pointer-events:none;
-}
-.page-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:12px;}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,11vw,88px);letter-spacing:0.08em;line-height:0.92;color:var(--off-white);margin-bottom:16px;}
-.page-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.4);line-height:2.2;max-width:400px;margin:0 auto;}
 
-/* ━━ CATEGORY FILTER ━━ */
-.filter-bar{
-  display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
-  padding:32px 40px 0;
+/* ━━ MENU IMAGE ━━ */
+.menu-image-wrap{
+  display:flex;justify-content:center;
+  padding:48px 24px 64px;
 }
-.filter-btn{
-  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;
-  padding:9px 20px;border:1px solid #242424;background:transparent;color:rgba(240,234,216,0.45);
-  cursor:pointer;transition:all 0.2s;-webkit-tap-highlight-color:transparent;
+.menu-img{
+  max-width:800px;
+  width:100%;
+  display:block;
+  border:1px solid var(--border);
 }
-.filter-btn:hover,.filter-btn.active{color:var(--gold);border-color:rgba(201,168,76,0.45);background:#0d0d0d;}
-
-/* ━━ PRODUCTS GRID ━━ */
-.products-section{padding:40px 40px 80px;max-width:1100px;margin:0 auto;width:100%;}
-.section-divider{display:flex;align-items:center;gap:18px;margin:48px 0 32px;}
-.section-divider .ln{flex:1;height:1px;background:#1e1e1e;}
-.section-divider span{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:#444;white-space:nowrap;}
-
-.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:#181818;}
-.product-card{
-  background:var(--black);padding:32px 28px;
-  display:flex;flex-direction:column;gap:10px;
-  transition:background 0.2s;
-  position:relative;
-}
-.product-card:hover{background:#0d0d0d;}
-.product-card::after{
-  content:'';position:absolute;inset:0;
-  border:1px solid transparent;
-  transition:border-color 0.2s;pointer-events:none;
-}
-.product-card:hover::after{border-color:rgba(201,168,76,0.2);}
-
-.pc-category{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0.6;}
-.pc-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.06em;line-height:1;color:var(--off-white);}
-.pc-strain{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.35);margin-top:2px;}
-.pc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
-.pc-tag{
-  font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.2em;text-transform:uppercase;
-  padding:4px 10px;border:1px solid #252525;color:rgba(240,234,216,0.35);
-}
-.pc-note{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.05em;color:rgba(240,234,216,0.3);line-height:1.8;margin-top:4px;}
-
-/* ━━ COMING SOON BANNER ━━ */
-.coming-soon-note{
-  text-align:center;padding:56px 40px;border-top:1px solid #181818;
-}
-.cs-badge{
-  display:inline-block;
-  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.4em;
-  text-transform:uppercase;color:var(--gold);opacity:0.6;
-  border:1px solid rgba(201,168,76,0.2);padding:7px 18px;margin-bottom:20px;
-}
-.cs-text{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.3);line-height:2.4;max-width:380px;margin:0 auto;}
 
 /* footer */
 footer{margin-top:auto;border-top:1px solid #181818;padding:28px 40px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
-footer p{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;color:rgba(240,234,216,0.25);text-align:center;}
+footer p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:rgba(240,234,216,0.25);text-align:center;}
 footer a{color:rgba(240,234,216,0.4);text-decoration:none;transition:color 0.2s;}
 footer a:hover{color:var(--gold);}
 
 /* responsive */
 @media(max-width:620px){
   .hnav .hide-mobile{display:none}
+  .hnav{gap:6px;}
+  .hnav a{padding:7px 10px;font-size:10px;letter-spacing:0.1em;}
+  header{padding:10px 16px;gap:10px;}
   .filter-bar{padding:24px 20px 0;}
   .products-section{padding:32px 20px 60px;}
   .page-header{padding:48px 24px 36px;}
@@ -168,144 +112,9 @@ footer a:hover{color:var(--gold);}
     </nav>
   </header>
 
-  <!-- PAGE HEADER -->
-  <div class="page-header">
-    <div class="page-label">Current Offerings</div>
-    <h2 class="page-title">Our Menu</h2>
-    <p class="page-sub">Artisan solventless concentrates — rosin, hash, and live products crafted in Grove, Oklahoma</p>
-  </div>
-
-  <!-- FILTER BAR -->
-  <div class="filter-bar">
-    <button class="filter-btn active" onclick="filterProducts('all',this)">All</button>
-    <button class="filter-btn" onclick="filterProducts('rosin',this)">Rosin</button>
-    <button class="filter-btn" onclick="filterProducts('hash',this)">Hash</button>
-    <button class="filter-btn" onclick="filterProducts('vape',this)">Vapes</button>
-    <button class="filter-btn" onclick="filterProducts('hash-hole',this)">Hash Holes</button>
-  </div>
-
-  <!-- PRODUCTS -->
-  <div class="products-section">
-
-    <div class="section-divider"><div class="ln"></div><span>Flower Rosin</span><div class="ln"></div></div>
-    <div class="product-grid" id="product-grid">
-
-      <div class="product-card" data-category="rosin">
-        <div class="pc-category">Flower Rosin</div>
-        <div class="pc-name">Bacio Mints</div>
-        <div class="pc-strain">Indica Dominant</div>
-        <div class="pc-tags">
-          <span class="pc-tag">Full Spectrum</span>
-          <span class="pc-tag">Solventless</span>
-        </div>
-        <div class="pc-note">Rich, creamy terpene profile with dessert-forward notes.</div>
-      </div>
-
-      <div class="product-card" data-category="rosin">
-        <div class="pc-category">Flower Rosin</div>
-        <div class="pc-name">Pink Runtz</div>
-        <div class="pc-strain">Hybrid</div>
-        <div class="pc-tags">
-          <span class="pc-tag">Full Spectrum</span>
-          <span class="pc-tag">Solventless</span>
-        </div>
-        <div class="pc-note">Sweet candy-forward aroma with balanced effects.</div>
-      </div>
-
-      <div class="product-card" data-category="rosin">
-        <div class="pc-category">Flower Rosin</div>
-        <div class="pc-name">Devil Driver</div>
-        <div class="pc-strain">Indica</div>
-        <div class="pc-tags">
-          <span class="pc-tag">Full Spectrum</span>
-          <span class="pc-tag">Solventless</span>
-        </div>
-        <div class="pc-note">Dark, fuel-driven terps with heavy indica expression.</div>
-      </div>
-
-      <div class="product-card" data-category="rosin">
-        <div class="pc-category">Flower Rosin</div>
-        <div class="pc-name">Grape Pie</div>
-        <div class="pc-strain">Indica Dominant</div>
-        <div class="pc-tags">
-          <span class="pc-tag">Full Spectrum</span>
-          <span class="pc-tag">Solventless</span>
-        </div>
-        <div class="pc-note">Deep grape and earthy notes with a smooth finish.</div>
-      </div>
-
-      <div class="product-card" data-category="rosin">
-        <div class="pc-category">Flower Rosin</div>
-        <div class="pc-name">Hooch x White Rainbow</div>
-        <div class="pc-strain">Hybrid</div>
-        <div class="pc-tags">
-          <span class="pc-tag">Full Spectrum</span>
-          <span class="pc-tag">Solventless</span>
-        </div>
-        <div class="pc-note">Complex floral and tropical terpene combination.</div>
-      </div>
-
-      <div class="product-card" data-category="rosin">
-        <div class="pc-category">Flower Rosin</div>
-        <div class="pc-name">Sticky Buns</div>
-        <div class="pc-strain">Hybrid</div>
-        <div class="pc-tags">
-          <span class="pc-tag">Full Spectrum</span>
-          <span class="pc-tag">Solventless</span>
-        </div>
-        <div class="pc-note">Sweet pastry aroma with warm, well-rounded effects.</div>
-      </div>
-
-    </div><!-- /product-grid -->
-
-    <div class="section-divider"><div class="ln"></div><span>Vapes</span><div class="ln"></div></div>
-    <div class="product-grid">
-
-      <div class="product-card" data-category="vape">
-        <div class="pc-category">Vape Cartridge</div>
-        <div class="pc-name">Bacio Mints Vape</div>
-        <div class="pc-strain">Indica Dominant</div>
-        <div class="pc-tags">
-          <span class="pc-tag">Live Rosin</span>
-          <span class="pc-tag">Solventless</span>
-        </div>
-        <div class="pc-note">All the richness of Bacio Mints in a convenient cartridge format.</div>
-      </div>
-
-    </div>
-
-    <div class="section-divider"><div class="ln"></div><span>Hash Holes</span><div class="ln"></div></div>
-    <div class="product-grid">
-
-      <div class="product-card" data-category="hash-hole">
-        <div class="pc-category">Hash Hole</div>
-        <div class="pc-name">Grape Pie x Devil Driver</div>
-        <div class="pc-strain">Indica Dominant Cross</div>
-        <div class="pc-tags">
-          <span class="pc-tag">Infused Pre-Roll</span>
-          <span class="pc-tag">Solventless</span>
-        </div>
-        <div class="pc-note">Two powerhouse strains wrapped together in a slow-burning hash hole.</div>
-      </div>
-
-      <div class="product-card" data-category="hash-hole">
-        <div class="pc-category">Hash Hole</div>
-        <div class="pc-name">Creme Soda + Pink Runtz</div>
-        <div class="pc-strain">Hybrid Cross</div>
-        <div class="pc-tags">
-          <span class="pc-tag">Infused Pre-Roll</span>
-          <span class="pc-tag">Solventless</span>
-        </div>
-        <div class="pc-note">Sweet, effervescent terp profile in a premium infused pre-roll.</div>
-      </div>
-
-    </div>
-
-  </div><!-- /products-section -->
-
-  <div class="coming-soon-note">
-    <div class="cs-badge">Always Expanding</div>
-    <p class="cs-text">New drops and seasonal releases added regularly.<br>Follow us or contact your dispensary for availability.</p>
+  <!-- MENU IMAGE -->
+  <div class="menu-image-wrap">
+    <img src="../images/KONG Concentrate Product Menu 2.jpg" alt="Kong Concentrates Menu" class="menu-img">
   </div>
 
   <footer>
@@ -322,20 +131,6 @@ function enterSite(){
   setTimeout(()=>{ site.style.opacity='1'; },50);
 }
 
-function filterProducts(category, btn){
-  // update active button
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-
-  // show/hide cards
-  document.querySelectorAll('.product-card').forEach(card=>{
-    if(category === 'all' || card.dataset.category === category){
-      card.style.display='flex';
-    } else {
-      card.style.display='none';
-    }
-  });
-}
 </script>
 </body>
 </html>
