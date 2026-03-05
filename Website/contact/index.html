@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kong Concentrates - Contact</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0a0a0a;
+  --off-white:#f0ead8;
+  --gold:#c9a84c;
+  --gold2:#e8c46a;
+  --dark:#141414;
+  --border:rgba(201,168,76,0.15);
+}
+html,body{height:100%;overflow-x:hidden}
+body{background:var(--black);font-family:'Barlow Condensed',sans-serif;color:var(--off-white);min-height:100vh;display:flex;flex-direction:column;}
+
+/* ━━ HEADER ━━ */
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;flex-wrap:wrap;}
+.hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
+.htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
+.htext p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-top:3px;}
+.hnav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.hnav a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;}
+.hnav a:hover{color:var(--gold);border-color:rgba(201,168,76,0.4);}
+.hnav a.active{color:var(--gold);border-color:rgba(201,168,76,0.35);}
+.hnav-ig{display:flex;align-items:center;justify-content:center;padding:8px 10px;}
+
+/* ━━ PAGE HEADER ━━ */
+.page-header{
+  padding:72px 40px 48px;
+  text-align:center;
+  border-bottom:1px solid #181818;
+}
+.page-label{
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.35em;
+  text-transform:uppercase;color:var(--gold);opacity:0.7;
+  margin-bottom:16px;
+}
+.page-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(52px,10vw,88px);letter-spacing:0.06em;line-height:0.92;
+  color:var(--off-white);margin-bottom:20px;
+}
+.page-sub{
+  font-family:'DM Mono',monospace;font-size:13px;
+  letter-spacing:0.12em;color:rgba(240,234,216,0.65);
+  text-transform:uppercase;line-height:2.2;
+}
+
+/* ━━ CONTACT WRAP ━━ */
+.contact-wrap{
+  max-width:640px;margin:0 auto;width:100%;
+  padding:56px 40px 72px;
+  flex:1;
+}
+
+/* Direct line cards */
+.direct-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin-bottom:40px;
+}
+.direct-card{
+  border:1px solid #242424;padding:22px 20px;
+  transition:border-color 0.2s;
+}
+.direct-card:hover{border-color:rgba(201,168,76,0.3);}
+.dc-label{
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:0.25em;text-transform:uppercase;
+  color:rgba(240,234,216,0.4);margin-bottom:8px;
+}
+.dc-val{
+  font-family:'DM Mono',monospace;font-size:12px;
+  letter-spacing:0.05em;color:rgba(240,234,216,0.8);
+}
+.dc-val a{color:inherit;text-decoration:none;transition:color 0.2s;}
+.dc-val a:hover{color:var(--gold);}
+
+/* Divider */
+.form-divider{
+  display:flex;align-items:center;gap:16px;margin-bottom:32px;
+}
+.form-divider .ln{flex:1;height:1px;background:#282828;}
+.form-divider span{
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:0.25em;text-transform:uppercase;color:#666;
+  white-space:nowrap;
+}
+
+/* Form */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.form-group{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+label{
+  font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.5);
+}
+input,textarea,select{
+  background:#0e0e0e;border:1px solid #262626;
+  color:var(--off-white);padding:14px 16px;
+  font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:0.05em;outline:none;width:100%;
+  transition:border-color 0.2s;
+  -webkit-appearance:none;border-radius:0;
+}
+input:focus,textarea:focus,select:focus{border-color:rgba(201,168,76,0.5);}
+input::placeholder,textarea::placeholder{color:#333;}
+textarea{resize:vertical;min-height:130px;}
+select option{background:#0e0e0e;}
+
+.submit-btn{
+  width:100%;padding:16px;margin-top:8px;
+  background:transparent;border:1px solid var(--gold);color:var(--gold);
+  font-family:'Barlow Condensed',sans-serif;font-size:13px;
+  font-weight:700;letter-spacing:0.4em;text-transform:uppercase;
+  cursor:pointer;transition:background 0.25s,color 0.25s,box-shadow 0.25s;
+}
+.submit-btn:hover{background:var(--gold);color:var(--black);box-shadow:0 0 24px rgba(201,168,76,0.25)}
+.submit-btn:disabled{opacity:0.4;cursor:not-allowed}
+
+.form-error{
+  display:none;
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:0.1em;color:#c0392b;
+  border:1px solid rgba(192,57,43,0.35);
+  padding:14px 16px;margin-top:14px;line-height:1.8;
+  text-align:center;
+}
+.form-success{
+  display:none;
+  text-align:center;padding:48px 20px;
+  border:1px solid rgba(201,168,76,0.2);
+}
+.form-success .check{font-size:28px;margin-bottom:16px;}
+.form-success h4{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;letter-spacing:0.1em;margin-bottom:10px;
+}
+.form-success p{
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:0.1em;color:rgba(240,234,216,0.5);line-height:2;
+}
+
+/* ━━ FOOTER ━━ */
+footer{border-top:1px solid #181818;padding:28px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+footer p{font-family:'DM Mono',monospace;font-size:11px;color:#363636;letter-spacing:0.05em;}
+footer a{color:#555;text-decoration:none;}
+footer a:hover{color:var(--gold)}
+
+@media(max-width:620px){
+  header{padding:10px 16px;gap:10px;}
+  .hnav .hide-mobile{display:none}
+  .hnav{gap:6px;}
+  .hnav a{padding:7px 10px;font-size:10px;letter-spacing:0.1em;}
+  .page-header{padding:48px 20px 36px;}
+  .contact-wrap{padding:36px 20px 56px;}
+  .direct-row{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  footer{padding:20px;flex-direction:column;text-align:center;gap:6px;}
+}
+</style>
+</head>
+<body>
+
+  <header>
+    <a href="/" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
+      <img src="../images/MAIN-ROUND-1.png" alt="Logo" class="hlogo">
+      <div class="htext">
+        <h1>Kong Concentrates</h1>
+        <p>Grove, Oklahoma</p>
+      </div>
+    </a>
+    <nav class="hnav">
+      <a href="/menu">Menu</a>
+      <a href="/coa" class="hide-mobile">Lab Results</a>
+      <a href="/contact" class="active">Contact</a>
+      <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+    </nav>
+  </header>
+
+  <div class="page-header">
+    <div class="page-label">Reach Out</div>
+    <div class="page-title">Get in Touch</div>
+    <p class="page-sub">Wholesale inquiries, retail partnerships,<br>or general questions — we'd love to hear from you.</p>
+  </div>
+
+  <div class="contact-wrap">
+
+    <div class="direct-row">
+      <div class="direct-card">
+        <div class="dc-label">Email</div>
+        <div class="dc-val"><a href="mailto:process@kongconcentrates.com">process@<br>kongconcentrates.com</a></div>
+      </div>
+      <div class="direct-card">
+        <div class="dc-label">Instagram</div>
+        <div class="dc-val"><a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener">@kongconcentrates</a></div>
+      </div>
+    </div>
+
+    <div class="form-divider">
+      <div class="ln"></div>
+      <span>Or send us a message</span>
+      <div class="ln"></div>
+    </div>
+
+    <form id="contact-form" name="contact" netlify data-netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contact">
+      <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-name">Name</label>
+          <input type="text" id="f-name" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="f-email">Email</label>
+          <input type="email" id="f-email" name="email" placeholder="your@email.com" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="f-subject">Inquiry Type</label>
+        <select id="f-subject" name="subject">
+          <option value="">Select a topic</option>
+          <option value="Wholesale / Retail Partnership">Wholesale / Retail Partnership</option>
+          <option value="Carry Our Products">Carry Our Products</option>
+          <option value="General Inquiry">General Inquiry</option>
+          <option value="Press / Media">Press / Media</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="f-msg">Message</label>
+        <textarea id="f-msg" name="message" placeholder="Tell us how we can help..."></textarea>
+      </div>
+      <button class="submit-btn" id="submit-btn" type="button" onclick="sendForm()">Send Message</button>
+      <div class="form-error" id="form-error"></div>
+    </form>
+
+    <div class="form-success" id="form-success">
+      <div class="check">&#10003;</div>
+      <h4>Message Sent</h4>
+      <p>Thanks for reaching out. We'll be in touch at the email you provided.</p>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Kong Concentrates LLC &nbsp;&middot;&nbsp; Grove, OK 74344</p>
+    <p><a href="/menu">Menu</a> &nbsp;&middot;&nbsp; <a href="/coa">Lab Results</a> &nbsp;&middot;&nbsp; <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a></p>
+  </footer>
+
+<script>
+async function sendForm(){
+  const name    = document.getElementById('f-name').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const subject = document.getElementById('f-subject').value;
+  const msg     = document.getElementById('f-msg').value.trim();
+
+  const errEl = document.getElementById('form-error');
+  errEl.style.display = 'none';
+
+  if(!name || !email || !msg){
+    errEl.textContent = 'Please fill in your name, email, and message.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  try{
+    const res = await fetch(window.location.pathname, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        'form-name': 'contact',
+        name, email,
+        subject: subject || 'General Inquiry',
+        message: msg
+      }).toString()
+    });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  } catch(e){
+    btn.disabled = false;
+    btn.textContent = 'Send Message';
+    errEl.textContent = 'Something went wrong (' + e.message + '). Please email us directly at process@kongconcentrates.com';
+    errEl.style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>

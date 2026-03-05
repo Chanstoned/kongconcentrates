@@ -90,26 +90,6 @@ body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif
   margin-top:8px;
 }
 
-.enter-btn{
-  margin-top:48px;
-  opacity:0;
-  animation:fadeUp 0.6s ease 1.5s forwards;
-  background:transparent;
-  border:1px solid rgba(200,169,110,0.5);
-  color:var(--gold);
-  font-family:'DM Mono',monospace;
-  font-size:9px;
-  letter-spacing:5px;
-  text-transform:uppercase;
-  padding:14px 44px;
-  cursor:pointer;
-  transition:all 0.25s;
-}
-.enter-btn:hover{
-  background:rgba(200,169,110,0.08);
-  border-color:var(--gold);
-  box-shadow:0 0 20px rgba(200,169,110,0.15);
-}
 
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(12px);}
@@ -398,8 +378,7 @@ footer a{color:#888;text-decoration:none;}
     <h2>Kong Concentrates</h2>
     <p>Quality is King &nbsp;&middot;&nbsp; Grove, Oklahoma</p>
   </div>
-  <button class="enter-btn" onclick="enterSite()">View Lab Results</button>
-</div>
+  </div>
 
 <!-- ── MAIN ── -->
 <div id="main">
@@ -416,6 +395,7 @@ footer a{color:#888;text-decoration:none;}
       <a href="/" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(200,169,110,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c';this.style.borderColor='rgba(201,168,76,0.4)'" onmouseout="this.style.color='rgba(200,169,110,0.55)';this.style.borderColor='#242424'">Home</a>
       <a href="/menu" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(200,169,110,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c';this.style.borderColor='rgba(201,168,76,0.4)'" onmouseout="this.style.color='rgba(200,169,110,0.55)';this.style.borderColor='#242424'">Menu</a>
       <a href="/coa" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(200,169,110,0.55);text-decoration:none;padding:8px 14px;border:1px solid rgba(201,168,76,0.35);" aria-current="page">Lab Results</a>
+      <a href="/contact" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(200,169,110,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;" onmouseover="this.style.color='#c9a84c';this.style.borderColor='rgba(201,168,76,0.4)'" onmouseout="this.style.color='rgba(200,169,110,0.55)';this.style.borderColor='#242424'">Contact</a>
     </nav>
   </header>
 
@@ -813,6 +793,7 @@ footer a{color:#888;text-decoration:none;}
 
 <script>
 // ── Intro
+setTimeout(()=>enterSite(), 2500);
 function enterSite(){
   document.getElementById('intro').classList.add('fade-out');
   setTimeout(()=>{
