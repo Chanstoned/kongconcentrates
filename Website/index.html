@@ -204,6 +204,55 @@ footer a:hover{color:var(--gold)}
   .form-row{grid-template-columns:1fr;}
   footer{padding:20px;flex-direction:column;text-align:center;gap:6px;}
 }
+
+/* ━━ STRAIN GALLERY ━━ */
+.strains-section{padding:48px 0 0;}
+.strains-label{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;
+  text-transform:uppercase;color:var(--gold);opacity:0.6;
+  text-align:center;margin-bottom:24px;
+}
+.strains-scroll{
+  display:flex;gap:12px;
+  overflow-x:auto;
+  padding:0 40px 32px;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+.strains-scroll::-webkit-scrollbar{display:none;}
+.strain-tile{
+  flex:0 0 200px;
+  display:flex;flex-direction:column;
+  text-decoration:none;color:var(--off-white);
+  border:1px solid #1a1a1a;
+  background:#0b0b0b;
+  overflow:hidden;
+  transition:border-color 0.25s;
+}
+.strain-tile:hover{border-color:rgba(201,168,76,0.35);}
+.strain-tile img{
+  width:200px;height:200px;
+  object-fit:cover;object-position:center;
+  display:block;
+  transition:transform 0.4s ease;
+}
+.strain-tile:hover img{transform:scale(1.04);}
+.strain-tile-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:18px;letter-spacing:0.1em;
+  padding:12px 14px 10px;line-height:1;
+}
+.strain-tile-type{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--gold);opacity:0.6;
+  padding:0 14px 12px;
+}
+@media(max-width:620px){
+  .strains-scroll{padding:0 16px 24px;gap:10px;}
+  .strain-tile{flex:0 0 160px;}
+  .strain-tile img{width:160px;height:160px;}
+}
 </style>
 </head>
 <body>
@@ -298,6 +347,43 @@ footer a:hover{color:var(--gold)}
       </a>
     </div>
   </section>
+
+  <!-- STRAINS -->
+  <div class="strains-section">
+    <div class="strains-label">Current Lineup</div>
+    <div class="strains-scroll">
+      <a href="/coa" class="strain-tile">
+        <img src="images/pink runtz.PNG" alt="Pink Runtz" loading="lazy">
+        <div class="strain-tile-name">Pink Runtz</div>
+        <div class="strain-tile-type">Live Rosin</div>
+      </a>
+      <a href="/coa" class="strain-tile">
+        <img src="images/bacio mints.PNG" alt="Bacio Mints" loading="lazy">
+        <div class="strain-tile-name">Bacio Mints</div>
+        <div class="strain-tile-type">Live Rosin</div>
+      </a>
+      <a href="/coa" class="strain-tile">
+        <img src="images/hooch x white rainbow.PNG" alt="Hooch x White Rainbow" loading="lazy">
+        <div class="strain-tile-name">Hooch x White Rainbow</div>
+        <div class="strain-tile-type">Live Rosin</div>
+      </a>
+      <a href="/coa" class="strain-tile">
+        <img src="images/sticky buns.PNG" alt="Sticky Buns" loading="lazy">
+        <div class="strain-tile-name">Sticky Buns</div>
+        <div class="strain-tile-type">Live Rosin</div>
+      </a>
+      <a href="/coa" class="strain-tile">
+        <img src="images/devil driver.PNG" alt="Devil Driver" loading="lazy">
+        <div class="strain-tile-name">Devil Driver</div>
+        <div class="strain-tile-type">Live Rosin</div>
+      </a>
+      <a href="/coa" class="strain-tile">
+        <img src="images/grape pie.PNG" alt="Grape Pie" loading="lazy">
+        <div class="strain-tile-name">Grape Pie</div>
+        <div class="strain-tile-type">Live Rosin</div>
+      </a>
+    </div>
+  </div>
 
   <!-- BRAND STRIP -->
   <div class="divider"><div class="ln"></div><span>By the Numbers</span><div class="ln"></div></div>
