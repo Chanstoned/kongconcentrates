@@ -47,6 +47,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 .hnav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
 .hnav a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;}
 .hnav a:hover{color:var(--gold);border-color:rgba(201,168,76,0.4);}
+.hnav-ig{display:flex;align-items:center;justify-content:center;padding:8px 10px;}
 
 /* ━━ HERO ━━ */
 .hero{min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 28px 64px;position:relative;overflow:hidden;}
@@ -76,15 +77,15 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 
 /* DIVIDER */
 .divider{display:flex;align-items:center;gap:18px;padding:0 40px;margin:72px 0 0;}
-.divider .ln{flex:1;height:1px;background:#1e1e1e;}
-.divider span{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:#444;white-space:nowrap;}
+.divider .ln{flex:1;height:1px;background:#383838;}
+.divider span{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:#888;white-space:nowrap;}
 
 /* BRAND STRIP */
 .brand-strip{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #181818;border-bottom:1px solid #181818;}
 .bs-item{padding:36px 20px;text-align:center;border-right:1px solid #181818;}
 .bs-item:last-child{border-right:none}
 .bs-val{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,5vw,48px);color:var(--gold2);line-height:1;}
-.bs-lbl{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.35);margin-top:7px;}
+.bs-lbl{font-family:'DM Mono',monospace;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.7);margin-top:7px;}
 
 /* LOCATIONS - COMING SOON */
 #locations{scroll-margin-top:72px;}
@@ -105,8 +106,8 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
   color:var(--off-white);margin-bottom:14px;
 }
 .cs-sub{
-  font-family:'DM Mono',monospace;font-size:13px;
-  letter-spacing:0.15em;color:rgba(240,234,216,0.4);
+  font-family:'DM Mono',monospace;font-size:14px;
+  letter-spacing:0.12em;color:rgba(240,234,216,0.7);
   text-transform:uppercase;line-height:2.2;max-width:420px;
 }
 
@@ -122,8 +123,8 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
   margin-bottom:8px;
 }
 .contact-lead{
-  font-family:'DM Mono',monospace;font-size:13px;
-  letter-spacing:0.12em;color:rgba(240,234,216,0.45);
+  font-family:'DM Mono',monospace;font-size:14px;
+  letter-spacing:0.1em;color:rgba(240,234,216,0.7);
   text-transform:uppercase;line-height:2;
   margin-bottom:40px;
 }
@@ -235,6 +236,7 @@ footer a:hover{color:var(--gold)}
       <a href="/coa">Lab Results</a>
       <a href="#locations" class="hide-mobile">Locations</a>
       <a href="#contact">Contact</a>
+      <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
     </nav>
   </header>
 
