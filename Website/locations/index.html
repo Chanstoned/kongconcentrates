@@ -84,19 +84,17 @@ header{
   text-align:center;
 }
 
-/* Oklahoma SVG */
+/* Oklahoma map */
 .ok-map-wrap{
   display:flex;justify-content:center;margin-bottom:56px;
+  position:relative;
 }
-.ok-map-svg{
+.ok-map-img{
   width:100%;max-width:420px;
   opacity:0.55;
   filter:drop-shadow(0 0 18px rgba(201,168,76,0.12));
+  display:block;
 }
-.ok-state-path{fill:none;stroke:var(--gold);stroke-width:2;stroke-linejoin:round;}
-.ok-dot{fill:var(--gold);}
-.ok-dot-ring{fill:none;stroke:var(--gold);stroke-width:1;opacity:0.4;}
-.ok-dot-label{fill:var(--gold);font-family:'DM Mono',monospace;font-size:18px;letter-spacing:2px;}
 
 /* Coming soon block */
 .cs-badge{
@@ -203,14 +201,7 @@ footer a:hover{color:var(--gold);}
 
     <!-- Oklahoma SVG Map -->
     <div class="ok-map-wrap">
-      <svg class="ok-map-svg" viewBox="0 0 470 220" xmlns="http://www.w3.org/2000/svg" aria-label="Map of Oklahoma">
-        <!-- State outline -->
-        <path class="ok-state-path" d="M 4 4 H 466 V 216 H 166 V 35 H 4 Z"/>
-        <!-- Grove, OK marker (NE Oklahoma) -->
-        <circle class="ok-dot-ring" cx="448" cy="28" r="10"/>
-        <circle class="ok-dot" cx="448" cy="28" r="4"/>
-        <text class="ok-dot-label" x="437" y="22" font-size="11" text-anchor="end">Grove, OK</text>
-      </svg>
+      <img class="ok-map-img" src="../images/oklahoma.png" alt="Map of Oklahoma">
     </div>
 
     <div class="cs-badge">Coming Soon</div>
