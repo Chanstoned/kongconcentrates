@@ -167,6 +167,22 @@ header{
 }
 .coa-card:hover{background:#0d0d0d;}
 .coa-card:hover .view-btn{border-color:var(--gold);color:var(--gold);}
+.card-img{
+  width:calc(100% + 44px);
+  margin:-24px -22px 20px;
+  height:180px;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.card-img img{
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+  transition:transform 0.4s ease;
+}
+.coa-card:hover .card-img img{transform:scale(1.04);}
+
 
 .card-type{
   font-family:'DM Mono',monospace;
@@ -401,7 +417,7 @@ footer a{color:#888;text-decoration:none;}
     <nav class="hnav">
       <a href="/menu">Menu</a>
       <a href="/coa" class="active">Lab Results</a>
-      <a href="/#locations" class="hide-mobile">Locations</a>
+      <a href="/locations" class="hide-mobile">Locations</a>
       <a href="/contact">Contact</a>
       <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
     </nav>
@@ -417,6 +433,7 @@ footer a{color:#888;text-decoration:none;}
 
     
     <div class="coa-card" onclick="openPDF('pink_runtz', 'Pink Runtz', 'KC-26-ECE-01 &middot; #114400-01')">
+      <div class="card-img"><img src="../images/pink runtz.PNG" alt="" loading="lazy"></div>
       <div class="card-type">Live Rosin</div>
       <div class="card-name">Pink Runtz</div>
       <div class="card-batch">KC-26-ECE-01 &middot; #114400-01</div>
@@ -460,6 +477,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
     
     <div class="coa-card" onclick="openPDF('bacio_mints', 'Bacio Mints', 'KC-26-KC-01 &middot; #114399-01')">
+      <div class="card-img"><img src="../images/bacio mints.PNG" alt="" loading="lazy"></div>
       <div class="card-type">Live Rosin</div>
       <div class="card-name">Bacio Mints</div>
       <div class="card-batch">KC-26-KC-01 &middot; #114399-01</div>
@@ -503,6 +521,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
     
     <div class="coa-card" onclick="openPDF('hooch_white_rainbow', 'Hooch x White Rainbow', 'KC-26-ECE-03 &middot; #114402-01')">
+      <div class="card-img"><img src="../images/hooch x white rainbow.PNG" alt="" loading="lazy"></div>
       <div class="card-type">Live Rosin</div>
       <div class="card-name">Hooch x White Rainbow</div>
       <div class="card-batch">KC-26-ECE-03 &middot; #114402-01</div>
@@ -546,6 +565,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
     
     <div class="coa-card" onclick="openPDF('sticky_buns', 'Sticky Buns', 'KC-26-ECE-02 &middot; #114401-01')">
+      <div class="card-img"><img src="../images/sticky buns.PNG" alt="" loading="lazy"></div>
       <div class="card-type">Live Rosin</div>
       <div class="card-name">Sticky Buns</div>
       <div class="card-batch">KC-26-ECE-02 &middot; #114401-01</div>
@@ -589,6 +609,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
     
     <div class="coa-card" onclick="openPDF('devil_driver', 'Devil Driver', 'KC-26-ECE-05 &middot; #114404-01')">
+      <div class="card-img"><img src="../images/devil driver.PNG" alt="" loading="lazy"></div>
       <div class="card-type">Live Rosin</div>
       <div class="card-name">Devil Driver</div>
       <div class="card-batch">KC-26-ECE-05 &middot; #114404-01</div>
@@ -632,6 +653,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
     
     <div class="coa-card" onclick="openPDF('grape_pie', 'Grape Pie', 'KC-26-ECE-04 &middot; #114403-01')">
+      <div class="card-img"><img src="../images/grape pie.PNG" alt="" loading="lazy"></div>
       <div class="card-type">Live Rosin</div>
       <div class="card-name">Grape Pie</div>
       <div class="card-batch">KC-26-ECE-04 &middot; #114403-01</div>
