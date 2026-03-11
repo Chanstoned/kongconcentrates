@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Cancelled | Kong Concentrates</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#0a0a0a;--off-white:#f0ead8;--gold:#c9a84c;--gold2:#e8c46a;--border:rgba(201,168,76,0.15);}
+html,body{min-height:100%;background:var(--black);color:var(--off-white);font-family:'Barlow Condensed',sans-serif;}
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;flex-wrap:wrap;}
+.hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
+.htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
+.htext p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-top:3px;}
+.hnav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+.hnav a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;}
+.hnav a:hover,.hnav a.active{color:var(--gold);border-color:rgba(201,168,76,0.4);}
+.hnav-ig{display:flex;align-items:center;justify-content:center;padding:8px 10px;}
+
+.cancel-wrap{
+  min-height:80vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:60px 32px;
+}
+.cancel-badge{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.3em;
+  text-transform:uppercase;color:rgba(240,234,216,0.35);
+  border:1px solid #242424;padding:7px 18px;
+  margin-bottom:20px;
+  animation:fadeUp 0.6s ease 0.2s both;
+}
+.cancel-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(44px,9vw,80px);letter-spacing:0.08em;line-height:0.95;
+  margin-bottom:20px;
+  animation:fadeUp 0.6s ease 0.35s both;
+}
+.cancel-sub{
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;
+  color:rgba(240,234,216,0.35);text-transform:uppercase;
+  line-height:2.4;max-width:360px;margin-bottom:40px;
+  animation:fadeUp 0.6s ease 0.5s both;
+}
+.cancel-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;animation:fadeUp 0.6s ease 0.65s both;}
+.btn-primary{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.25em;
+  text-transform:uppercase;padding:14px 28px;
+  border:1px solid var(--gold);color:var(--gold);
+  text-decoration:none;background:transparent;
+  transition:background 0.2s,color 0.2s;
+}
+.btn-primary:hover{background:var(--gold);color:var(--black);}
+.btn-secondary{
+  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.25em;
+  text-transform:uppercase;padding:14px 28px;
+  border:1px solid #2a2a2a;color:rgba(240,234,216,0.4);
+  text-decoration:none;
+  transition:border-color 0.2s,color 0.2s;
+}
+.btn-secondary:hover{border-color:rgba(201,168,76,0.3);color:rgba(240,234,216,0.7);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+footer{padding:28px 40px;border-top:1px solid #181818;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+footer p{font-family:'DM Mono',monospace;font-size:11px;color:#363636;letter-spacing:0.05em;}
+footer a{color:#555;text-decoration:none;}
+footer a:hover{color:var(--gold)}
+@media(max-width:620px){
+  header{padding:10px 16px;gap:10px;}
+  .hnav .hide-mobile{display:none}
+  .hnav{gap:6px;}
+  .hnav a{padding:7px 10px;font-size:10px;}
+  footer{padding:20px;flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+<header>
+  <a href="/"><img src="/images/MAIN-ROUND-1.png" alt="Kong" class="hlogo"></a>
+  <div class="htext">
+    <h1>Kong Concentrates</h1>
+    <p>Grove, Oklahoma</p>
+  </div>
+  <nav class="hnav">
+    <a href="/menu">Menu</a>
+    <a href="/coa" class="hide-mobile">Lab Results</a>
+    <a href="/locations" class="hide-mobile">Locations</a>
+    <a href="/merch" class="active">Merch</a>
+    <a href="/contact">Contact</a>
+    <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+  </nav>
+</header>
+
+<div class="cancel-wrap">
+  <div class="cancel-badge">Checkout Cancelled</div>
+  <h2 class="cancel-title">No Charge Made</h2>
+  <p class="cancel-sub">
+    Your checkout was cancelled.<br>
+    Nothing was charged to your account.<br>
+    Come back whenever you're ready.
+  </p>
+  <div class="cancel-actions">
+    <a href="/merch/" class="btn-primary">Back to Merch</a>
+    <a href="/" class="btn-secondary">Home</a>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 Kong Concentrates LLC &nbsp;·&nbsp; Grove, Oklahoma</p>
+  <p><a href="/contact">Contact</a> &nbsp;·&nbsp; <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener">Instagram</a></p>
+</footer>
+</body>
+</html>
