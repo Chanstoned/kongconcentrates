@@ -500,7 +500,7 @@ footer a:hover{color:var(--gold)}
   <div class="email-signup">
     <div class="email-signup-inner">
       <div class="es-label">Stay in the Loop</div>
-      <p class="es-sub">New drops, lab results, and Oklahoma availability.</p>
+      <p class="es-sub">New drops, exclusive discounts, and giveaways.</p>
       <form name="newsletter" netlify data-netlify-honeypot="bot-field" onsubmit="submitNewsletter(event,this)">
         <input type="hidden" name="form-name" value="newsletter">
         <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
@@ -574,7 +574,7 @@ async function sendForm(){
 
 function submitNewsletter(e, form) {
   e.preventDefault();
-  fetch('/', {
+  fetch(window.location.pathname, {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     body: new URLSearchParams(new FormData(form)).toString()
