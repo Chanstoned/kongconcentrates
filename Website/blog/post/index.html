@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Meta tags populated by JS after post loads -->
+<title>Blog | Kong Concentrates</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="robots" content="index, follow">
+<link rel="canonical" id="canonical" href="https://kongconcentrates.com/blog">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Kong Concentrates">
+<meta property="og:title" id="og-title" content="">
+<meta property="og:description" id="og-desc" content="">
+<meta property="og:url" id="og-url" content="">
+<meta property="og:image" id="og-image" content="https://kongconcentrates.com/images/MAIN-ROUND-1.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" id="tw-title" content="">
+<meta name="twitter:description" id="tw-desc" content="">
+<meta name="twitter:image" id="tw-image" content="https://kongconcentrates.com/images/MAIN-ROUND-1.png">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5YMLL0G1WB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-5YMLL0G1WB');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- marked.js for markdown rendering -->
+<script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --black:#080808;
+  --gold:#c9a84c;
+  --gold2:#e8c46a;
+  --off-white:#f0ead8;
+  --border:#1e1e1e;
+}
+body{background:var(--black);color:var(--off-white);min-height:100vh;font-family:'DM Mono',monospace;}
+
+/* ━━ INTRO ━━ */
+#intro{position:fixed;inset:0;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.7s ease;}
+#intro.fade-out{opacity:0;pointer-events:none;}
+.logo-wrap{position:relative;width:min(220px,60vw);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.85);animation:logoIn 1.1s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,0.25);animation:pulse 2.4s ease-in-out infinite alternate;pointer-events:none;}
+.ring1{inset:-16px;animation-delay:0s;}
+.ring2{inset:-32px;animation-delay:0.5s;border-color:rgba(200,169,110,0.1)}
+.ring3{inset:-52px;animation-delay:0.9s;border-color:rgba(200,169,110,0.05)}
+@keyframes pulse{0%,100%{opacity:0.3;transform:scale(1);}50%{opacity:0.7;transform:scale(1.02);}}
+#intro-logo{width:100%;border-radius:50%;display:block;filter:drop-shadow(0 0 60px rgba(201,168,76,0.45));}
+@keyframes logoIn{to{opacity:1;transform:scale(1);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.intro-text{margin-top:36px;text-align:center;}
+.intro-tagline{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,6vw,42px);letter-spacing:0.15em;color:var(--off-white);opacity:0;animation:fadeUp 0.7s ease 1.2s forwards;}
+.intro-sub{margin-top:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0;animation:fadeUp 0.7s ease 1.5s forwards;}
+
+/* ━━ MAIN ━━ */
+#main{opacity:0;transition:opacity 0.6s ease;}
+#main.visible{opacity:1;}
+
+/* ━━ HEADER ━━ */
+header{padding:12px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:0;background:rgba(8,8,8,0.95);backdrop-filter:blur(8px);z-index:10;}
+.hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
+.htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
+.htext p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.4);margin-top:3px;}
+.hnav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
+.hnav a{font-family:'DM Mono',monospace;font-size:clamp(9px,1.5vw,11px);letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:6px clamp(6px,1vw,10px);border:1px solid #242424;transition:all 0.2s;}
+.hnav a:hover{color:var(--gold);border-color:rgba(201,168,76,0.4);}
+.hnav-ig{display:flex;align-items:center;justify-content:center;padding:8px 10px;}
+
+/* ━━ ARTICLE ━━ */
+.article-wrap{max-width:720px;margin:0 auto;padding:56px 40px 80px;}
+
+.back-link{display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.35);text-decoration:none;margin-bottom:48px;transition:color 0.2s;}
+.back-link:hover{color:var(--gold);}
+.back-link svg{transition:transform 0.2s;}
+.back-link:hover svg{transform:translateX(-3px);}
+
+.article-hero{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;border:1px solid var(--border);margin-bottom:40px;filter:brightness(0.9);}
+
+.article-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:12px;}
+.article-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,52px);letter-spacing:0.06em;line-height:1.05;margin-bottom:16px;}
+.article-meta{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(240,234,216,0.35);margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--border);}
+
+/* ━━ ARTICLE BODY ━━ */
+.article-body{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:400;line-height:1.75;color:rgba(240,234,216,0.82);}
+.article-body h1,.article-body h2,.article-body h3,.article-body h4{font-family:'Bebas Neue',sans-serif;letter-spacing:0.06em;color:var(--off-white);margin:2em 0 0.5em;}
+.article-body h2{font-size:clamp(24px,3vw,32px);}
+.article-body h3{font-size:clamp(20px,2.5vw,26px);}
+.article-body p{margin-bottom:1.4em;}
+.article-body a{color:var(--gold);text-decoration:underline;text-underline-offset:3px;}
+.article-body a:hover{color:var(--gold2);}
+.article-body strong{color:var(--off-white);font-weight:700;}
+.article-body em{color:rgba(240,234,216,0.65);font-style:italic;}
+.article-body ul,.article-body ol{padding-left:1.5em;margin-bottom:1.4em;}
+.article-body li{margin-bottom:0.5em;}
+.article-body blockquote{border-left:2px solid var(--gold);padding-left:20px;margin:2em 0;color:rgba(240,234,216,0.5);font-style:italic;}
+.article-body hr{border:none;border-top:1px solid var(--border);margin:2.5em 0;}
+.article-body img{max-width:100%;border:1px solid var(--border);display:block;margin:2em auto;}
+.article-body code{font-family:'DM Mono',monospace;font-size:13px;background:#111;padding:2px 6px;border:1px solid #222;}
+.article-body pre{background:#0d0d0d;border:1px solid #222;padding:20px;overflow-x:auto;margin-bottom:1.4em;}
+.article-body pre code{background:none;border:none;padding:0;}
+
+/* Tags */
+.article-tags{margin-top:40px;padding-top:28px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:8px;}
+.tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.4);border:1px solid #1e1e1e;padding:4px 10px;}
+
+/* Error / loading */
+.post-error{text-align:center;padding:80px 20px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.25);}
+
+/* ━━ FOOTER ━━ */
+footer{padding:24px 40px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+footer p{font-family:'DM Mono',monospace;font-size:11px;color:#666;letter-spacing:0.5px;}
+footer a{color:#888;text-decoration:none;}
+footer a:hover{color:var(--gold);}
+
+/* ━━ RESPONSIVE ━━ */
+@media(max-width:660px){
+  .hnav a{padding:4px 7px;font-size:9px;letter-spacing:0.06em;}
+  header{padding:10px 16px;}
+  .article-wrap{padding:40px 20px 60px;}
+  footer{padding:20px 16px;flex-direction:column;gap:6px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── INTRO ── -->
+<div id="intro">
+  <div class="logo-wrap">
+    <div class="ring ring1"></div>
+    <div class="ring ring2"></div>
+    <div class="ring ring3"></div>
+    <img id="intro-logo" src="../../images/MAIN-ROUND-1.png" alt="Kong Concentrates">
+  </div>
+  <div class="intro-text">
+    <div class="intro-tagline">Kong Concentrates</div>
+    <div class="intro-sub">Journal</div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div id="main">
+
+  <header>
+    <a href="/" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
+      <img src="../../images/MAIN-ROUND-1.png" alt="Logo" class="hlogo">
+      <div class="htext">
+        <h1>Kong Concentrates</h1>
+        <p>Grove, Oklahoma</p>
+      </div>
+    </a>
+    <nav class="hnav">
+      <a href="/menu">Menu</a>
+      <a href="/coa">Lab Results</a>
+      <a href="/locations">Locations</a>
+      <a href="/merch">Merch</a>
+      <a href="/contact">Contact</a>
+      <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+    </nav>
+  </header>
+
+  <div class="article-wrap" id="article-wrap">
+    <div class="post-error" id="post-loading">Loading&hellip;</div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Kong Concentrates LLC &nbsp;&middot;&nbsp; Grove, OK 74344</p>
+    <p>License PAAA-NYSE-PYO4 &nbsp;&middot;&nbsp; <a href="/blog">Blog</a> &nbsp;&middot;&nbsp; <a href="/coa">Lab Results</a> &nbsp;&middot;&nbsp; <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a></p>
+  </footer>
+
+</div>
+
+<script>
+function formatDate(str) {
+  if (!str) return '';
+  var d = new Date(str + 'T12:00:00');
+  return d.toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+}
+
+function setMeta(post, slug) {
+  var title = (post.og_title || post.title) + ' | Kong Concentrates';
+  var desc = post.description || '';
+  var img = post.og_image || 'https://kongconcentrates.com/images/MAIN-ROUND-1.png';
+  var url = 'https://kongconcentrates.com/blog/' + slug;
+  var keywords = (post.keywords || []).join(', ');
+
+  document.title = title;
+  document.querySelector('meta[name="description"]').setAttribute('content', desc);
+  document.querySelector('meta[name="keywords"]').setAttribute('content', keywords);
+  document.getElementById('canonical').setAttribute('href', url);
+  document.getElementById('og-title').setAttribute('content', title);
+  document.getElementById('og-desc').setAttribute('content', desc);
+  document.getElementById('og-url').setAttribute('content', url);
+  document.getElementById('og-image').setAttribute('content', img);
+  document.getElementById('tw-title').setAttribute('content', title);
+  document.getElementById('tw-desc').setAttribute('content', desc);
+  document.getElementById('tw-image').setAttribute('content', img);
+}
+
+function renderPost(post, slug) {
+  setMeta(post, slug);
+
+  var html = '<a class="back-link" href="/blog">' +
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>' +
+    'All Posts</a>';
+
+  if (post.og_image) {
+    html += '<img class="article-hero" src="' + post.og_image + '" alt="' + post.title + '">';
+  }
+
+  html += '<div class="article-label">Kong Journal</div>';
+  html += '<h1 class="article-title">' + post.title + '</h1>';
+  html += '<div class="article-meta">' + formatDate(post.date) + '</div>';
+  html += '<div class="article-body" id="article-body"></div>';
+
+  if (post.keywords && post.keywords.length) {
+    html += '<div class="article-tags">';
+    post.keywords.forEach(function(k) {
+      html += '<span class="tag">' + k + '</span>';
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('article-wrap').innerHTML = html;
+
+  // Render markdown safely
+  if (post.body) {
+    document.getElementById('article-body').innerHTML = marked.parse(post.body);
+  }
+}
+
+// Get slug from URL: /blog/my-post (via Netlify rewrite) or ?slug=my-post fallback
+var slug = '';
+var pathParts = window.location.pathname.replace(/\/$/, '').split('/');
+var lastPart = pathParts[pathParts.length - 1];
+if (lastPart && lastPart !== 'post') {
+  slug = lastPart;
+} else {
+  slug = new URLSearchParams(window.location.search).get('slug') || '';
+}
+
+if (!slug) {
+  document.getElementById('article-wrap').innerHTML =
+    '<a class="back-link" href="/blog"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>All Posts</a>' +
+    '<div class="post-error">Post not found.</div>';
+} else {
+  fetch('/blog/posts.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var post = (data.posts || []).find(function(p) { return p.slug === slug; });
+      if (!post) {
+        document.getElementById('article-wrap').innerHTML =
+          '<a class="back-link" href="/blog"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>All Posts</a>' +
+          '<div class="post-error">Post not found.</div>';
+        return;
+      }
+      renderPost(post, slug);
+    })
+    .catch(function() {
+      document.getElementById('article-wrap').innerHTML =
+        '<div class="post-error">Could not load post.</div>';
+    });
+}
+
+// Intro
+setTimeout(function() {
+  document.getElementById('intro').classList.add('fade-out');
+  setTimeout(function() {
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('main').classList.add('visible');
+  }, 700);
+}, 2500);
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: Website/images/blog
+public_folder: /images/blog
+
+# Decap CMS config for Kong Concentrates blog
+# SETUP REQUIRED (one-time, in Netlify dashboard):
+#   1. Site Settings → Identity → Enable Identity
+#   2. Identity → Services → Enable Git Gateway
+#   3. Invite yourself as a user via Identity → Invite users
+#   4. Accept the invite, then go to /admin/ to log in
+
+collections:
+  - label: "Blog"
+    name: "blog"
+    files:
+      - label: "Posts"
+        name: "posts"
+        file: "Website/blog/posts.json"
+        format: "json"
+        fields:
+          - label: "Posts"
+            name: "posts"
+            widget: "list"
+            summary: "{{fields.title}} — {{fields.date}}"
+            fields:
+              - label: "Title"
+                name: "title"
+                widget: "string"
+                hint: "Post headline shown on the listing page and in browser tabs."
+
+              - label: "Slug"
+                name: "slug"
+                widget: "string"
+                hint: "URL-friendly ID, lowercase with hyphens. E.g. why-solventless-matters"
+                pattern:
+                  - "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                  - "Lowercase letters, numbers, and hyphens only — no spaces."
+
+              - label: "Publish Date"
+                name: "date"
+                widget: "datetime"
+                date_format: "YYYY-MM-DD"
+                time_format: false
+                format: "YYYY-MM-DD"
+
+              - label: "Meta Description"
+                name: "description"
+                widget: "string"
+                hint: "Appears in Google search results and social previews. ~155 characters."
+
+              - label: "Keywords"
+                name: "keywords"
+                widget: "list"
+                allow_add: true
+                hint: "SEO tags. E.g. live rosin, solventless, Oklahoma dispensary"
+
+              - label: "OG Title (optional)"
+                name: "og_title"
+                widget: "string"
+                required: false
+                hint: "Override the post title for social sharing previews. Leave blank to use the main title."
+
+              - label: "OG / Hero Image"
+                name: "og_image"
+                widget: "image"
+                required: false
+                hint: "Used as the hero image on the post and as the social sharing preview (1200×630 px recommended)."
+
+              - label: "Body"
+                name: "body"
+                widget: "markdown"
+                hint: "Full post content. Supports headings, bold, italic, links, and images."
