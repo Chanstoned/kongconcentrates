@@ -420,20 +420,33 @@ document.addEventListener('click', function(e) {
   if (!e.target.closest('.finder-input-wrap')) closeDropdown();
 });
 
+function formatAddress(p) {
+  var line1 = (p.housenumber && p.street) ? p.housenumber + ' ' + p.street
+              : (p.name || p.street || '');
+  var line2 = [p.city || p.town || p.village, p.state].filter(Boolean).join(', ');
+  if (p.postcode) line2 += ' ' + p.postcode;
+  return line1 ? (line2 ? line1 + ', ' + line2 : line1) : line2;
+}
+
 function fetchSuggestions(q) {
-  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=us&addressdetails=1&q=' + encodeURIComponent(q), {
-    headers: {'Accept-Language': 'en'}
+  // Photon returns full address details including house numbers
+  fetch('https://photon.komoot.io/api/?q=' + encodeURIComponent(q) + '&limit=6&lang=en&lat=36.5&lon=-96.0', {
+    headers: {'Accept': 'application/json'}
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
-    acResults = data || [];
+    var features = (data && data.features) ? data.features : [];
+    // US only
+    acResults = features.filter(function(f) { return f.properties.countrycode === 'US'; }).slice(0, 5);
     acIndex = -1;
     if (!acResults.length) { closeDropdown(); return; }
     var html = '';
     acResults.forEach(function(item, i) {
-      var parts = item.display_name.split(', ');
-      var main = parts[0];
-      var sub = parts.slice(1, 3).join(', ');
+      var p = item.properties;
+      var main = (p.housenumber && p.street) ? p.housenumber + ' ' + p.street
+                 : (p.name || p.street || p.city || '');
+      var sub = [p.city || p.town || p.village, p.state].filter(Boolean).join(', ');
+      if (p.postcode) sub += ' ' + p.postcode;
       html += '<div class="ac-item" data-idx="' + i + '">' +
               '<strong style="display:block;font-family:\'DM Mono\',monospace;font-weight:500">' + main + '</strong>' +
               (sub ? '<span style="font-size:10px;opacity:0.5">' + sub + '</span>' : '') +
@@ -456,14 +469,17 @@ function highlightItem(idx) {
     el.classList.toggle('ac-active', i === idx);
   });
   if (idx >= 0 && acResults[idx]) {
-    inputEl.value = acResults[idx].display_name.split(', ').slice(0, 2).join(', ');
+    inputEl.value = formatAddress(acResults[idx].properties);
   }
 }
 
 function selectSuggestion(item) {
-  inputEl.value = item.display_name.split(', ').slice(0, 2).join(', ');
+  inputEl.value = formatAddress(item.properties);
   closeDropdown();
-  placeUserAndUpdate(parseFloat(item.lat), parseFloat(item.lon), item.display_name.split(',')[0]);
+  // GeoJSON coords are [lng, lat]
+  var lng = item.geometry.coordinates[0];
+  var lat = item.geometry.coordinates[1];
+  placeUserAndUpdate(lat, lng, formatAddress(item.properties).split(',')[0]);
 }
 
 function closeDropdown() {
