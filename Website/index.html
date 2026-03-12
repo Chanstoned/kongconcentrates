@@ -21,6 +21,19 @@
 <meta name="twitter:title" content="Kong Concentrates | Artisan Solventless Concentrates | Grove, OK">
 <meta name="twitter:description" content="Premium solventless concentrates handcrafted in Grove, Oklahoma. Live rosin, hash holes, and vapes — full panel third-party tested. Quality is King.">
 <meta name="twitter:image" content="https://kongconcentrates.com/images/MAIN-ROUND-1.png">
+<!-- Netlify Identity — handles invite/recovery tokens that redirect to homepage -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', function(user) {
+      if (!user) {
+        window.netlifyIdentity.on('login', function() {
+          document.location.href = '/admin/';
+        });
+      }
+    });
+  }
+</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-5YMLL0G1WB"></script>
 <script>
