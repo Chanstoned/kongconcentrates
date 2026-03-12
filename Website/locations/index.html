@@ -420,36 +420,20 @@ document.addEventListener('click', function(e) {
   if (!e.target.closest('.finder-input-wrap')) closeDropdown();
 });
 
-function formatAddress(p) {
-  var line1 = (p.housenumber && p.street) ? p.housenumber + ' ' + p.street
-              : (p.name || p.street || '');
-  var line2 = [p.city || p.town || p.village, p.state].filter(Boolean).join(', ');
-  if (p.postcode) line2 += ' ' + p.postcode;
-  return line1 ? (line2 ? line1 + ', ' + line2 : line1) : line2;
-}
-
 function fetchSuggestions(q) {
-  // Photon returns full address details including house numbers
-  fetch('https://photon.komoot.io/api/?q=' + encodeURIComponent(q) + '&limit=6&lang=en&lat=36.5&lon=-96.0', {
-    headers: {'Accept': 'application/json'}
-  })
+  // ArcGIS World Geocoder has comprehensive US address coverage including house numbers
+  fetch('https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest' +
+        '?text=' + encodeURIComponent(q) + '&countryCode=USA&maxSuggestions=5&f=json')
   .then(function(r) { return r.json(); })
   .then(function(data) {
-    var features = (data && data.features) ? data.features : [];
-    // US only
-    acResults = features.filter(function(f) {
-      var cc = (f.properties.countrycode || '').toLowerCase();
-      return cc === 'us';
-    }).slice(0, 5);
+    acResults = (data && data.suggestions) ? data.suggestions : [];
     acIndex = -1;
     if (!acResults.length) { closeDropdown(); return; }
     var html = '';
     acResults.forEach(function(item, i) {
-      var p = item.properties;
-      var main = (p.housenumber && p.street) ? p.housenumber + ' ' + p.street
-                 : (p.name || p.street || p.city || '');
-      var sub = [p.city || p.town || p.village, p.state].filter(Boolean).join(', ');
-      if (p.postcode) sub += ' ' + p.postcode;
+      var parts = item.text.split(', ');
+      var main = parts[0];
+      var sub = parts.slice(1).join(', ');
       html += '<div class="ac-item" data-idx="' + i + '">' +
               '<strong style="display:block;font-family:\'DM Mono\',monospace;font-weight:500">' + main + '</strong>' +
               (sub ? '<span style="font-size:10px;opacity:0.5">' + sub + '</span>' : '') +
@@ -472,17 +456,27 @@ function highlightItem(idx) {
     el.classList.toggle('ac-active', i === idx);
   });
   if (idx >= 0 && acResults[idx]) {
-    inputEl.value = formatAddress(acResults[idx].properties);
+    inputEl.value = acResults[idx].text;
   }
 }
 
 function selectSuggestion(item) {
-  inputEl.value = formatAddress(item.properties);
+  inputEl.value = item.text;
   closeDropdown();
-  // GeoJSON coords are [lng, lat]
-  var lng = item.geometry.coordinates[0];
-  var lat = item.geometry.coordinates[1];
-  placeUserAndUpdate(lat, lng, formatAddress(item.properties).split(',')[0]);
+  // Resolve coordinates via magicKey
+  fetch('https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates' +
+        '?SingleLine=' + encodeURIComponent(item.text) +
+        '&magicKey=' + encodeURIComponent(item.magicKey) +
+        '&outFields=*&f=json')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data && data.candidates && data.candidates.length) {
+      var c = data.candidates[0];
+      // ArcGIS returns x=longitude, y=latitude
+      placeUserAndUpdate(c.location.y, c.location.x, item.text.split(',')[0]);
+    }
+  })
+  .catch(function() {});
 }
 
 function closeDropdown() {
