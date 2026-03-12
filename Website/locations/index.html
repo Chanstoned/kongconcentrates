@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -256,9 +256,11 @@ footer a:hover{color:var(--gold);}
 
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN2GKNo=" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
 // ── DATA ──────────────────────────────────────────────────────────────────
+var map, storeMarkers = [], userMarker = null;
+
 var LOCATIONS = [
   {
     id: 'flavor-chasers',
@@ -285,19 +287,6 @@ var LOCATIONS = [
 ];
 
 // ── MAP ───────────────────────────────────────────────────────────────────
-var map = L.map('map', {
-  center: [36.5, -95.3],
-  zoom: 7,
-  zoomControl: true,
-  scrollWheelZoom: false
-});
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>',
-  maxZoom: 18
-}).addTo(map);
-
-// Gold marker icon
 function makeIcon(highlight) {
   return L.divIcon({
     className: '',
@@ -311,15 +300,27 @@ function makeIcon(highlight) {
   });
 }
 
-var storeMarkers = [];
-var userMarker = null;
+function initMap() {
+  map = L.map('map', {
+    center: [36.5, -95.3],
+    zoom: 7,
+    zoomControl: true,
+    scrollWheelZoom: false
+  });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 18
+  }).addTo(map);
+  LOCATIONS.forEach(function(loc) {
+    var m = L.marker([loc.lat, loc.lng], {icon: makeIcon(false)})
+      .addTo(map)
+      .bindPopup('<strong>' + loc.name + '</strong><br>' + loc.address + '<br>' + loc.city + '<br>' + loc.phone);
+    storeMarkers.push(m);
+  });
+  renderCards(null, null);
+}
 
-LOCATIONS.forEach(function(loc) {
-  var m = L.marker([loc.lat, loc.lng], {icon: makeIcon(false)})
-    .addTo(map)
-    .bindPopup('<strong>' + loc.name + '</strong>' + loc.address + '<br>' + loc.city + '<br>' + loc.phone);
-  storeMarkers.push(m);
-});
+document.addEventListener('DOMContentLoaded', initMap);
 
 // ── HAVERSINE ─────────────────────────────────────────────────────────────
 function haversine(lat1, lng1, lat2, lng2) {
@@ -373,9 +374,6 @@ function renderCards(userLat, userLng) {
     m.setIcon(makeIcon(isClosest));
   });
 }
-
-// Initial render (no user location)
-renderCards(null, null);
 
 // ── FIND BY ADDRESS ───────────────────────────────────────────────────────
 function setStatus(msg, isError) {
