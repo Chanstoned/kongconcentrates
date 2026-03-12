@@ -266,42 +266,44 @@ footer a:hover{color:var(--gold)}
 
       <div class="product-badge">Services</div>
       <h2 class="product-title">Private<br>Consultation</h2>
-      <div class="product-price">$150</div>
+      <div class="product-price">Inquire</div>
       <div class="product-divider"></div>
 
       <p class="product-desc">
-        Get direct access to Kong's extraction knowledge. Whether you're dialing in your first press or troubleshooting a commercial-scale wash, this one-on-one session gives you the edge. Conducted remotely via video call — we'll work through your specific goals and challenges.
+        Get direct access to Kong's extraction knowledge. Available in-person or virtually — pricing varies depending on format, scope, and travel. Whether you're building out a new lab or leveling up your existing process, we'll tailor the session to your goals.
       </p>
 
-      <div class="includes-label">What's Included</div>
+      <div class="includes-label">Areas of Expertise</div>
       <ul class="includes-list">
-        <li><span class="li-dot"></span>60-minute 1-on-1 video session with Kong's team</li>
-        <li><span class="li-dot"></span>Solventless technique & process review</li>
-        <li><span class="li-dot"></span>Strain selection & input material guidance</li>
-        <li><span class="li-dot"></span>Equipment & workflow recommendations</li>
-        <li><span class="li-dot"></span>Post-session follow-up via email</li>
+        <li><span class="li-dot"></span>Lab materials, setup & equipment selection</li>
+        <li><span class="li-dot"></span>Material preparation & sourcing</li>
+        <li><span class="li-dot"></span>Ice water extraction (bubble hash)</li>
+        <li><span class="li-dot"></span>Drying & freeze drying techniques</li>
+        <li><span class="li-dot"></span>Dry sift extraction & static isolation</li>
+        <li><span class="li-dot"></span>Traditional hash & rosin making SOPs</li>
+        <li><span class="li-dot"></span>Curing SOPs & product quality elevation</li>
+        <li><span class="li-dot"></span>Solventless process optimization for brands</li>
       </ul>
 
       <div class="product-details">
         <div class="product-detail-row">
           <span class="pd-label">Format</span>
-          <span class="pd-val">Video call (link sent after booking)</span>
+          <span class="pd-val">In-person or virtual</span>
         </div>
         <div class="product-detail-row">
-          <span class="pd-label">Duration</span>
-          <span class="pd-val">60 minutes</span>
+          <span class="pd-label">Pricing</span>
+          <span class="pd-val">Varies — contact for a quote</span>
         </div>
         <div class="product-detail-row">
-          <span class="pd-label">Scheduling</span>
-          <span class="pd-val">Confirmed within 48 hrs via email</span>
+          <span class="pd-label">Specialty</span>
+          <span class="pd-val">Solventless extraction methods</span>
         </div>
       </div>
 
-      <button class="buy-btn" id="buy-btn" onclick="checkout()">
-        Book Now — $150
-      </button>
-      <p class="buy-note">Secure checkout via Stripe &nbsp;·&nbsp; Scheduling confirmed within 48 hours</p>
-      <div class="buy-error" id="buy-error"></div>
+      <a class="buy-btn" href="/contact/?inquiry=consultation" style="display:block;text-align:center;text-decoration:none;line-height:normal;padding:18px;">
+        Inquire Now
+      </a>
+      <p class="buy-note">Reach out to discuss your goals &nbsp;·&nbsp; In-person &amp; virtual available</p>
     </div>
   </div>
 
@@ -371,33 +373,6 @@ document.addEventListener('keydown', function(e){
   if(e.key==='ArrowRight') lbNav(1);
 });
 
-// Checkout
-async function checkout() {
-  var btn = document.getElementById('buy-btn');
-  var errEl = document.getElementById('buy-error');
-  errEl.style.display = 'none';
-  btn.disabled = true;
-  btn.textContent = 'Redirecting…';
-
-  try {
-    var res = await fetch('/.netlify/functions/create-checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ productSlug: 'private-consultation' })
-    });
-    var data = await res.json();
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      throw new Error(data.error || 'Could not start checkout.');
-    }
-  } catch (err) {
-    errEl.textContent = err.message;
-    errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Book Now — $150';
-  }
-}
 </script>
 </body>
 </html>
