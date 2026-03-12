@@ -1,7 +1,7 @@
 const Stripe = require("stripe");
 
 // Product catalog — prices defined here, IDs set in Netlify env vars
-// Set STRIPE_SECRET_KEY, STRIPE_TSHIRT_PRICE_ID, STRIPE_CONSULTATION_PRICE_ID
+// Set STRIPE_SECRET_KEY, STRIPE_TSHIRT_PRICE_ID, STRIPE_STICKER_PRICE_ID
 // in your Netlify site settings → Environment variables.
 
 const PRODUCTS = {
@@ -9,9 +9,9 @@ const PRODUCTS = {
     priceEnvKey: "STRIPE_TSHIRT_PRICE_ID",
     name: "Kong T-Shirt",
   },
-  "private-consultation": {
-    priceEnvKey: "STRIPE_CONSULTATION_PRICE_ID",
-    name: "Private Consultation",
+  "sticker-pack": {
+    priceEnvKey: "STRIPE_STICKER_PRICE_ID",
+    name: "Sticker Pack",
   },
 };
 
