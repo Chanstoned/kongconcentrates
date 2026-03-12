@@ -437,7 +437,10 @@ function fetchSuggestions(q) {
   .then(function(data) {
     var features = (data && data.features) ? data.features : [];
     // US only
-    acResults = features.filter(function(f) { return f.properties.countrycode === 'US'; }).slice(0, 5);
+    acResults = features.filter(function(f) {
+      var cc = (f.properties.countrycode || '').toLowerCase();
+      return cc === 'us';
+    }).slice(0, 5);
     acIndex = -1;
     if (!acResults.length) { closeDropdown(); return; }
     var html = '';
