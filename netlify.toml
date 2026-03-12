@@ -4,3 +4,9 @@
 
 [functions]
   node_bundler = "esbuild"
+
+# Blog post clean URLs: /blog/my-post → /blog/post/?slug=my-post
+[[redirects]]
+  from = "/blog/:slug"
+  to = "/blog/post/?slug=:slug"
+  status = 200
