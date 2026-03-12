@@ -65,25 +65,28 @@ header{padding:12px 28px;border-bottom:1px solid var(--border);display:flex;alig
 .hnav a.active{color:var(--gold);border-color:rgba(201,168,76,0.35);}
 .hnav-ig{display:flex;align-items:center;justify-content:center;padding:8px 10px;}
 
-/* ━━ PAGE HEADER ━━ */
-.page-header{padding:64px 40px 48px;text-align:center;border-bottom:1px solid var(--border);}
-.page-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:16px;}
-.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,8vw,72px);letter-spacing:0.08em;line-height:1;margin-bottom:14px;}
-.page-sub{font-family:'DM Mono',monospace;font-size:13px;color:rgba(240,234,216,0.5);line-height:1.8;letter-spacing:0.05em;}
-
 /* ━━ LOCATION FINDER ━━ */
 .finder-section{max-width:900px;margin:0 auto;padding:56px 40px 0;}
 
 .finder-heading{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,40px);letter-spacing:0.08em;margin-bottom:8px;text-align:center;}
 .finder-sub{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(240,234,216,0.45);text-align:center;margin-bottom:28px;}
 
-.finder-row{display:flex;gap:8px;max-width:540px;margin:0 auto 16px;}
-.finder-input{flex:1;background:#0d0d0d;border:1px solid #2a2a2a;color:var(--off-white);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;padding:12px 14px;outline:none;transition:border-color 0.2s;min-width:0;}
+.finder-row{display:flex;gap:8px;max-width:540px;margin:0 auto 16px;position:relative;}
+.finder-input-wrap{flex:1;position:relative;min-width:0;}
+.finder-input{width:100%;background:#0d0d0d;border:1px solid #2a2a2a;color:var(--off-white);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;padding:12px 14px;outline:none;transition:border-color 0.2s;}
 .finder-input:focus{border-color:rgba(201,168,76,0.4);}
 .finder-input::placeholder{color:#3a3a3a;}
 .finder-btn{background:transparent;border:1px solid rgba(201,168,76,0.4);color:var(--gold);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:12px 20px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
 .finder-btn:hover{background:rgba(201,168,76,0.08);border-color:var(--gold);}
 .finder-btn:disabled{opacity:0.4;cursor:default;}
+
+/* Autocomplete dropdown */
+.ac-dropdown{position:absolute;top:100%;left:0;right:0;background:#111;border:1px solid #2a2a2a;border-top:none;z-index:50;display:none;}
+.ac-dropdown.open{display:block;}
+.ac-item{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.04em;color:rgba(240,234,216,0.65);padding:10px 14px;cursor:pointer;border-bottom:1px solid #1a1a1a;transition:background 0.15s,color 0.15s;line-height:1.4;}
+.ac-item:last-child{border-bottom:none;}
+.ac-item:hover,.ac-item.ac-active{background:#1a1a1a;color:var(--gold);}
+.ac-item em{font-style:normal;color:var(--gold);opacity:0.9;}
 
 .use-location-btn{display:block;margin:0 auto 32px;background:none;border:none;color:rgba(240,234,216,0.35);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;padding:4px 0;transition:color 0.2s;text-decoration:underline;text-underline-offset:3px;}
 .use-location-btn:hover{color:rgba(240,234,216,0.65);}
@@ -197,20 +200,17 @@ footer a:hover{color:var(--gold);}
     </nav>
   </header>
 
-  <div class="page-header">
-    <div class="page-label">Where to Find Us</div>
-    <div class="page-title">Locations</div>
-    <p class="page-sub">Find Kong Concentrates at a dispensary near you.</p>
-  </div>
-
   <!-- LOCATION FINDER -->
   <div class="finder-section">
 
     <div class="finder-heading">Find Kong Near You</div>
-    <p class="finder-sub">Enter your address or zip code to see the closest location.</p>
+    <p class="finder-sub">Enter your address or zip code to see the closest dispensary carrying our products.</p>
 
     <div class="finder-row">
-      <input class="finder-input" id="loc-input" type="text" placeholder="Address, city, or zip code&hellip;" autocomplete="off" onkeydown="if(event.key==='Enter')findLocations()">
+      <div class="finder-input-wrap">
+        <input class="finder-input" id="loc-input" type="text" placeholder="Address, city, or zip code&hellip;" autocomplete="off">
+        <div class="ac-dropdown" id="ac-dropdown"></div>
+      </div>
       <button class="finder-btn" id="find-btn" onclick="findLocations()">Search</button>
     </div>
     <button class="use-location-btn" onclick="useMyLocation()">&#8982; Use my current location</button>
@@ -375,6 +375,102 @@ function renderCards(userLat, userLng) {
   });
 }
 
+// ── AUTOCOMPLETE ──────────────────────────────────────────────────────────
+var acTimer = null;
+var acIndex = -1;
+var acResults = [];
+
+var inputEl = document.getElementById('loc-input');
+var dropdown = document.getElementById('ac-dropdown');
+
+inputEl.addEventListener('input', function() {
+  clearTimeout(acTimer);
+  var q = this.value.trim();
+  if (q.length < 3) { closeDropdown(); return; }
+  acTimer = setTimeout(function() { fetchSuggestions(q); }, 280);
+});
+
+inputEl.addEventListener('keydown', function(e) {
+  if (!dropdown.classList.contains('open')) {
+    if (e.key === 'Enter') findLocations();
+    return;
+  }
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    acIndex = Math.min(acIndex + 1, acResults.length - 1);
+    highlightItem(acIndex);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    acIndex = Math.max(acIndex - 1, -1);
+    highlightItem(acIndex);
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (acIndex >= 0 && acResults[acIndex]) {
+      selectSuggestion(acResults[acIndex]);
+    } else {
+      closeDropdown();
+      findLocations();
+    }
+  } else if (e.key === 'Escape') {
+    closeDropdown();
+  }
+});
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.finder-input-wrap')) closeDropdown();
+});
+
+function fetchSuggestions(q) {
+  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=us&addressdetails=1&q=' + encodeURIComponent(q), {
+    headers: {'Accept-Language': 'en'}
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    acResults = data || [];
+    acIndex = -1;
+    if (!acResults.length) { closeDropdown(); return; }
+    var html = '';
+    acResults.forEach(function(item, i) {
+      var parts = item.display_name.split(', ');
+      var main = parts[0];
+      var sub = parts.slice(1, 3).join(', ');
+      html += '<div class="ac-item" data-idx="' + i + '">' +
+              '<strong style="display:block;font-family:\'DM Mono\',monospace;font-weight:500">' + main + '</strong>' +
+              (sub ? '<span style="font-size:10px;opacity:0.5">' + sub + '</span>' : '') +
+              '</div>';
+    });
+    dropdown.innerHTML = html;
+    dropdown.classList.add('open');
+    dropdown.querySelectorAll('.ac-item').forEach(function(el) {
+      el.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        selectSuggestion(acResults[parseInt(this.dataset.idx)]);
+      });
+    });
+  })
+  .catch(function() { closeDropdown(); });
+}
+
+function highlightItem(idx) {
+  dropdown.querySelectorAll('.ac-item').forEach(function(el, i) {
+    el.classList.toggle('ac-active', i === idx);
+  });
+  if (idx >= 0 && acResults[idx]) {
+    inputEl.value = acResults[idx].display_name.split(', ').slice(0, 2).join(', ');
+  }
+}
+
+function selectSuggestion(item) {
+  inputEl.value = item.display_name.split(', ').slice(0, 2).join(', ');
+  closeDropdown();
+  placeUserAndUpdate(parseFloat(item.lat), parseFloat(item.lon), item.display_name.split(',')[0]);
+}
+
+function closeDropdown() {
+  dropdown.classList.remove('open');
+  acIndex = -1;
+}
+
 // ── FIND BY ADDRESS ───────────────────────────────────────────────────────
 function setStatus(msg, isError) {
   var el = document.getElementById('finder-status');
@@ -385,25 +481,19 @@ function setStatus(msg, isError) {
 function findLocations() {
   var query = document.getElementById('loc-input').value.trim();
   if (!query) { setStatus('Enter an address or zip code.', true); return; }
-
+  closeDropdown();
   var btn = document.getElementById('find-btn');
   btn.disabled = true;
   setStatus('Searching\u2026');
-
   fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&q=' + encodeURIComponent(query), {
-    headers: {'Accept-Language': 'en', 'User-Agent': 'KongConcentratesLocator/1.0'}
+    headers: {'Accept-Language': 'en'}
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
     btn.disabled = false;
-    if (!data || !data.length) {
-      setStatus('No results found. Try a zip code or city name.', true);
-      return;
-    }
-    var lat = parseFloat(data[0].lat);
-    var lng = parseFloat(data[0].lon);
+    if (!data || !data.length) { setStatus('No results found. Try a zip code or city name.', true); return; }
     setStatus('');
-    placeUserAndUpdate(lat, lng, data[0].display_name.split(',')[0]);
+    placeUserAndUpdate(parseFloat(data[0].lat), parseFloat(data[0].lon), data[0].display_name.split(',')[0]);
   })
   .catch(function() {
     btn.disabled = false;
