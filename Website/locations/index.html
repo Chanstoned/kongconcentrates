@@ -77,8 +77,8 @@ header{
 .hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
 .htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
 .htext p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.4);margin-top:3px;}
-.hnav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-.hnav a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;}
+.hnav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
+.hnav a{font-family:'DM Mono',monospace;font-size:clamp(9px,1.5vw,11px);letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:6px clamp(6px,1vw,10px);border:1px solid #242424;transition:all 0.2s;}
 .hnav a:hover{color:var(--gold);border-color:rgba(201,168,76,0.4);}
 .hnav a.active{color:var(--gold);border-color:rgba(201,168,76,0.35);}
 .hnav-ig{display:flex;align-items:center;justify-content:center;padding:8px 10px;}
@@ -172,7 +172,7 @@ footer a:hover{color:var(--gold);}
 @media(max-width:620px){
   .hide-mobile{display:none}
   .hnav{gap:6px;}
-  .hnav a{padding:7px 10px;font-size:10px;letter-spacing:0.1em;}
+  .hnav a{padding:4px 7px;font-size:9px;letter-spacing:0.06em;}
   header{padding:14px 16px;}
   .page-header{padding:48px 20px 36px;}
   .loc-wrap{padding:40px 20px 60px;}
@@ -223,7 +223,7 @@ footer a:hover{color:var(--gold);}
     </a>
     <nav class="hnav">
       <a href="/menu">Menu</a>
-      <a href="/coa" class="hide-mobile">Lab Results</a>
+      <a href="/coa">Lab Results</a>
       <a href="/locations" class="active hide-mobile">Locations</a>
       <a href="/merch">Merch</a>
       <a href="/contact">Contact</a>
