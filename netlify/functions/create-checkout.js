@@ -47,8 +47,13 @@ exports.handler = async (event) => {
 
     const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-    const origin = event.headers.origin || event.headers.referer || "https://kongconcentrates.com";
-    const baseUrl = origin.replace(/\/$/, "");
+    // Use origin header if present; otherwise extract origin from referer; fallback to hardcoded domain
+    let baseUrl = "https://kongconcentrates.com";
+    if (event.headers.origin) {
+      baseUrl = event.headers.origin.replace(/\/$/, "");
+    } else if (event.headers.referer) {
+      try { baseUrl = new URL(event.headers.referer).origin; } catch(e) {}
+    }
 
     const sessionParams = {
       mode: "payment",
