@@ -237,24 +237,20 @@ footer a:hover{color:var(--gold)}
         <img
           id="gallery-main"
           class="gallery-main"
-          src="/merch/images/tshirt-1.jpg"
+          src="/images/kongshirt%20front.png"
           alt="Kong T-Shirt"
           onerror="this.src='/images/MAIN-ROUND-1.png';this.style.padding='40px'"
         >
       </div>
       <div class="gallery-thumbs">
         <img class="gallery-thumb active"
-          src="/merch/images/tshirt-1.jpg" alt="Kong T-Shirt view 1"
+          src="/images/kongshirt%20front.png" alt="Kong T-Shirt front"
           onerror="this.style.display='none'"
-          onclick="setMainImg('/merch/images/tshirt-1.jpg',this)">
+          onclick="setMainImg('/images/kongshirt%20front.png',this)">
         <img class="gallery-thumb"
-          src="/merch/images/tshirt-2.jpg" alt="Kong T-Shirt view 2"
+          src="/images/kongshirt%20back%20512.png" alt="Kong T-Shirt back"
           onerror="this.style.display='none'"
-          onclick="setMainImg('/merch/images/tshirt-2.jpg',this)">
-        <img class="gallery-thumb"
-          src="/merch/images/tshirt-3.jpg" alt="Kong T-Shirt view 3"
-          onerror="this.style.display='none'"
-          onclick="setMainImg('/merch/images/tshirt-3.jpg',this)">
+          onclick="setMainImg('/images/kongshirt%20back%20512.png',this)">
       </div>
     </div>
 
@@ -338,11 +334,10 @@ footer a:hover{color:var(--gold)}
 })();
 
 // Gallery
-var currentImg = '/merch/images/tshirt-1.jpg';
+var currentImg = '/images/kongshirt%20front.png';
 var galleryImgs = [
-  '/merch/images/tshirt-1.jpg',
-  '/merch/images/tshirt-2.jpg',
-  '/merch/images/tshirt-3.jpg'
+  '/images/kongshirt%20front.png',
+  '/images/kongshirt%20back%20512.png'
 ];
 
 function setMainImg(src, thumbEl) {

@@ -224,24 +224,16 @@ footer a:hover{color:var(--gold)}
         <img
           id="gallery-main"
           class="gallery-main"
-          src="/merch/images/sticker-1.jpg"
+          src="/images/stickerpack.jpg"
           alt="Kong Sticker Pack"
           onerror="this.src='/images/MAIN-ROUND-1.png';this.style.padding='40px'"
         >
       </div>
       <div class="gallery-thumbs">
         <img class="gallery-thumb active"
-          src="/merch/images/sticker-1.jpg" alt="Sticker Pack view 1"
+          src="/images/stickerpack.jpg" alt="Kong Sticker Pack"
           onerror="this.style.display='none'"
-          onclick="setMainImg('/merch/images/sticker-1.jpg',this)">
-        <img class="gallery-thumb"
-          src="/merch/images/sticker-2.jpg" alt="Sticker Pack view 2"
-          onerror="this.style.display='none'"
-          onclick="setMainImg('/merch/images/sticker-2.jpg',this)">
-        <img class="gallery-thumb"
-          src="/merch/images/sticker-3.jpg" alt="Sticker Pack view 3"
-          onerror="this.style.display='none'"
-          onclick="setMainImg('/merch/images/sticker-3.jpg',this)">
+          onclick="setMainImg('/images/stickerpack.jpg',this)">
       </div>
     </div>
 
@@ -312,11 +304,9 @@ footer a:hover{color:var(--gold)}
 })();
 
 // Gallery
-var currentImg = '/merch/images/sticker-1.jpg';
+var currentImg = '/images/stickerpack.jpg';
 var galleryImgs = [
-  '/merch/images/sticker-1.jpg',
-  '/merch/images/sticker-2.jpg',
-  '/merch/images/sticker-3.jpg'
+  '/images/stickerpack.jpg'
 ];
 
 function setMainImg(src, thumbEl) {
