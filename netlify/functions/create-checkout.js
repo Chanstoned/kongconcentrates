@@ -1,17 +1,19 @@
 const Stripe = require("stripe");
 
-// Product catalog — prices defined here, IDs set in Netlify env vars
-// Set STRIPE_SECRET_KEY, STRIPE_TSHIRT_PRICE_ID, STRIPE_STICKER_PRICE_ID
-// in your Netlify site settings → Environment variables.
-
+// Product catalog — product IDs and prices defined here.
+// Only STRIPE_SECRET_KEY needs to be set in Netlify environment variables.
 const PRODUCTS = {
   "kong-tshirt": {
-    priceEnvKey: "STRIPE_TSHIRT_PRICE_ID",
+    productId: "prod_U8GMZnTnZCHiBz",
     name: "Kong T-Shirt",
+    amount: 4000, // $40.00 in cents
+    currency: "usd",
   },
   "sticker-pack": {
-    priceEnvKey: "STRIPE_STICKER_PRICE_ID",
+    productId: "prod_U8HAxaDHrSph2P",
     name: "Sticker Pack",
+    amount: 1000, // $10.00 in cents
+    currency: "usd",
   },
 };
 
@@ -43,15 +45,6 @@ exports.handler = async (event) => {
       };
     }
 
-    const priceId = process.env[product.priceEnvKey];
-    if (!priceId) {
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ error: `Price not configured for ${product.name}. Set ${product.priceEnvKey} in Netlify environment variables.` }),
-      };
-    }
-
     const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
     const origin = event.headers.origin || event.headers.referer || "https://kongconcentrates.com";
@@ -59,7 +52,16 @@ exports.handler = async (event) => {
 
     const sessionParams = {
       mode: "payment",
-      line_items: [{ price: priceId, quantity: 1 }],
+      line_items: [
+        {
+          price_data: {
+            currency: product.currency,
+            product: product.productId,
+            unit_amount: product.amount,
+          },
+          quantity: 1,
+        },
+      ],
       success_url: `${baseUrl}/merch/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/merch/${productSlug}/`,
     };
@@ -70,8 +72,17 @@ exports.handler = async (event) => {
         {
           key: "size",
           label: { type: "custom", custom: "Size" },
-          type: "text",
-          text: { default_value: size },
+          type: "dropdown",
+          dropdown: {
+            options: [
+              { label: "Small", value: "S" },
+              { label: "Medium", value: "M" },
+              { label: "Large", value: "L" },
+              { label: "X-Large", value: "XL" },
+              { label: "XX-Large", value: "XXL" },
+            ],
+            default_value: size,
+          },
         },
       ];
     }
