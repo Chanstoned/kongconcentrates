@@ -236,24 +236,16 @@ footer a:hover{color:var(--gold)}
         <img
           id="gallery-main"
           class="gallery-main"
-          src="/merch/images/consult-1.jpg"
+          src="/images/labkongsquare.jpg"
           alt="Private Consultation"
           onerror="this.src='/images/MAIN-ROUND-1.png';this.style.padding='40px'"
         >
       </div>
       <div class="gallery-thumbs">
         <img class="gallery-thumb active"
-          src="/merch/images/consult-1.jpg" alt="Consultation 1"
+          src="/images/labkongsquare.jpg" alt="Consultation"
           onerror="this.style.display='none'"
-          onclick="setMainImg('/merch/images/consult-1.jpg',this)">
-        <img class="gallery-thumb"
-          src="/merch/images/consult-2.jpg" alt="Consultation 2"
-          onerror="this.style.display='none'"
-          onclick="setMainImg('/merch/images/consult-2.jpg',this)">
-        <img class="gallery-thumb"
-          src="/merch/images/consult-3.jpg" alt="Consultation 3"
-          onerror="this.style.display='none'"
-          onclick="setMainImg('/merch/images/consult-3.jpg',this)">
+          onclick="setMainImg('/images/labkongsquare.jpg',this)">
       </div>
     </div>
 
@@ -335,11 +327,9 @@ footer a:hover{color:var(--gold)}
 })();
 
 // Gallery
-var currentImg = '/merch/images/consult-1.jpg';
+var currentImg = '/images/labkongsquare.jpg';
 var galleryImgs = [
-  '/merch/images/consult-1.jpg',
-  '/merch/images/consult-2.jpg',
-  '/merch/images/consult-3.jpg'
+  '/images/labkongsquare.jpg'
 ];
 
 function setMainImg(src, thumbEl) {
