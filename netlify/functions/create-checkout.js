@@ -81,9 +81,6 @@ exports.handler = async (event) => {
           dropdown: {
             options: [
               { label: "Small", value: "S" },
-              { label: "Medium", value: "M" },
-              { label: "Large", value: "L" },
-              { label: "X-Large", value: "XL" },
               { label: "XX-Large", value: "XXL" },
             ],
             default_value: size,

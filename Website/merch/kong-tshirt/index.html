@@ -267,7 +267,7 @@ footer a:hover{color:var(--gold)}
       <div class="product-divider"></div>
 
       <p class="product-desc">
-        Represent the finest in solventless with the official Kong Concentrates tee. Printed on a premium heavyweight cotton blank with the iconic Kong roundel on the chest. Built to last — like the concentrates.
+        Represent the finest in solventless with the official Kong Concentrates tee. Printed on a premium heavyweight cotton blank with the iconic Kong roundel on the chest. Available in S and 2XL.
       </p>
 
       <div class="product-details">
@@ -291,11 +291,8 @@ footer a:hover{color:var(--gold)}
 
       <div class="size-label">Select Size</div>
       <div class="size-options">
-        <button class="size-btn" data-size="S" onclick="selectSize(this)">S</button>
-        <button class="size-btn" data-size="M" onclick="selectSize(this)">M</button>
-        <button class="size-btn selected" data-size="L" onclick="selectSize(this)">L</button>
-        <button class="size-btn" data-size="XL" onclick="selectSize(this)">XL</button>
-        <button class="size-btn" data-size="XXL" onclick="selectSize(this)">XXL</button>
+        <button class="size-btn selected" data-size="S" onclick="selectSize(this)">S</button>
+        <button class="size-btn" data-size="XXL" onclick="selectSize(this)">2XL</button>
       </div>
 
       <button class="buy-btn" id="buy-btn" onclick="checkout()">
@@ -372,7 +369,7 @@ document.addEventListener('keydown', function(e){
 });
 
 // Size selection
-var selectedSize = 'L';
+var selectedSize = 'S';
 function selectSize(btn) {
   selectedSize = btn.dataset.size;
   document.querySelectorAll('.size-btn').forEach(function(b){ b.classList.remove('selected'); });
