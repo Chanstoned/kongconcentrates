@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merch | Kong Concentrates</title>
+<meta name="description" content="Official Kong Concentrates merch — apparel and private consultations. Quality is King.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kongconcentrates.com/merch">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kong Concentrates">
+<meta property="og:title" content="Merch | Kong Concentrates">
+<meta property="og:description" content="Official Kong Concentrates merch — apparel and private consultations. Quality is King.">
+<meta property="og:url" content="https://kongconcentrates.com/merch">
+<meta property="og:image" content="https://kongconcentrates.com/images/MAIN-ROUND-1.png">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5YMLL0G1WB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-5YMLL0G1WB');
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0a0a0a;
+  --off-white:#f0ead8;
+  --gold:#c9a84c;
+  --gold2:#e8c46a;
+  --dark:#141414;
+  --border:rgba(201,168,76,0.15);
+}
+html,body{height:100%;overflow-x:hidden}
+body{background:var(--black);font-family:'Barlow Condensed',sans-serif;color:var(--off-white);min-height:100vh;}
+
+/* ━━ INTRO ━━ */
+#intro{position:fixed;inset:0;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;transition:opacity 0.8s ease,transform 0.8s ease;}
+#intro.hide{opacity:0;transform:scale(1.02);pointer-events:none;visibility:hidden}
+.logo-wrap{position:relative;width:min(180px,52vw);opacity:0;transform:scale(0.85);animation:logoIn 1.1s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;}
+.logo-wrap img{width:100%;border-radius:50%;display:block;filter:drop-shadow(0 0 60px rgba(201,168,76,0.45));}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,0.25);animation:pulse 2.4s ease-in-out infinite alternate;pointer-events:none;}
+.ring1{inset:-16px;animation-delay:0s}
+.ring2{inset:-32px;animation-delay:0.5s;border-color:rgba(201,168,76,0.1)}
+.ring3{inset:-52px;animation-delay:0.9s;border-color:rgba(201,168,76,0.05)}
+.intro-tagline{margin-top:28px;font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,6vw,40px);letter-spacing:0.15em;color:var(--off-white);opacity:0;animation:fadeUp 0.7s ease 1.2s forwards;text-align:center;}
+.intro-sub{margin-top:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0;animation:fadeUp 0.7s ease 1.5s forwards;text-align:center;}
+@keyframes logoIn{to{opacity:1;transform:scale(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{from{opacity:0.2;transform:scale(1)}to{opacity:0.7;transform:scale(1.015)}}
+
+/* ━━ SITE ━━ */
+#site{display:none;flex-direction:column;min-height:100vh}
+#site.show{display:flex}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;flex-wrap:wrap;}
+.hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
+.htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
+.htext p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-top:3px;}
+.hnav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+.hnav a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:8px 14px;border:1px solid #242424;transition:all 0.2s;}
+.hnav a:hover,.hnav a.active{color:var(--gold);border-color:rgba(201,168,76,0.4);}
+.hnav-ig{display:flex;align-items:center;justify-content:center;padding:8px 10px;}
+
+/* ━━ PAGE HEADER ━━ */
+.page-hdr{padding:64px 40px 40px;text-align:center;}
+.page-hdr-badge{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0.65;border:1px solid rgba(201,168,76,0.2);padding:7px 18px;display:inline-block;margin-bottom:20px;}
+.page-hdr h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,10vw,88px);letter-spacing:0.08em;line-height:0.92;color:var(--off-white);margin-bottom:14px;}
+.page-hdr-sub{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(240,234,216,0.45);line-height:2;}
+
+/* ━━ PRODUCT GRID ━━ */
+.shop-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:24px;
+  padding:0 40px 80px;
+  max-width:1100px;
+  margin:0 auto;
+  width:100%;
+}
+
+/* ━━ PRODUCT CARD ━━ */
+.product-card{
+  display:flex;flex-direction:column;
+  border:1px solid #1e1e1e;
+  background:#0c0c0c;
+  text-decoration:none;color:var(--off-white);
+  transition:border-color 0.25s,transform 0.2s;
+  overflow:hidden;
+}
+.product-card:hover{border-color:rgba(201,168,76,0.4);transform:translateY(-4px);}
+
+/* Gallery strip inside card */
+.card-gallery{position:relative;overflow:hidden;background:#0a0a0a;}
+.card-gallery-main{
+  width:100%;aspect-ratio:4/3;
+  object-fit:cover;object-position:center;
+  display:block;
+  transition:transform 0.5s ease;
+}
+.product-card:hover .card-gallery-main{transform:scale(1.04);}
+.card-thumbs{
+  display:flex;gap:4px;padding:4px;
+  background:#090909;border-top:1px solid #1a1a1a;
+}
+.card-thumb{
+  width:0;flex:1;aspect-ratio:1;
+  object-fit:cover;object-position:center;
+  opacity:0.6;border:1px solid transparent;
+  transition:opacity 0.2s,border-color 0.2s;cursor:pointer;
+}
+.card-thumb.active,.card-thumb:hover{opacity:1;border-color:rgba(201,168,76,0.4);}
+
+/* Card body */
+.card-body{padding:24px 22px 20px;display:flex;flex-direction:column;flex:1;}
+.card-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);opacity:0.65;margin-bottom:8px;}
+.card-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:0.08em;line-height:1;margin-bottom:10px;}
+.card-desc{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.04em;color:rgba(240,234,216,0.5);line-height:2;flex:1;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid #1e1e1e;}
+.card-price{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.05em;color:var(--gold2);}
+.card-cta{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(201,168,76,0.55);display:flex;align-items:center;gap:6px;transition:color 0.2s;}
+.product-card:hover .card-cta{color:var(--gold);}
+.card-cta svg{width:10px;height:10px;stroke:currentColor;transition:transform 0.2s;}
+.product-card:hover .card-cta svg{transform:translateX(3px);}
+
+/* ━━ DIVIDER ━━ */
+.divider{display:flex;align-items:center;gap:18px;padding:0 40px;margin:0 0 56px;}
+.divider .ln{flex:1;height:1px;background:#232323;}
+.divider span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#555;white-space:nowrap;}
+
+/* footer */
+footer{margin-top:auto;padding:28px 40px;border-top:1px solid #181818;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+footer p{font-family:'DM Mono',monospace;font-size:11px;color:#363636;letter-spacing:0.05em;}
+footer a{color:#555;text-decoration:none;}
+footer a:hover{color:var(--gold)}
+
+@media(max-width:620px){
+  header{padding:10px 16px;gap:10px;}
+  .hnav .hide-mobile{display:none}
+  .hnav{gap:6px;}
+  .hnav a{padding:7px 10px;font-size:10px;letter-spacing:0.1em;}
+  .page-hdr{padding:44px 20px 28px;}
+  .shop-grid{padding:0 16px 60px;gap:16px;}
+  footer{padding:20px;flex-direction:column;text-align:center;gap:6px;}
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+  <div class="logo-wrap">
+    <img src="/images/MAIN-ROUND-1.png" alt="Kong Concentrates">
+    <div class="ring ring1"></div>
+    <div class="ring ring2"></div>
+    <div class="ring ring3"></div>
+  </div>
+  <p class="intro-tagline">Kong Concentrates</p>
+  <p class="intro-sub">Merch Shop</p>
+</div>
+
+<!-- SITE -->
+<div id="site">
+  <header>
+    <a href="/">
+      <img src="/images/MAIN-ROUND-1.png" alt="Kong" class="hlogo">
+    </a>
+    <div class="htext">
+      <h1>Kong Concentrates</h1>
+      <p>Grove, Oklahoma</p>
+    </div>
+    <nav class="hnav">
+      <a href="/menu">Menu</a>
+      <a href="/coa" class="hide-mobile">Lab Results</a>
+      <a href="/locations" class="hide-mobile">Locations</a>
+      <a href="/merch" class="active">Merch</a>
+      <a href="/contact">Contact</a>
+      <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-hdr">
+      <div class="page-hdr-badge">Official Store</div>
+      <h2>Merch</h2>
+      <p class="page-hdr-sub">Represent the finest in solventless &nbsp;·&nbsp; Quality is King</p>
+    </div>
+
+    <div class="divider">
+      <div class="ln"></div>
+      <span>Products</span>
+      <div class="ln"></div>
+    </div>
+
+    <div class="shop-grid">
+
+      <!-- Kong T-Shirt -->
+      <a class="product-card" href="/merch/kong-tshirt/">
+        <div class="card-gallery">
+          <img
+            class="card-gallery-main"
+            id="tshirt-main"
+            src="/images/kongshirt%20front.png"
+            alt="Kong T-Shirt"
+            onerror="this.src='/images/MAIN-ROUND-1.png';this.style.padding='20px'"
+          >
+          <div class="card-thumbs">
+            <img class="card-thumb active" src="/images/kongshirt%20front.png" alt="" onerror="this.style.display='none'"
+              onclick="event.preventDefault();switchThumb('tshirt-main',this,'/images/kongshirt%20front.png')">
+            <img class="card-thumb" src="/images/kongshirt%20back%20512.png" alt="" onerror="this.style.display='none'"
+              onclick="event.preventDefault();switchThumb('tshirt-main',this,'/images/kongshirt%20back%20512.png')">
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-label">Apparel</div>
+          <div class="card-title">Kong T-Shirt</div>
+          <div class="card-desc">Premium heavyweight tee featuring the iconic Kong Concentrates logo. Unisex fit, sizes S–XXL. Quality you can feel.</div>
+          <div class="card-footer">
+            <span class="card-price">$40</span>
+            <span class="card-cta">View Product <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Sticker Pack -->
+      <a class="product-card" href="/merch/sticker-pack/">
+        <div class="card-gallery">
+          <img
+            class="card-gallery-main"
+            id="sticker-main"
+            src="/images/stickerpack.jpg"
+            alt="Kong Sticker Pack"
+            onerror="this.src='/images/MAIN-ROUND-1.png';this.style.padding='20px'"
+          >
+          <div class="card-thumbs">
+            <img class="card-thumb active" src="/images/stickerpack.jpg" alt="" onerror="this.style.display='none'"
+              onclick="event.preventDefault();switchThumb('sticker-main',this,'/images/stickerpack.jpg')">
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-label">Accessories</div>
+          <div class="card-title">Sticker Pack</div>
+          <div class="card-desc">Official Kong Concentrates sticker pack. Show your love for solventless wherever you go. High-quality vinyl, weather-resistant.</div>
+          <div class="card-footer">
+            <span class="card-price">$10</span>
+            <span class="card-cta">View Product <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Private Consultation -->
+      <a class="product-card" href="/merch/private-consultation/">
+        <div class="card-gallery">
+          <img
+            class="card-gallery-main"
+            id="consult-main"
+            src="/merch/images/consult-1.jpg"
+            alt="Private Consultation"
+            onerror="this.src='/images/MAIN-ROUND-1.png';this.style.padding='20px'"
+          >
+          <div class="card-thumbs">
+            <img class="card-thumb active" src="/merch/images/consult-1.jpg" alt="" onerror="this.style.display='none'"
+              onclick="event.preventDefault();switchThumb('consult-main',this,'/merch/images/consult-1.jpg')">
+            <img class="card-thumb" src="/merch/images/consult-2.jpg" alt="" onerror="this.style.display='none'"
+              onclick="event.preventDefault();switchThumb('consult-main',this,'/merch/images/consult-2.jpg')">
+            <img class="card-thumb" src="/merch/images/consult-3.jpg" alt="" onerror="this.style.display='none'"
+              onclick="event.preventDefault();switchThumb('consult-main',this,'/merch/images/consult-3.jpg')">
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-label">Services</div>
+          <div class="card-title">Private Consultation</div>
+          <div class="card-desc">One-on-one session with Kong's extraction team. In-person or virtual — solventless technique, process optimization, lab setup, and more.</div>
+          <div class="card-footer">
+            <span class="card-price">Inquire</span>
+            <span class="card-cta">Get in Touch <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Kong Concentrates LLC &nbsp;·&nbsp; Grove, Oklahoma</p>
+    <p><a href="/contact">Contact</a> &nbsp;·&nbsp; <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener">Instagram</a></p>
+  </footer>
+</div>
+
+<script>
+// Intro
+(function(){
+  var intro = document.getElementById('intro');
+  var site  = document.getElementById('site');
+  var delay = sessionStorage.getItem('seen') ? 0 : 2000;
+  sessionStorage.setItem('seen','1');
+  setTimeout(function(){
+    intro.classList.add('hide');
+    site.classList.add('show');
+  }, delay);
+})();
+
+// Gallery thumb switcher
+function switchThumb(mainId, thumbEl, src) {
+  document.getElementById(mainId).src = src;
+  thumbEl.closest('.card-thumbs').querySelectorAll('.card-thumb').forEach(function(t){
+    t.classList.remove('active');
+  });
+  thumbEl.classList.add('active');
+}
+</script>
+</body>
+</html>

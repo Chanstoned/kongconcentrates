@@ -68,9 +68,9 @@ body{background:var(--black);color:var(--off-white);min-height:100vh;font-family
 
 /* ━━ HEADER ━━ */
 header{
-  padding:20px 40px;
+  padding:12px 28px;
   border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:14px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
   position:sticky;top:0;background:rgba(8,8,8,0.95);
   backdrop-filter:blur(8px);z-index:10;
 }
@@ -223,8 +223,9 @@ footer a:hover{color:var(--gold);}
     </a>
     <nav class="hnav">
       <a href="/menu">Menu</a>
-      <a href="/coa">Lab Results</a>
-      <a href="/locations" class="active">Locations</a>
+      <a href="/coa" class="hide-mobile">Lab Results</a>
+      <a href="/locations" class="active hide-mobile">Locations</a>
+      <a href="/merch">Merch</a>
       <a href="/contact">Contact</a>
       <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
     </nav>
