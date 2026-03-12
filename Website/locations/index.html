@@ -4,50 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Locations | Kong Concentrates</title>
-<meta name="description" content="Find Kong Concentrates at dispensaries across Oklahoma. Rooted in Grove since 2020 — expanding statewide. Wholesale and retail inquiries welcome.">
+<meta name="description" content="Find Kong Concentrates at dispensaries across Oklahoma. Flavor Chasers in Tulsa and Miami Natural Health in Miami, OK.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kongconcentrates.com/locations">
-
-<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kong Concentrates">
 <meta property="og:title" content="Locations | Kong Concentrates">
-<meta property="og:description" content="Find Kong Concentrates at dispensaries across Oklahoma. Rooted in Grove since 2020 — expanding statewide. Wholesale and retail inquiries welcome.">
+<meta property="og:description" content="Find Kong Concentrates at dispensaries across Oklahoma.">
 <meta property="og:url" content="https://kongconcentrates.com/locations">
 <meta property="og:image" content="https://kongconcentrates.com/images/MAIN-ROUND-1.png">
-
-<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Locations | Kong Concentrates">
-<meta name="twitter:description" content="Find Kong Concentrates at dispensaries across Oklahoma. Rooted in Grove since 2020 — expanding statewide. Wholesale and retail inquiries welcome.">
+<meta name="twitter:description" content="Find Kong Concentrates at dispensaries across Oklahoma.">
 <meta name="twitter:image" content="https://kongconcentrates.com/images/MAIN-ROUND-1.png">
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-5YMLL0G1WB"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-5YMLL0G1WB');
-</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-5YMLL0G1WB');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
   --black:#080808;
   --gold:#c9a84c;
+  --gold2:#e8c46a;
   --off-white:#f0ead8;
   --border:#1e1e1e;
 }
 body{background:var(--black);color:var(--off-white);min-height:100vh;font-family:'DM Mono',monospace;}
 
 /* ━━ INTRO ━━ */
-#intro{
-  position:fixed;inset:0;background:var(--black);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  z-index:100;transition:opacity 0.7s ease;
-}
+#intro{position:fixed;inset:0;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity 0.7s ease;}
 #intro.fade-out{opacity:0;pointer-events:none;}
 .logo-wrap{position:relative;width:min(220px,60vw);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.85);animation:logoIn 1.1s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;}
 .ring{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,0.25);animation:pulse 2.4s ease-in-out infinite alternate;pointer-events:none;}
@@ -67,13 +55,7 @@ body{background:var(--black);color:var(--off-white);min-height:100vh;font-family
 #main.visible{opacity:1;}
 
 /* ━━ HEADER ━━ */
-header{
-  padding:12px 28px;
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-  position:sticky;top:0;background:rgba(8,8,8,0.95);
-  backdrop-filter:blur(8px);z-index:10;
-}
+header{padding:12px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:0;background:rgba(8,8,8,0.95);backdrop-filter:blur(8px);z-index:10;}
 .hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
 .htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
 .htext p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.4);margin-top:3px;}
@@ -84,100 +66,65 @@ header{
 .hnav-ig{display:flex;align-items:center;justify-content:center;padding:8px 10px;}
 
 /* ━━ PAGE HEADER ━━ */
-.page-header{
-  padding:64px 40px 48px;
-  text-align:center;
-  border-bottom:1px solid var(--border);
-}
-.page-label{
-  font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;
-  text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:16px;
-}
-.page-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(42px,8vw,72px);letter-spacing:0.08em;
-  line-height:1;margin-bottom:14px;
-}
-.page-sub{
-  font-family:'DM Mono',monospace;font-size:13px;
-  color:rgba(240,234,216,0.5);line-height:1.8;letter-spacing:0.05em;
-}
+.page-header{padding:64px 40px 48px;text-align:center;border-bottom:1px solid var(--border);}
+.page-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:16px;}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,8vw,72px);letter-spacing:0.08em;line-height:1;margin-bottom:14px;}
+.page-sub{font-family:'DM Mono',monospace;font-size:13px;color:rgba(240,234,216,0.5);line-height:1.8;letter-spacing:0.05em;}
 
-/* ━━ LOCATIONS CONTENT ━━ */
-.loc-wrap{
-  max-width:780px;margin:0 auto;padding:64px 40px 80px;
-  text-align:center;
-}
+/* ━━ LOCATION FINDER ━━ */
+.finder-section{max-width:900px;margin:0 auto;padding:56px 40px 0;}
 
-/* Oklahoma map */
-.ok-map-wrap{
-  display:flex;justify-content:center;margin-bottom:56px;
-  position:relative;
-}
-.ok-map-img{
-  width:100%;max-width:420px;
-  opacity:0.55;
-  filter:drop-shadow(0 0 18px rgba(201,168,76,0.12));
-  display:block;
-}
+.finder-heading{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,40px);letter-spacing:0.08em;margin-bottom:8px;text-align:center;}
+.finder-sub{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(240,234,216,0.45);text-align:center;margin-bottom:28px;}
 
-/* Coming soon block */
-.cs-badge{
-  display:inline-block;
-  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.3em;
-  text-transform:uppercase;color:var(--gold);opacity:0.6;
-  border:1px solid rgba(201,168,76,0.2);padding:7px 18px;
-  margin-bottom:24px;
-}
-.cs-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(32px,6vw,52px);letter-spacing:0.08em;
-  line-height:1;margin-bottom:20px;
-}
-.cs-body{
-  font-family:'DM Mono',monospace;font-size:13px;
-  color:rgba(240,234,216,0.55);line-height:2;letter-spacing:0.05em;
-  margin-bottom:36px;
-}
-.cs-cta{
-  display:inline-block;
-  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.3em;
-  text-transform:uppercase;color:var(--gold);
-  border:1px solid rgba(201,168,76,0.35);padding:14px 32px;
-  text-decoration:none;transition:all 0.25s;
-}
-.cs-cta:hover{background:rgba(201,168,76,0.08);border-color:var(--gold);}
+.finder-row{display:flex;gap:8px;max-width:540px;margin:0 auto 16px;}
+.finder-input{flex:1;background:#0d0d0d;border:1px solid #2a2a2a;color:var(--off-white);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;padding:12px 14px;outline:none;transition:border-color 0.2s;min-width:0;}
+.finder-input:focus{border-color:rgba(201,168,76,0.4);}
+.finder-input::placeholder{color:#3a3a3a;}
+.finder-btn{background:transparent;border:1px solid rgba(201,168,76,0.4);color:var(--gold);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:12px 20px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.finder-btn:hover{background:rgba(201,168,76,0.08);border-color:var(--gold);}
+.finder-btn:disabled{opacity:0.4;cursor:default;}
 
-.home-badge{
-  display:flex;align-items:center;justify-content:center;gap:12px;
-  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;
-  text-transform:uppercase;color:rgba(240,234,216,0.35);
-  border:1px solid #1e1e1e;padding:14px 20px;
-  margin-top:48px;
-}
+.use-location-btn{display:block;margin:0 auto 32px;background:none;border:none;color:rgba(240,234,216,0.35);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;padding:4px 0;transition:color 0.2s;text-decoration:underline;text-underline-offset:3px;}
+.use-location-btn:hover{color:rgba(240,234,216,0.65);}
+
+.finder-status{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(240,234,216,0.4);text-align:center;margin-bottom:20px;min-height:18px;}
+.finder-status.error{color:rgba(201,100,100,0.7);}
+
+/* ━━ LOCATION CARDS ━━ */
+.loc-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
+.loc-card{border:1px solid #1e1e1e;padding:24px;background:#0c0c0c;transition:border-color 0.25s;}
+.loc-card.closest{border-color:rgba(201,168,76,0.35);}
+.loc-card-logo{width:100%;height:100px;object-fit:contain;object-position:left center;margin-bottom:16px;display:block;filter:brightness(0.9);}
+.loc-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.loc-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.06em;line-height:1.1;}
+.loc-distance{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);opacity:0.8;white-space:nowrap;padding-left:12px;padding-top:4px;}
+.loc-addr{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;color:rgba(240,234,216,0.5);line-height:1.8;margin-bottom:14px;}
+.loc-phone{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(240,234,216,0.4);margin-bottom:16px;}
+.loc-phone a{color:rgba(240,234,216,0.55);text-decoration:none;transition:color 0.2s;}
+.loc-phone a:hover{color:var(--gold);}
+.loc-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.loc-link{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.3);padding:7px 12px;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.loc-link:hover{background:rgba(201,168,76,0.08);border-color:var(--gold);}
+.closest-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.25);padding:3px 8px;display:inline-block;margin-bottom:8px;}
+
+/* ━━ MAP ━━ */
+.map-wrap{border:1px solid #1e1e1e;overflow:hidden;margin-bottom:24px;}
+#map{height:380px;width:100%;background:#111;}
+/* Override leaflet styles for dark theme */
+.leaflet-container{background:#111 !important;}
+.leaflet-tile{filter:brightness(0.75) saturate(0.6);}
+.leaflet-popup-content-wrapper{background:#141414;border:1px solid #2a2a2a;border-radius:0;color:var(--off-white);box-shadow:none;}
+.leaflet-popup-tip{background:#141414;}
+.leaflet-popup-content{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;line-height:1.8;margin:10px 14px;}
+.leaflet-popup-content strong{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.06em;display:block;margin-bottom:4px;}
+.leaflet-control-zoom a{background:#141414;color:rgba(240,234,216,0.6);border-color:#2a2a2a;}
+.leaflet-control-zoom a:hover{background:#1e1e1e;color:var(--gold);}
+.leaflet-control-attribution{background:rgba(8,8,8,0.8);color:#444;font-size:9px;}
+.leaflet-control-attribution a{color:#666;}
+
+.home-badge{display:flex;align-items:center;justify-content:center;gap:12px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.35);border:1px solid #1e1e1e;padding:14px 20px;margin:0 0 56px;}
 .home-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;}
-
-/* ━━ FOOTER ━━ */
-footer{
-  padding:24px 40px;
-  border-top:1px solid var(--border);
-  display:flex;justify-content:space-between;
-  flex-wrap:wrap;gap:8px;
-}
-footer p{font-family:'DM Mono',monospace;font-size:11px;color:#666;letter-spacing:0.5px;}
-footer a{color:#888;text-decoration:none;}
-footer a:hover{color:var(--gold);}
-
-/* ━━ RESPONSIVE ━━ */
-@media(max-width:620px){
-  .hide-mobile{display:none}
-  .hnav{gap:6px;}
-  .hnav a{padding:4px 7px;font-size:9px;letter-spacing:0.06em;}
-  header{padding:14px 16px;}
-  .page-header{padding:48px 20px 36px;}
-  .loc-wrap{padding:40px 20px 60px;}
-  footer{padding:20px 16px;flex-direction:column;gap:6px;}
-}
 
 /* ━━ EMAIL SIGNUP ━━ */
 .email-signup{border-top:1px solid #181818;padding:52px 40px;display:flex;justify-content:center;}
@@ -191,7 +138,26 @@ footer a:hover{color:var(--gold);}
 .es-btn{background:transparent;border:1px solid rgba(201,168,76,0.35);color:var(--gold);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:11px 20px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
 .es-btn:hover{background:rgba(201,168,76,0.08);border-color:var(--gold);}
 .es-msg{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-top:16px;display:none;}
-@media(max-width:520px){.es-row{flex-direction:column;}.email-signup{padding:40px 20px;}}
+
+/* ━━ FOOTER ━━ */
+footer{padding:24px 40px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+footer p{font-family:'DM Mono',monospace;font-size:11px;color:#666;letter-spacing:0.5px;}
+footer a{color:#888;text-decoration:none;}
+footer a:hover{color:var(--gold);}
+
+/* ━━ RESPONSIVE ━━ */
+@media(max-width:660px){
+  .hnav a{padding:4px 7px;font-size:9px;letter-spacing:0.06em;}
+  header{padding:10px 16px;}
+  .page-header{padding:48px 20px 36px;}
+  .finder-section{padding:40px 20px 0;}
+  .finder-row{flex-direction:column;}
+  .loc-cards{grid-template-columns:1fr;}
+  #map{height:280px;}
+  .email-signup{padding:40px 20px;}
+  footer{padding:20px 16px;flex-direction:column;gap:6px;}
+  .home-badge{font-size:9px;padding:12px 14px;}
+}
 </style>
 </head>
 <body>
@@ -224,7 +190,7 @@ footer a:hover{color:var(--gold);}
     <nav class="hnav">
       <a href="/menu">Menu</a>
       <a href="/coa">Lab Results</a>
-      <a href="/locations" class="active hide-mobile">Locations</a>
+      <a href="/locations" class="active">Locations</a>
       <a href="/merch">Merch</a>
       <a href="/contact">Contact</a>
       <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
@@ -234,25 +200,30 @@ footer a:hover{color:var(--gold);}
   <div class="page-header">
     <div class="page-label">Where to Find Us</div>
     <div class="page-title">Locations</div>
-    <p class="page-sub">Rooted in Grove, Oklahoma &mdash; growing statewide.</p>
+    <p class="page-sub">Find Kong Concentrates at a dispensary near you.</p>
   </div>
 
-  <div class="loc-wrap">
+  <!-- LOCATION FINDER -->
+  <div class="finder-section">
 
+    <div class="finder-heading">Find Kong Near You</div>
+    <p class="finder-sub">Enter your address or zip code to see the closest location.</p>
 
-    <div class="cs-badge">Coming Soon</div>
-    <div class="cs-title">Expanding Across Oklahoma</div>
-
-    <div class="ok-map-wrap">
-      <img class="ok-map-img" src="../images/oklahoma.png" alt="Map of Oklahoma">
+    <div class="finder-row">
+      <input class="finder-input" id="loc-input" type="text" placeholder="Address, city, or zip code&hellip;" autocomplete="off" onkeydown="if(event.key==='Enter')findLocations()">
+      <button class="finder-btn" id="find-btn" onclick="findLocations()">Search</button>
     </div>
-    <p class="cs-body">
-      We're bringing Kong Concentrates to dispensaries statewide.<br>
-      Rooted in Grove since 2020, our artisan solventless concentrates<br>
-      are crafted for quality-first retailers across the state.<br><br>
-      Check back soon &mdash; or reach out if you'd like to carry our products.
-    </p>
-    <a href="/contact" class="cs-cta">Get in Touch</a>
+    <button class="use-location-btn" onclick="useMyLocation()">&#8982; Use my current location</button>
+
+    <div class="finder-status" id="finder-status"></div>
+
+    <div class="loc-cards" id="loc-cards">
+      <!-- rendered by JS -->
+    </div>
+
+    <div class="map-wrap">
+      <div id="map"></div>
+    </div>
 
     <div class="home-badge">
       <span class="home-badge-dot"></span>
@@ -285,27 +256,215 @@ footer a:hover{color:var(--gold);}
 
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN2GKNo=" crossorigin=""></script>
 <script>
-setTimeout(()=>enterSite(), 2500);
-function enterSite(){
-  document.getElementById('intro').classList.add('fade-out');
-  setTimeout(()=>{
-    document.getElementById('intro').style.display='none';
-    document.getElementById('main').classList.add('visible');
-  }, 700);
+// ── DATA ──────────────────────────────────────────────────────────────────
+var LOCATIONS = [
+  {
+    id: 'flavor-chasers',
+    name: 'Flavor Chasers',
+    address: '2036 E 81st St #110',
+    city: 'Tulsa, OK 74137',
+    phone: '(918) 209-5078',
+    lat: 36.0635,
+    lng: -95.9205,
+    mapsUrl: 'https://maps.google.com/?q=2036+E+81st+St+%23110,+Tulsa,+OK+74137',
+    img: '/images/flavor chasers png.png'
+  },
+  {
+    id: 'miami-natural-health',
+    name: 'Miami Natural Health',
+    address: '1805 E Steve Owens Blvd',
+    city: 'Miami, OK 74354',
+    phone: '(918) 919-3481',
+    lat: 36.8808,
+    lng: -94.8709,
+    mapsUrl: 'https://maps.google.com/?q=1805+E+Steve+Owens+Blvd,+Miami,+OK+74354',
+    img: '/images/natural health png.png'
+  }
+];
+
+// ── MAP ───────────────────────────────────────────────────────────────────
+var map = L.map('map', {
+  center: [36.5, -95.3],
+  zoom: 7,
+  zoomControl: true,
+  scrollWheelZoom: false
+});
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>',
+  maxZoom: 18
+}).addTo(map);
+
+// Gold marker icon
+function makeIcon(highlight) {
+  return L.divIcon({
+    className: '',
+    html: '<div style="width:14px;height:14px;border-radius:50%;background:' +
+          (highlight ? '#c9a84c' : '#6a5a2a') +
+          ';border:2px solid ' + (highlight ? '#e8c46a' : '#c9a84c') +
+          ';box-shadow:0 0 8px rgba(201,168,76,' + (highlight ? '0.7' : '0.3') + ')"></div>',
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
+    popupAnchor: [0, -10]
+  });
 }
 
+var storeMarkers = [];
+var userMarker = null;
 
+LOCATIONS.forEach(function(loc) {
+  var m = L.marker([loc.lat, loc.lng], {icon: makeIcon(false)})
+    .addTo(map)
+    .bindPopup('<strong>' + loc.name + '</strong>' + loc.address + '<br>' + loc.city + '<br>' + loc.phone);
+  storeMarkers.push(m);
+});
+
+// ── HAVERSINE ─────────────────────────────────────────────────────────────
+function haversine(lat1, lng1, lat2, lng2) {
+  var R = 3958.8; // miles
+  var dLat = (lat2 - lat1) * Math.PI / 180;
+  var dLng = (lng2 - lng1) * Math.PI / 180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+          Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
+          Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// ── RENDER CARDS ──────────────────────────────────────────────────────────
+function renderCards(userLat, userLng) {
+  var locs = LOCATIONS.map(function(loc, i) {
+    var dist = (userLat != null) ? haversine(userLat, userLng, loc.lat, loc.lng) : null;
+    return Object.assign({}, loc, {dist: dist, markerIdx: i});
+  });
+
+  if (userLat != null) {
+    locs.sort(function(a, b) { return a.dist - b.dist; });
+  }
+
+  var html = '';
+  locs.forEach(function(loc, i) {
+    var isClosest = userLat != null && i === 0;
+    html += '<div class="loc-card' + (isClosest ? ' closest' : '') + '">';
+    if (loc.img) html += '<img class="loc-card-logo" src="' + loc.img + '" alt="' + loc.name + '" onerror="this.style.display=\'none\'">';
+    if (isClosest) html += '<div class="closest-badge">Closest to You</div>';
+    html += '<div class="loc-card-header">';
+    html += '<div class="loc-name">' + loc.name + '</div>';
+    if (loc.dist != null) {
+      html += '<div class="loc-distance">' + loc.dist.toFixed(1) + ' mi</div>';
+    }
+    html += '</div>';
+    html += '<div class="loc-addr">' + loc.address + '<br>' + loc.city + '</div>';
+    html += '<div class="loc-phone"><a href="tel:' + loc.phone.replace(/\D/g,'') + '">' + loc.phone + '</a></div>';
+    html += '<div class="loc-actions">';
+    html += '<a class="loc-link" href="' + loc.mapsUrl + '" target="_blank" rel="noopener">Get Directions</a>';
+    html += '<a class="loc-link" href="tel:' + loc.phone.replace(/\D/g,'') + '">Call</a>';
+    html += '</div>';
+    html += '</div>';
+  });
+
+  document.getElementById('loc-cards').innerHTML = html;
+
+  // Update markers
+  storeMarkers.forEach(function(m, i) {
+    var loc = LOCATIONS[i];
+    var isClosest = userLat != null && locs[0].id === loc.id;
+    m.setIcon(makeIcon(isClosest));
+  });
+}
+
+// Initial render (no user location)
+renderCards(null, null);
+
+// ── FIND BY ADDRESS ───────────────────────────────────────────────────────
+function setStatus(msg, isError) {
+  var el = document.getElementById('finder-status');
+  el.textContent = msg;
+  el.className = 'finder-status' + (isError ? ' error' : '');
+}
+
+function findLocations() {
+  var query = document.getElementById('loc-input').value.trim();
+  if (!query) { setStatus('Enter an address or zip code.', true); return; }
+
+  var btn = document.getElementById('find-btn');
+  btn.disabled = true;
+  setStatus('Searching\u2026');
+
+  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&q=' + encodeURIComponent(query), {
+    headers: {'Accept-Language': 'en', 'User-Agent': 'KongConcentratesLocator/1.0'}
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    btn.disabled = false;
+    if (!data || !data.length) {
+      setStatus('No results found. Try a zip code or city name.', true);
+      return;
+    }
+    var lat = parseFloat(data[0].lat);
+    var lng = parseFloat(data[0].lon);
+    setStatus('');
+    placeUserAndUpdate(lat, lng, data[0].display_name.split(',')[0]);
+  })
+  .catch(function() {
+    btn.disabled = false;
+    setStatus('Could not reach geocoding service. Check your connection.', true);
+  });
+}
+
+function useMyLocation() {
+  if (!navigator.geolocation) { setStatus('Geolocation not supported by your browser.', true); return; }
+  setStatus('Getting your location\u2026');
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      setStatus('');
+      placeUserAndUpdate(pos.coords.latitude, pos.coords.longitude, 'Your Location');
+    },
+    function() { setStatus('Location access denied. Try entering your address above.', true); }
+  );
+}
+
+function placeUserAndUpdate(lat, lng, label) {
+  if (userMarker) map.removeLayer(userMarker);
+  userMarker = L.marker([lat, lng], {
+    icon: L.divIcon({
+      className: '',
+      html: '<div style="width:12px;height:12px;border-radius:50%;background:#f0ead8;border:2px solid #fff;box-shadow:0 0 6px rgba(240,234,216,0.6)"></div>',
+      iconSize: [12, 12],
+      iconAnchor: [6, 6],
+      popupAnchor: [0, -10]
+    })
+  }).addTo(map).bindPopup('<strong>' + label + '</strong>').openPopup();
+
+  renderCards(lat, lng);
+
+  // Fit map to show user + all stores
+  var bounds = L.latLngBounds([[lat, lng]]);
+  LOCATIONS.forEach(function(loc) { bounds.extend([loc.lat, loc.lng]); });
+  map.fitBounds(bounds, {padding: [40, 40]});
+}
+
+// ── INTRO ─────────────────────────────────────────────────────────────────
+setTimeout(function() {
+  document.getElementById('intro').classList.add('fade-out');
+  setTimeout(function() {
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('main').classList.add('visible');
+  }, 700);
+}, 2500);
+
+// ── NEWSLETTER ────────────────────────────────────────────────────────────
 function submitNewsletter(e, form) {
   e.preventDefault();
   fetch(window.location.pathname, {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     body: new URLSearchParams(new FormData(form)).toString()
-  }).then(() => {
+  }).then(function() {
     form.querySelector('.es-row').style.display = 'none';
     form.querySelector('.es-msg').style.display = 'block';
-  }).catch(() => {
+  }).catch(function() {
     form.querySelector('.es-btn').textContent = 'Try again';
   });
 }
