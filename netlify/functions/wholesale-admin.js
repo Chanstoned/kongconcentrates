@@ -1,4 +1,5 @@
 const { createClient } = require("@supabase/supabase-js");
+const { sendAccountApproved, sendAccountRejected, sendOrderStatusUpdate } = require("./email-helper");
 
 // Supabase admin client — uses service role key to bypass RLS
 const supabaseAdmin = createClient(
@@ -102,11 +103,20 @@ exports.handler = async (event) => {
 
       // Approve or reject a dispensary account
       if (action === "approve" || action === "reject") {
+        const { data: disp, error: fe } = await supabaseAdmin
+          .from("dispensaries")
+          .select("name, contact_name, email")
+          .eq("id", body.id)
+          .single();
         const { error: e } = await supabaseAdmin
           .from("dispensaries")
           .update({ approved: action === "approve" })
           .eq("id", body.id);
         if (e) throw e;
+        if (disp) {
+          const notifyFn = action === "approve" ? sendAccountApproved : sendAccountRejected;
+          notifyFn(disp).catch(console.error);
+        }
         return ok({ ok: true });
       }
 
@@ -119,6 +129,17 @@ exports.handler = async (event) => {
           .update({ status: body.status, updated_at: new Date().toISOString() })
           .eq("id", body.orderId);
         if (e) throw e;
+        // Send status update email to dispensary (non-blocking)
+        supabaseAdmin
+          .from("wholesale_orders")
+          .select("dispensary_id, dispensaries(name, contact_name, email)")
+          .eq("id", body.orderId)
+          .single()
+          .then(({ data }) => {
+            if (data?.dispensaries) {
+              sendOrderStatusUpdate({ dispensary: data.dispensaries, status: body.status, orderId: body.orderId }).catch(console.error);
+            }
+          });
         return ok({ ok: true });
       }
 
@@ -161,6 +182,33 @@ exports.handler = async (event) => {
       if (action === "delete-product") {
         const { error: e } = await supabaseAdmin
           .from("wholesale_products")
+          .delete()
+          .eq("id", body.id);
+        if (e) throw e;
+        return ok({ ok: true });
+      }
+
+      // Update a dispensary account
+      if (action === "update-account") {
+        const update = {};
+        if (body.name !== undefined) update.name = body.name;
+        if (body.contact_name !== undefined) update.contact_name = body.contact_name;
+        if (body.phone !== undefined) update.phone = body.phone;
+        if (body.address !== undefined) update.address = body.address;
+        if (body.omma_license !== undefined) update.omma_license = body.omma_license || null;
+        if (body.obndd_license !== undefined) update.obndd_license = body.obndd_license || null;
+        const { error: e } = await supabaseAdmin
+          .from("dispensaries")
+          .update(update)
+          .eq("id", body.id);
+        if (e) throw e;
+        return ok({ ok: true });
+      }
+
+      // Delete a dispensary account (profile only — auth user remains)
+      if (action === "delete-account") {
+        const { error: e } = await supabaseAdmin
+          .from("dispensaries")
           .delete()
           .eq("id", body.id);
         if (e) throw e;

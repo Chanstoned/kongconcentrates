@@ -1,4 +1,5 @@
 const { createClient } = require("@supabase/supabase-js");
+const { sendApplicationReceived } = require("./email-helper");
 
 const supabaseAdmin = createClient(
   process.env.SUPABASE_URL,
@@ -56,6 +57,9 @@ exports.handler = async (event) => {
     await supabaseAdmin.auth.admin.deleteUser(user.id);
     return { statusCode: 500, headers, body: JSON.stringify({ error: "Profile setup failed — please contact us." }) };
   }
+
+  // Send notification emails (non-blocking)
+  sendApplicationReceived({ name, contact_name, email, phone, address, omma_license, obndd_license }).catch(console.error);
 
   return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
 };
