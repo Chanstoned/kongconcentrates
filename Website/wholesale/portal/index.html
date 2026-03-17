@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wholesale Portal — Kong Concentrates</title>
+<meta name="robots" content="noindex, nofollow">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5YMLL0G1WB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-5YMLL0G1WB');</script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#0a0a0a;--off-white:#f0ead8;--gold:#c9a84c;--gold2:#e8c46a;--dark:#141414;--border:rgba(201,168,76,0.15);}
+html,body{height:100%;overflow-x:hidden}
+body{background:var(--black);font-family:'Barlow Condensed',sans-serif;color:var(--off-white);min-height:100vh;}
+#site{display:none;flex-direction:column;min-height:100vh}
+#site.show{display:flex}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;flex-wrap:wrap;}
+.hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
+.htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
+.htext p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-top:3px;}
+.hnav{margin-left:auto;display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
+.hnav span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:rgba(240,234,216,0.4);padding:4px 0;}
+.btn-sm{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;background:none;border:1px solid #242424;color:rgba(240,234,216,0.55);padding:7px 12px;cursor:pointer;transition:all 0.2s;}
+.btn-sm:hover{color:var(--gold);border-color:rgba(201,168,76,0.4);}
+
+/* LAYOUT */
+.container{flex:1;max-width:900px;width:100%;margin:0 auto;padding:40px 24px 80px;}
+
+/* WELCOME */
+.welcome-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+.welcome-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,5vw,38px);letter-spacing:0.08em;color:var(--off-white);}
+.welcome-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:4px;}
+
+/* TABS */
+.tab-nav{display:flex;border-bottom:1px solid var(--border);margin-bottom:32px;gap:0;}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;color:rgba(240,234,216,0.45);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;padding:13px 22px;cursor:pointer;transition:color 0.2s,border-color 0.2s;white-space:nowrap;}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* PRODUCT GRID */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+.prod-card{background:#0d0d0d;border:1px solid #1e1e1e;padding:22px 18px;transition:border-color 0.2s;}
+.prod-card:hover{border-color:rgba(201,168,76,0.25);}
+.prod-cat{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.65;margin-bottom:8px;}
+.prod-name{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.06em;line-height:1.1;margin-bottom:6px;}
+.prod-desc{font-family:'Barlow Condensed',sans-serif;font-size:14px;color:rgba(240,234,216,0.55);line-height:1.5;margin-bottom:14px;min-height:40px;}
+.prod-footer{display:flex;align-items:flex-end;justify-content:space-between;border-top:1px solid #1a1a1a;padding-top:12px;margin-top:auto;}
+.prod-price{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.04em;color:var(--gold2);}
+.prod-unit{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;color:rgba(240,234,216,0.35);text-transform:uppercase;margin-top:2px;}
+.prod-min{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;color:rgba(240,234,216,0.3);text-transform:uppercase;}
+
+/* ORDER FORM */
+.order-intro{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(240,234,216,0.4);margin-bottom:24px;line-height:1.9;}
+.order-items{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.order-row{display:flex;align-items:center;justify-content:space-between;background:#0d0d0d;border:1px solid #1e1e1e;padding:14px 16px;gap:12px;flex-wrap:wrap;}
+.order-row-info{flex:1;min-width:160px;}
+.order-row-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:0.06em;}
+.order-row-detail{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--gold);opacity:0.65;text-transform:uppercase;margin-top:2px;}
+.qty-wrap{display:flex;align-items:center;gap:8px;}
+.qty-btn{width:28px;height:28px;background:none;border:1px solid #2a2a2a;color:var(--off-white);font-size:16px;line-height:1;cursor:pointer;transition:border-color 0.15s;flex-shrink:0;}
+.qty-btn:hover{border-color:var(--gold);}
+.qty-input{width:54px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid #2a2a2a;color:var(--off-white);font-family:'DM Mono',monospace;font-size:14px;padding:5px 4px;-webkit-appearance:none;-moz-appearance:textfield;outline:none;}
+.qty-input::-webkit-outer-spin-button,.qty-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.row-subtotal{font-family:'DM Mono',monospace;font-size:13px;color:var(--off-white);min-width:60px;text-align:right;}
+
+.order-footer{background:#0d0d0d;border:1px solid var(--border);padding:20px 22px;}
+.order-total-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.order-total-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,234,216,0.5);}
+.order-total-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.06em;color:var(--gold2);}
+.notes-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(201,168,76,0.7);margin-bottom:8px;}
+textarea.fi{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(201,168,76,0.18);color:var(--off-white);font-family:'Barlow Condensed',sans-serif;font-size:15px;padding:11px 14px;resize:vertical;min-height:80px;outline:none;transition:border-color 0.2s;margin-bottom:16px;}
+textarea.fi:focus{border-color:rgba(201,168,76,0.45);}
+.btn-gold{width:100%;background:var(--gold);color:#0a0a0a;border:none;border-radius:2px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;padding:15px;cursor:pointer;transition:background 0.2s,opacity 0.2s;}
+.btn-gold:hover{background:var(--gold2);}
+.btn-gold:disabled{opacity:0.4;cursor:not-allowed;}
+
+/* ALERTS */
+.alert{padding:13px 15px;border-radius:2px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;line-height:1.7;margin-bottom:20px;display:none;}
+.alert.show{display:block;}
+.alert-err{background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.25);color:#d97070;}
+.alert-ok{background:rgba(50,180,80,0.08);border:1px solid rgba(50,180,80,0.2);color:#70c878;}
+
+/* ORDERS LIST */
+.orders-list{display:flex;flex-direction:column;gap:12px;}
+.order-card{background:#0d0d0d;border:1px solid #1e1e1e;overflow:hidden;}
+.order-card-header{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;flex-wrap:wrap;}
+.order-card-header:hover{background:rgba(255,255,255,0.02);}
+.order-num{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.14em;color:rgba(240,234,216,0.4);flex:0 0 auto;}
+.order-date{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(240,234,216,0.35);}
+.order-total-s{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.06em;color:var(--gold2);margin-left:auto;}
+.status-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;padding:4px 10px;border-radius:30px;white-space:nowrap;}
+.status-received{background:rgba(100,140,255,0.12);border:1px solid rgba(100,140,255,0.25);color:#8aabff;}
+.status-processing{background:rgba(255,200,50,0.1);border:1px solid rgba(255,200,50,0.25);color:#ffd060;}
+.status-out_for_delivery{background:rgba(255,140,50,0.1);border:1px solid rgba(255,140,50,0.25);color:#ffa050;}
+.status-complete{background:rgba(50,200,100,0.08);border:1px solid rgba(50,200,100,0.22);color:#60cc80;}
+.order-expand{padding:0 18px 16px;}
+.order-items-table{width:100%;border-collapse:collapse;font-size:13px;}
+.order-items-table th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,234,216,0.35);text-align:left;padding:0 0 8px;border-bottom:1px solid #1e1e1e;}
+.order-items-table td{padding:8px 0;border-bottom:1px solid #141414;font-family:'Barlow Condensed',sans-serif;font-size:14px;color:rgba(240,234,216,0.7);}
+.order-items-table td:last-child,.order-items-table th:last-child{text-align:right;}
+.order-notes{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:rgba(240,234,216,0.35);margin-top:12px;line-height:1.7;}
+.btn-invoice{background:none;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.7);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;padding:7px 14px;cursor:pointer;margin-top:14px;transition:all 0.2s;}
+.btn-invoice:hover{border-color:var(--gold);color:var(--gold);}
+
+/* STATUS TRACKER */
+.status-track{display:flex;gap:0;margin-top:16px;overflow:hidden;}
+.st-step{flex:1;text-align:center;padding:8px 4px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,234,216,0.2);border-top:2px solid #1e1e1e;position:relative;}
+.st-step.done{color:var(--gold);border-top-color:var(--gold);}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:60px 20px;}
+.empty-state p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;color:rgba(240,234,216,0.3);}
+
+/* SPINNER */
+.spinner{text-align:center;padding:48px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;color:rgba(201,168,76,0.4);}
+
+/* INVOICE MODAL */
+#inv-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;overflow:auto;padding:40px 20px;}
+#inv-modal.show{display:flex;align-items:flex-start;justify-content:center;}
+.inv-paper{background:#f8f4ec;color:#111;max-width:680px;width:100%;padding:52px 56px;position:relative;}
+.inv-close{position:absolute;top:16px;right:20px;background:none;border:none;font-size:22px;cursor:pointer;color:#555;line-height:1;}
+.inv-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:36px;padding-bottom:24px;border-bottom:2px solid #222;}
+.inv-brand{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.1em;color:#111;}
+.inv-brand-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;color:#888;text-transform:uppercase;margin-top:4px;}
+.inv-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.12em;color:#333;text-align:right;}
+.inv-meta{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#666;text-align:right;margin-top:6px;line-height:1.9;}
+.inv-bill-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#aaa;margin-bottom:6px;}
+.inv-bill-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.08em;color:#111;margin-bottom:4px;}
+.inv-bill-info{font-family:'DM Mono',monospace;font-size:11px;color:#555;line-height:1.8;}
+table.inv-table{width:100%;border-collapse:collapse;margin:28px 0;}
+table.inv-table th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:#888;text-align:left;padding:8px 0;border-bottom:1px solid #ddd;}
+table.inv-table th:last-child,table.inv-table td:last-child{text-align:right;}
+table.inv-table td{padding:10px 0;border-bottom:1px solid #eee;font-family:'Barlow Condensed',sans-serif;font-size:15px;color:#222;}
+.inv-total-row{display:flex;justify-content:flex-end;gap:60px;margin-top:20px;padding-top:16px;border-top:2px solid #222;}
+.inv-total-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#555;}
+.inv-total-val{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.06em;color:#111;}
+.inv-notes{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#777;margin-top:28px;line-height:1.8;}
+.inv-footer{margin-top:48px;padding-top:20px;border-top:1px solid #ddd;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:#aaa;text-align:center;}
+.btn-print{display:block;width:100%;background:#111;color:#f8f4ec;border:none;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:14px;cursor:pointer;margin-top:24px;transition:background 0.2s;}
+.btn-print:hover{background:#333;}
+@media print{
+  #inv-modal{padding:0;background:white;}
+  .inv-paper{max-width:100%;box-shadow:none;padding:32px 40px;}
+  .inv-close,.btn-print{display:none!important;}
+}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:28px;text-align:center;margin-top:auto;}
+footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:rgba(240,234,216,0.2);}
+
+@media(max-width:600px){
+  header{padding:12px 16px;}
+  .container{padding:28px 16px 60px;}
+  .tab-btn{padding:12px 12px;font-size:10px;}
+  .inv-paper{padding:32px 24px;}
+}
+</style>
+</head>
+<body>
+
+<div id="site">
+  <header>
+    <a href="/" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+      <img src="../../images/MAIN-ROUND-1.png" alt="Logo" class="hlogo">
+      <div class="htext"><h1>Kong Concentrates</h1><p>Wholesale Portal</p></div>
+    </a>
+    <div class="hnav">
+      <span id="user-name-display"></span>
+      <button class="btn-sm" onclick="doSignOut()">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="welcome-bar">
+      <div>
+        <div class="welcome-label">Welcome back</div>
+        <div class="welcome-name" id="welcome-name">—</div>
+      </div>
+    </div>
+
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="openTab('menu',this)">Browse Menu</button>
+      <button class="tab-btn" onclick="openTab('order',this)">Place Order</button>
+      <button class="tab-btn" onclick="openTab('history',this)">My Orders</button>
+    </div>
+
+    <!-- BROWSE MENU TAB -->
+    <div id="tab-menu" class="tab-panel active">
+      <div id="menu-spinner" class="spinner">Loading products…</div>
+      <div id="products-grid" class="products-grid" style="display:none;"></div>
+    </div>
+
+    <!-- PLACE ORDER TAB -->
+    <div id="tab-order" class="tab-panel">
+      <p class="order-intro">Select quantities for each product. Minimum order per item is noted below. All prices are wholesale rates.</p>
+      <div class="alert alert-err" id="order-err"></div>
+      <div class="alert alert-ok" id="order-ok"></div>
+      <div id="order-items" class="order-items"></div>
+      <div class="order-footer">
+        <div class="order-total-row">
+          <span class="order-total-label">Order Total</span>
+          <span class="order-total-val" id="order-total">$0.00</span>
+        </div>
+        <div class="notes-label">Special Instructions</div>
+        <textarea class="fi" id="order-notes" placeholder="Delivery preferences, special requests, etc."></textarea>
+        <button class="btn-gold" id="submit-btn" onclick="submitOrder()">Place Order</button>
+      </div>
+    </div>
+
+    <!-- ORDER HISTORY TAB -->
+    <div id="tab-history" class="tab-panel">
+      <div id="history-spinner" class="spinner">Loading orders…</div>
+      <div id="orders-list" class="orders-list" style="display:none;"></div>
+    </div>
+  </div>
+
+  <footer><p>© 2026 Kong Concentrates · Grove, Oklahoma · Wholesale Partners Only</p></footer>
+</div>
+
+<!-- INVOICE MODAL -->
+<div id="inv-modal">
+  <div class="inv-paper" id="inv-paper">
+    <button class="inv-close" onclick="closeInvoice()">✕</button>
+    <div id="inv-content"></div>
+    <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+/* ─────────────────────────────────────────────────────────────────
+   SETUP  ·  Must match values in /wholesale/index.html
+   ───────────────────────────────────────────────────────────────── */
+const SUPABASE_URL      = 'YOUR_SUPABASE_PROJECT_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+/* ───────────────────────────────────────────────────────────────── */
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let currentUser = null;
+let currentProfile = null;
+let products = [];
+let cartQtys = {}; // productId → quantity
+
+// ── Init
+(async()=>{
+  const {data:{session}} = await sb.auth.getSession();
+  if(!session){ window.location.href='/wholesale/'; return; }
+  currentUser = session.user;
+
+  const {data:profile} = await sb.from('dispensaries').select('*').eq('id',currentUser.id).single();
+  if(!profile || !profile.approved){ window.location.href='/wholesale/'; return; }
+  currentProfile = profile;
+
+  document.getElementById('welcome-name').textContent = profile.name;
+  document.getElementById('user-name-display').textContent = profile.name;
+  document.getElementById('site').classList.add('show');
+
+  await loadProducts();
+})();
+
+// ── Tab switching
+function openTab(name, btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='history') loadHistory();
+}
+
+// ── Load products
+async function loadProducts(){
+  const {data,error} = await sb.from('wholesale_products').select('*').eq('available',true).order('category').order('name');
+  if(error){ document.getElementById('menu-spinner').textContent='Failed to load products.'; return; }
+  products = data;
+  products.forEach(p=>{ cartQtys[p.id]=0; });
+
+  renderMenuGrid();
+  renderOrderRows();
+  document.getElementById('menu-spinner').style.display='none';
+  document.getElementById('products-grid').style.display='grid';
+}
+
+function renderMenuGrid(){
+  const grid = document.getElementById('products-grid');
+  grid.innerHTML = products.map(p=>`
+    <div class="prod-card">
+      <div class="prod-cat">${esc(p.category||'')}</div>
+      <div class="prod-name">${esc(p.name)}</div>
+      <div class="prod-desc">${esc(p.description||'')}</div>
+      <div class="prod-footer">
+        <div>
+          <div class="prod-price">$${Number(p.price_wholesale).toFixed(2)}</div>
+          <div class="prod-unit">${esc(p.unit_label||'per unit')}</div>
+        </div>
+        <div class="prod-min">Min ${p.min_qty||1}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderOrderRows(){
+  const container = document.getElementById('order-items');
+  container.innerHTML = products.map(p=>`
+    <div class="order-row">
+      <div class="order-row-info">
+        <div class="order-row-name">${esc(p.name)}</div>
+        <div class="order-row-detail">$${Number(p.price_wholesale).toFixed(2)} ${esc(p.unit_label||'per unit')} · Min ${p.min_qty||1}</div>
+      </div>
+      <div class="qty-wrap">
+        <button class="qty-btn" onclick="adjustQty('${p.id}',-1)">−</button>
+        <input class="qty-input" type="number" min="0" value="0" id="qty-${p.id}" onchange="setQty('${p.id}',this.value)">
+        <button class="qty-btn" onclick="adjustQty('${p.id}',1)">+</button>
+      </div>
+      <div class="row-subtotal" id="sub-${p.id}">—</div>
+    </div>`).join('');
+}
+
+function adjustQty(id, delta){
+  const input = document.getElementById('qty-'+id);
+  const newVal = Math.max(0, (parseInt(input.value)||0)+delta);
+  input.value = newVal;
+  setQty(id, newVal);
+}
+
+function setQty(id, val){
+  const p = products.find(x=>x.id===id);
+  const qty = Math.max(0,parseInt(val)||0);
+  cartQtys[id] = qty;
+  const sub = document.getElementById('sub-'+id);
+  sub.textContent = qty > 0 ? '$'+(qty*p.price_wholesale).toFixed(2) : '—';
+  updateTotal();
+}
+
+function updateTotal(){
+  let total = 0;
+  products.forEach(p=>{ total += (cartQtys[p.id]||0)*p.price_wholesale; });
+  document.getElementById('order-total').textContent = '$'+total.toFixed(2);
+}
+
+// ── Submit order
+async function submitOrder(){
+  const btn = document.getElementById('submit-btn');
+  const errEl = document.getElementById('order-err');
+  const okEl = document.getElementById('order-ok');
+  errEl.classList.remove('show'); okEl.classList.remove('show');
+
+  const items = products.filter(p=>(cartQtys[p.id]||0)>0);
+  if(!items.length){ errEl.textContent='Please select at least one product.'; errEl.classList.add('show'); return; }
+
+  // Validate min qty
+  const badItems = items.filter(p=>cartQtys[p.id]<(p.min_qty||1));
+  if(badItems.length){
+    errEl.textContent='Minimum quantity not met: '+badItems.map(p=>`${p.name} (min ${p.min_qty})`).join(', ')+'.';
+    errEl.classList.add('show'); return;
+  }
+
+  const total = items.reduce((s,p)=>s+(cartQtys[p.id]*p.price_wholesale),0);
+  const notes = document.getElementById('order-notes').value.trim();
+
+  btn.disabled=true; btn.textContent='Placing order…';
+
+  const {data:order,error:oe} = await sb.from('wholesale_orders').insert({
+    dispensary_id:currentUser.id, status:'received', total, notes
+  }).select().single();
+
+  if(oe){ errEl.textContent='Order failed: '+oe.message; errEl.classList.add('show'); btn.disabled=false; btn.textContent='Place Order'; return; }
+
+  const {error:ie} = await sb.from('wholesale_order_items').insert(
+    items.map(p=>({ order_id:order.id, product_id:p.id, product_name:p.name, quantity:cartQtys[p.id], unit_price:p.price_wholesale, subtotal:cartQtys[p.id]*p.price_wholesale }))
+  );
+
+  if(ie){ errEl.textContent='Order partially failed: '+ie.message; errEl.classList.add('show'); }
+  else {
+    okEl.textContent='Order placed! Reference #'+order.id.slice(-8).toUpperCase()+'. We\'ll be in touch shortly.';
+    okEl.classList.add('show');
+    // reset cart
+    products.forEach(p=>{ cartQtys[p.id]=0; document.getElementById('qty-'+p.id).value=0; document.getElementById('sub-'+p.id).textContent='—'; });
+    updateTotal();
+    document.getElementById('order-notes').value='';
+  }
+
+  btn.disabled=false; btn.textContent='Place Order';
+}
+
+// ── Load order history
+async function loadHistory(){
+  document.getElementById('history-spinner').style.display='block';
+  document.getElementById('orders-list').style.display='none';
+
+  const {data,error} = await sb.from('wholesale_orders')
+    .select(`*, wholesale_order_items(*, wholesale_products(unit_label))`)
+    .eq('dispensary_id',currentUser.id)
+    .order('created_at',{ascending:false});
+
+  document.getElementById('history-spinner').style.display='none';
+  const listEl = document.getElementById('orders-list');
+  listEl.style.display='flex';
+
+  if(error||!data||!data.length){
+    listEl.innerHTML='<div class="empty-state"><p>No orders yet.</p></div>'; return;
+  }
+
+  const statusSteps = ['received','processing','out_for_delivery','complete'];
+  const statusLabel = {received:'Received',processing:'Processing',out_for_delivery:'Out for Delivery',complete:'Complete'};
+
+  listEl.innerHTML = data.map(order=>{
+    const date = new Date(order.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const stepIdx = statusSteps.indexOf(order.status);
+    const itemsHtml = (order.wholesale_order_items||[]).map(it=>`
+      <tr>
+        <td>${esc(it.product_name)}</td>
+        <td>${it.quantity}</td>
+        <td>$${Number(it.unit_price).toFixed(2)}</td>
+        <td>$${Number(it.subtotal).toFixed(2)}</td>
+      </tr>`).join('');
+
+    const trackHtml = statusSteps.map((s,i)=>`
+      <div class="st-step ${i<=stepIdx?'done':''}">${statusLabel[s]}</div>`).join('');
+
+    return `
+      <div class="order-card">
+        <div class="order-card-header" onclick="toggleOrder('ord-${order.id}')">
+          <div class="order-num">#${order.id.slice(-8).toUpperCase()}</div>
+          <div class="order-date">${date}</div>
+          <span class="status-badge status-${order.status}">${statusLabel[order.status]||order.status}</span>
+          <div class="order-total-s">$${Number(order.total).toFixed(2)}</div>
+        </div>
+        <div id="ord-${order.id}" class="order-expand" style="display:none;">
+          <div class="status-track">${trackHtml}</div>
+          <table class="order-items-table" style="margin-top:18px;">
+            <thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead>
+            <tbody>${itemsHtml}</tbody>
+          </table>
+          ${order.notes?`<div class="order-notes">Notes: ${esc(order.notes)}</div>`:''}
+          <button class="btn-invoice" onclick="printInvoice('${order.id}')">Print Invoice</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleOrder(id){
+  const el = document.getElementById(id);
+  el.style.display = el.style.display==='none' ? 'block' : 'none';
+}
+
+// ── Invoice
+async function printInvoice(orderId){
+  const {data:order} = await sb.from('wholesale_orders')
+    .select(`*, dispensaries(name,address,phone,email), wholesale_order_items(*)`)
+    .eq('id',orderId).single();
+  if(!order){ alert('Could not load order.'); return; }
+
+  const d = currentProfile;
+  const date = new Date(order.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  const itemRows = (order.wholesale_order_items||[]).map(it=>`
+    <tr>
+      <td>${esc(it.product_name)}</td>
+      <td>${it.quantity}</td>
+      <td>$${Number(it.unit_price).toFixed(2)}</td>
+      <td>$${Number(it.subtotal).toFixed(2)}</td>
+    </tr>`).join('');
+
+  document.getElementById('inv-content').innerHTML = `
+    <div class="inv-header">
+      <div>
+        <div class="inv-brand">Kong Concentrates</div>
+        <div class="inv-brand-sub">Grove, Oklahoma · kongconcentrates.com</div>
+      </div>
+      <div>
+        <div class="inv-title">Wholesale Invoice</div>
+        <div class="inv-meta">
+          Invoice #${orderId.slice(-8).toUpperCase()}<br>
+          Date: ${date}
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="inv-bill-label">Bill To</div>
+      <div class="inv-bill-name">${esc(d.name)}</div>
+      <div class="inv-bill-info">${esc(d.address||'')}<br>${esc(d.phone||'')} · ${esc(d.email||'')}</div>
+    </div>
+    <table class="inv-table">
+      <thead><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Subtotal</th></tr></thead>
+      <tbody>${itemRows}</tbody>
+    </table>
+    <div class="inv-total-row">
+      <div class="inv-total-label">Total</div>
+      <div class="inv-total-val">$${Number(order.total).toFixed(2)}</div>
+    </div>
+    ${order.notes?`<div class="inv-notes">Notes: ${esc(order.notes)}</div>`:''}
+    <div class="inv-footer">Thank you for your partnership · Kong Concentrates</div>`;
+
+  document.getElementById('inv-modal').classList.add('show');
+}
+
+function closeInvoice(){ document.getElementById('inv-modal').classList.remove('show'); }
+
+// ── Helpers
+function esc(s){ const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
+
+async function doSignOut(){ await sb.auth.signOut(); window.location.href='/wholesale/'; }
+</script>
+</body>
+</html>
