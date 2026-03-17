@@ -97,12 +97,15 @@ create policy "order_items_own_insert"
     )
   );
 
--- ── Sample products (optional — delete or edit as needed) ───────
+-- ── Products ─────────────────────────────────────────────────────
 
 insert into wholesale_products (name, description, category, price_wholesale, unit_label, min_qty) values
-  ('Live Hash Rosin — Full Melt', 'Fresh-frozen, single-source, full-spectrum. Our flagship product.', 'Rosin', 35.00, 'per gram', 7),
-  ('Live Hash Rosin — 2nd Press', 'Same fresh-frozen source, second press. Great value for infusions.', 'Rosin', 22.00, 'per gram', 14),
-  ('Rosin Badder', 'Whipped live rosin with a smooth, workable consistency.', 'Rosin', 28.00, 'per gram', 7),
-  ('Full Melt Dry Sift', '5-star dry-sift ice water hash. Limited availability.', 'Hash', 40.00, 'per gram', 5),
-  ('Hash Hole Pre-Roll', 'Premium flower donut-wrapped in full-melt hash rosin.', 'Pre-Roll', 18.00, 'each', 10)
+  ('Pink Runtz', 'Live rosin, non-solvent. Fresh-frozen single-source.', 'Rosin', 30.00, 'per gram', 1),
+  ('Bacio Mints', 'Live rosin, non-solvent. Fresh-frozen single-source.', 'Rosin', 30.00, 'per gram', 1),
+  ('Hooch x White Rainbow', 'Live rosin, non-solvent. Fresh-frozen single-source.', 'Rosin', 30.00, 'per gram', 1),
+  ('Sticky Buns', 'Live rosin, non-solvent. Fresh-frozen single-source.', 'Rosin', 30.00, 'per gram', 1),
+  ('Devil Driver', 'Live rosin, non-solvent. Fresh-frozen single-source.', 'Rosin', 30.00, 'per gram', 1),
+  ('Grape Pie', 'Live rosin, non-solvent. Fresh-frozen single-source.', 'Rosin', 30.00, 'per gram', 1),
+  ('Bacio Mints Vape', 'Live rosin vape cartridge.', 'Vape', 30.00, 'each', 1),
+  ('Creme Soda x Pink Runtz Hash Hole', 'Infused pre-roll with live rosin hash hole.', 'Pre-Roll', 40.00, 'each', 1)
 on conflict do nothing;
