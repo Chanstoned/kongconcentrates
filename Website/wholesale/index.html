@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+a{color:inherit;}
 :root{--black:#0a0a0a;--off-white:#f0ead8;--gold:#c9a84c;--gold2:#e8c46a;--dark:#141414;--border:rgba(201,168,76,0.15);}
 html,body{height:100%;overflow-x:hidden}
 body{background:var(--black);font-family:'Barlow Condensed',sans-serif;color:var(--off-white);min-height:100vh;}
@@ -110,8 +111,11 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
     </a>
     <nav class="hnav">
       <a href="/menu">Menu</a>
+      <a href="/coa">Lab Results</a>
       <a href="/locations">Locations</a>
-      <a href="/contact">Contact</a>
+      <a href="/merch">Merch</a>
+      <a href="/#contact">Contact</a>
+      <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
     </nav>
   </header>
 
@@ -148,6 +152,10 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
             <div class="fg"><label class="fl">Phone</label><input class="fi" type="tel" id="r-phone" placeholder="(918) 555-0100" required></div>
           </div>
           <div class="fg"><label class="fl">Address</label><input class="fi" type="text" id="r-addr" placeholder="123 Main St, City, OK 74000" required></div>
+          <div class="frow">
+            <div class="fg"><label class="fl">OMMA License #</label><input class="fi" type="text" id="r-omma" placeholder="OMMA-00000000"></div>
+            <div class="fg"><label class="fl">OBNDD License #</label><input class="fi" type="text" id="r-obndd" placeholder="OBNDD-00000000"></div>
+          </div>
           <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="r-email" placeholder="orders@dispensary.com" required autocomplete="email"></div>
           <div class="frow">
             <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="r-pw" placeholder="••••••••" minlength="8" required autocomplete="new-password"></div>
@@ -255,25 +263,34 @@ async function doRegister(e){
 
   btn.disabled=true; btn.textContent='Submitting…';
 
-  const email   = document.getElementById('r-email').value.trim();
-  const bizName = document.getElementById('r-biz').value.trim();
-  const contact = document.getElementById('r-contact').value.trim();
-  const phone   = document.getElementById('r-phone').value.trim();
-  const addr    = document.getElementById('r-addr').value.trim();
+  const email        = document.getElementById('r-email').value.trim();
+  const bizName      = document.getElementById('r-biz').value.trim();
+  const contact      = document.getElementById('r-contact').value.trim();
+  const phone        = document.getElementById('r-phone').value.trim();
+  const addr         = document.getElementById('r-addr').value.trim();
+  const ommaLicense  = document.getElementById('r-omma').value.trim();
+  const obnddLicense = document.getElementById('r-obndd').value.trim();
 
-  const {data,error} = await sb.auth.signUp({ email, password:pw });
-  if(error){ errEl.textContent=error.message; errEl.classList.add('show'); btn.disabled=false; btn.textContent='Submit Application'; return; }
-
-  const {error:pe} = await sb.from('dispensaries').insert({
-    id:data.user.id, name:bizName, contact_name:contact, phone, address:addr, email, approved:false
+  const res = await fetch('/.netlify/functions/wholesale-register', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ email, password:pw, name:bizName, contact_name:contact, phone, address:addr, omma_license:ommaLicense, obndd_license:obnddLicense })
   });
-  if(pe){ errEl.textContent='Profile setup failed — please contact us.'; errEl.classList.add('show'); }
-  else {
-    document.getElementById('reg-form').style.display='none';
-    okEl.textContent='Application submitted! We\'ll be in touch within 1–2 business days.';
-    okEl.classList.add('show');
-    setTimeout(()=>{ document.getElementById('auth-section').style.display='none'; document.getElementById('pending-section').style.display='block'; },1500);
+  const json = await res.json();
+
+  if(!res.ok){
+    errEl.textContent=json.error||'Registration failed — please try again.';
+    errEl.classList.add('show');
+    btn.disabled=false; btn.textContent='Submit Application';
+    return;
   }
+
+  // Sign in so they see the pending screen
+  await sb.auth.signInWithPassword({ email, password:pw });
+  document.getElementById('reg-form').style.display='none';
+  okEl.textContent='Application submitted! We\'ll be in touch within 1–2 business days.';
+  okEl.classList.add('show');
+  setTimeout(()=>{ document.getElementById('auth-section').style.display='none'; document.getElementById('pending-section').style.display='block'; },1500);
   btn.disabled=false; btn.textContent='Submit Application';
 }
 
