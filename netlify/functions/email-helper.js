@@ -1,32 +1,19 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
 const ADMIN_EMAIL = "process@kongconcentrates.com";
+const FROM = "Kong Concentrates <process@kongconcentrates.com>";
 
-function createTransport() {
-  return nodemailer.createTransport({
-    host: process.env.EMAIL_SMTP_HOST,
-    port: parseInt(process.env.EMAIL_SMTP_PORT || "587"),
-    secure: process.env.EMAIL_SMTP_SECURE === "true",
-    auth: {
-      user: process.env.EMAIL_SMTP_USER,
-      pass: process.env.EMAIL_SMTP_PASS,
-    },
-  });
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
 }
 
 async function sendEmail({ to, subject, html, text }) {
-  if (!process.env.EMAIL_SMTP_HOST || !process.env.EMAIL_SMTP_USER) {
-    console.log("Email not configured — skipping send:", subject);
+  if (!process.env.RESEND_API_KEY) {
+    console.log("RESEND_API_KEY not set — skipping send:", subject);
     return;
   }
-  const transporter = createTransport();
-  await transporter.sendMail({
-    from: `"Kong Concentrates" <${process.env.EMAIL_SMTP_USER}>`,
-    to,
-    subject,
-    html,
-    text,
-  });
+  const resend = getResend();
+  await resend.emails.send({ from: FROM, to, subject, html, text });
 }
 
 // ── New application received ──────────────────────────────────────
