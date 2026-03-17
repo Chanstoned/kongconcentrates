@@ -8,9 +8,6 @@
 [functions]
   node_bundler = "nft"
 
-[functions."wholesale-place-order"]
-  timeout = 26
-
 # Blog post clean URLs: /blog/my-post → /blog/post/?slug=my-post
 [[redirects]]
   from = "/blog/:slug"

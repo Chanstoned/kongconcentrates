@@ -1,5 +1,4 @@
 const { createClient } = require("@supabase/supabase-js");
-const { sendOrderConfirmation } = require("./email-helper");
 
 const supabaseAdmin = createClient(
   process.env.SUPABASE_URL,
@@ -66,13 +65,6 @@ exports.handler = async (event) => {
         }))
       );
     if (itemsErr) throw itemsErr;
-
-    // Send confirmation emails with PDF invoice attached
-    try {
-      await sendOrderConfirmation({ order, items, dispensary });
-    } catch (emailErr) {
-      console.error("wholesale-place-order email error:", emailErr);
-    }
 
     return { statusCode: 200, headers, body: JSON.stringify({ ok: true, orderId: order.id }) };
   } catch (e) {
