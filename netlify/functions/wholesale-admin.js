@@ -227,6 +227,59 @@ exports.handler = async (event) => {
         return ok({ ok: true });
       }
 
+      // Manually create a new dispensary account (admin-initiated, auto-approved)
+      if (action === "create-account") {
+        const { email, password, name, contact_name, phone, address, omma_license, obndd_license } = body;
+        if (!email || !password || !name) return err("Email, password, and name are required.");
+        const { data: { user }, error: authErr } = await supabaseAdmin.auth.admin.createUser({
+          email,
+          password,
+          email_confirm: true,
+        });
+        if (authErr) return err(authErr.message);
+        const { error: dbErr } = await supabaseAdmin.from("dispensaries").insert({
+          id: user.id,
+          email,
+          name,
+          contact_name: contact_name || null,
+          phone: phone || null,
+          address: address || null,
+          omma_license: omma_license || null,
+          obndd_license: obndd_license || null,
+          approved: true,
+        });
+        if (dbErr) {
+          await supabaseAdmin.auth.admin.deleteUser(user.id);
+          throw dbErr;
+        }
+        return ok({ ok: true });
+      }
+
+      // Manually create an order for a dispensary
+      if (action === "create-order") {
+        const { dispensary_id, items, notes } = body;
+        if (!dispensary_id || !items || !items.length) return err("dispensary_id and items are required.");
+        const total = items.reduce((sum, it) => sum + Number(it.subtotal), 0);
+        const { data: order, error: orderErr } = await supabaseAdmin
+          .from("wholesale_orders")
+          .insert({ dispensary_id, status: "received", total, notes: notes || null })
+          .select()
+          .single();
+        if (orderErr) throw orderErr;
+        const { error: itemsErr } = await supabaseAdmin
+          .from("wholesale_order_items")
+          .insert(items.map((it) => ({
+            order_id: order.id,
+            product_id: it.product_id || null,
+            product_name: it.product_name,
+            quantity: it.quantity,
+            unit_price: it.unit_price,
+            subtotal: it.subtotal,
+          })));
+        if (itemsErr) throw itemsErr;
+        return ok({ ok: true, orderId: order.id });
+      }
+
       return err("Unknown action");
     }
 
