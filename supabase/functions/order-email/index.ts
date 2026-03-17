@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
         .select("*")
         .eq("order_id", order.id),
       supabase
-        .from("wholesale_dispensaries")
+        .from("dispensaries")
         .select("*")
         .eq("id", order.dispensary_id)
         .single(),
