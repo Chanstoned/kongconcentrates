@@ -256,7 +256,7 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ─────────────────────────────────────────────────────────────────
    SETUP  ·  Replace with your values. Must match other portal pages.
@@ -267,7 +267,8 @@ const SUPABASE_ANON_KEY = 'sb_publishable_aDFqNrKQwaCmWDm3gdPLBg_VhQTpKEC';
 const ADMIN_EMAIL       = 'process@kongconcentrates.com';
 /* ───────────────────────────────────────────────────────────────── */
 
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const { createClient } = window.supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const API = '/.netlify/functions/wholesale-admin';
 
 let allOrders = [];
