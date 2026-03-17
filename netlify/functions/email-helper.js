@@ -18,8 +18,7 @@ function getTransport() {
 
 async function sendEmail({ to, subject, html, text, attachments }) {
   if (!process.env.BREVO_SMTP_KEY) {
-    console.log("BREVO_SMTP_KEY not set — skipping send:", subject);
-    return;
+    throw new Error("BREVO_SMTP_KEY environment variable is not set");
   }
   const transport = getTransport();
   await transport.sendMail({ from: FROM, to, subject, html, text, attachments });
