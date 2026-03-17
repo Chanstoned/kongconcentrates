@@ -1,5 +1,5 @@
 const { createClient } = require("@supabase/supabase-js");
-const { sendAccountApproved, sendAccountRejected, sendOrderStatusUpdate } = require("./email-helper");
+const { sendAccountApproved, sendAccountRejected, sendOrderStatusUpdate, sendOrderConfirmation } = require("./email-helper");
 
 // Supabase admin client — uses service role key to bypass RLS
 const supabaseAdmin = createClient(
@@ -277,6 +277,14 @@ exports.handler = async (event) => {
             subtotal: it.subtotal,
           })));
         if (itemsErr) throw itemsErr;
+        const { data: dispensary } = await supabaseAdmin
+          .from("dispensaries")
+          .select("*")
+          .eq("id", dispensary_id)
+          .single();
+        if (dispensary) {
+          await sendOrderConfirmation({ order, items, dispensary }).catch(console.error);
+        }
         return ok({ ok: true, orderId: order.id });
       }
 
