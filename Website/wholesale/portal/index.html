@@ -461,13 +461,24 @@ async function printInvoice(orderId){
 
   const d = currentProfile;
   const date = new Date(order.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-  const itemRows = (order.wholesale_order_items||[]).map(it=>`
-    <tr>
-      <td>${esc(it.product_name)}</td>
-      <td>${it.quantity}</td>
-      <td>$${Number(it.unit_price).toFixed(2)}</td>
-      <td>$${Number(it.subtotal).toFixed(2)}</td>
-    </tr>`).join('');
+  const productInfo = {
+    'bacio mints':           { batch:'KC-26-KC-01',  metrc:'1A40E0100002F6A000000___' },
+    'pink runtz':            { batch:'KC-26-ECE-01', metrc:'1A40E0100002F6A000000___' },
+    'sticky buns':           { batch:'KC-26-ECE-02', metrc:'1A40E0100002F6A000000___' },
+    'hooch x white rainbow': { batch:'KC-26-ECE-03', metrc:'1A40E0100002F6A000000___' },
+    'grape pie':             { batch:'KC-26-ECE-04', metrc:'1A40E0100002F6A000000___' },
+    'devil driver':          { batch:'KC-26-ECE-05', metrc:'1A40E0100002F6A000000___' },
+  };
+  const itemRows = (order.wholesale_order_items||[]).map(it=>{
+    const info = productInfo[(it.product_name||'').toLowerCase()];
+    const batchLine = info ? '<br><span style="font-size:10px;color:#999;">Batch: ' + info.batch + ' \u00b7 Metrc: ' + info.metrc + '</span>' : '';
+    return '<tr>'
+      + '<td>' + esc(it.product_name) + batchLine + '</td>'
+      + '<td>' + it.quantity + '</td>'
+      + '<td>$' + Number(it.unit_price).toFixed(2) + '</td>'
+      + '<td>$' + Number(it.subtotal).toFixed(2) + '</td>'
+      + '</tr>';
+  }).join('');
 
   document.getElementById('inv-content').innerHTML = `
     <div class="inv-header">
