@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — Kong Concentrates Wholesale</title>
+<meta name="robots" content="noindex, nofollow">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5YMLL0G1WB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-5YMLL0G1WB');</script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#0a0a0a;--off-white:#f0ead8;--gold:#c9a84c;--gold2:#e8c46a;--dark:#141414;--border:rgba(201,168,76,0.15);}
+html,body{height:100%;overflow-x:hidden}
+body{background:var(--black);font-family:'Barlow Condensed',sans-serif;color:var(--off-white);min-height:100vh;}
+#site{display:none;flex-direction:column;min-height:100vh}
+#site.show{display:flex}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;flex-wrap:wrap;}
+.hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
+.htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
+.htext p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-top:3px;}
+.hnav{margin-left:auto;display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
+.btn-sm{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;background:none;border:1px solid #242424;color:rgba(240,234,216,0.55);padding:7px 12px;cursor:pointer;transition:all 0.2s;}
+.btn-sm:hover{color:var(--gold);border-color:rgba(201,168,76,0.4);}
+
+/* LAYOUT */
+.container{flex:1;max-width:1100px;width:100%;margin:0 auto;padding:36px 24px 80px;}
+
+/* STATS */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:36px;}
+.stat-card{background:#0d0d0d;border:1px solid #1e1e1e;padding:18px 20px;}
+.stat-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(201,168,76,0.6);margin-bottom:8px;}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.06em;color:var(--off-white);}
+
+/* TABS */
+.tab-nav{display:flex;border-bottom:1px solid var(--border);margin-bottom:28px;gap:0;}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;color:rgba(240,234,216,0.45);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;padding:13px 22px;cursor:pointer;transition:color 0.2s,border-color 0.2s;white-space:nowrap;}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* SECTION HEADER */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.08em;}
+.btn-add{background:var(--gold);color:#0a0a0a;border:none;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;padding:9px 16px;cursor:pointer;transition:background 0.2s;}
+.btn-add:hover{background:var(--gold2);}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;}
+table.data-tbl{width:100%;border-collapse:collapse;}
+table.data-tbl th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,234,216,0.35);text-align:left;padding:10px 14px;border-bottom:1px solid #1e1e1e;white-space:nowrap;}
+table.data-tbl td{padding:13px 14px;border-bottom:1px solid #111;font-size:14px;vertical-align:middle;}
+table.data-tbl tr:hover td{background:rgba(255,255,255,0.015);}
+table.data-tbl td.mono{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;}
+
+/* STATUS SELECT */
+.status-sel{background:#111;border:1px solid #2a2a2a;color:var(--off-white);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;padding:6px 10px;cursor:pointer;outline:none;-webkit-appearance:none;min-width:130px;}
+.status-sel:focus{border-color:var(--gold);}
+
+/* STATUS BADGES */
+.status-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;padding:4px 10px;border-radius:30px;white-space:nowrap;}
+.status-received{background:rgba(100,140,255,0.12);border:1px solid rgba(100,140,255,0.25);color:#8aabff;}
+.status-processing{background:rgba(255,200,50,0.1);border:1px solid rgba(255,200,50,0.25);color:#ffd060;}
+.status-out_for_delivery{background:rgba(255,140,50,0.1);border:1px solid rgba(255,140,50,0.25);color:#ffa050;}
+.status-complete{background:rgba(50,200,100,0.08);border:1px solid rgba(50,200,100,0.22);color:#60cc80;}
+.status-pending{background:rgba(200,100,50,0.1);border:1px solid rgba(200,100,50,0.25);color:#e09060;}
+.status-approved{background:rgba(50,200,100,0.08);border:1px solid rgba(50,200,100,0.22);color:#60cc80;}
+
+/* ACCOUNT ACTIONS */
+.btn-approve{background:rgba(50,200,80,0.12);border:1px solid rgba(50,200,80,0.3);color:#60cc70;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.btn-approve:hover{background:rgba(50,200,80,0.22);}
+.btn-reject{background:rgba(200,50,50,0.08);border:1px solid rgba(200,50,50,0.2);color:#d07070;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:all 0.2s;white-space:nowrap;margin-left:6px;}
+.btn-reject:hover{background:rgba(200,50,50,0.15);}
+.btn-invoice{background:none;border:1px solid rgba(201,168,76,0.2);color:rgba(201,168,76,0.6);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.btn-invoice:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ORDER EXPAND */
+.order-detail{display:none;padding:14px 14px 18px;background:#0a0a0a;border-top:1px solid #181818;}
+.detail-items-table{width:100%;border-collapse:collapse;font-size:13px;}
+.detail-items-table th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.3);padding:0 0 8px;border-bottom:1px solid #1e1e1e;text-align:left;}
+.detail-items-table th:last-child,.detail-items-table td:last-child{text-align:right;}
+.detail-items-table td{padding:7px 0;border-bottom:1px solid #141414;color:rgba(240,234,216,0.7);}
+
+/* PRODUCT FORM */
+.prod-form{background:#0d0d0d;border:1px solid var(--border);padding:24px;margin-bottom:24px;display:none;}
+.prod-form.show{display:block;}
+.prod-form h3{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.08em;margin-bottom:20px;}
+.fg{margin-bottom:16px;}
+label.fl{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;opacity:0.8;}
+input.fi,select.fi,textarea.fi{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(201,168,76,0.18);color:var(--off-white);font-family:'Barlow Condensed',sans-serif;font-size:15px;padding:10px 14px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;border-radius:0;}
+input.fi:focus,select.fi:focus,textarea.fi:focus{border-color:rgba(201,168,76,0.45);}
+input.fi::placeholder,textarea.fi::placeholder{color:rgba(240,234,216,0.25);}
+textarea.fi{resize:vertical;min-height:72px;}
+.frow{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;}
+.form-actions{display:flex;gap:10px;margin-top:8px;}
+.btn-save{background:var(--gold);color:#0a0a0a;border:none;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;padding:12px 22px;cursor:pointer;transition:background 0.2s;}
+.btn-save:hover{background:var(--gold2);}
+.btn-cancel{background:none;border:1px solid #2a2a2a;color:rgba(240,234,216,0.5);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;padding:12px 22px;cursor:pointer;transition:all 0.2s;}
+.btn-cancel:hover{border-color:#444;color:var(--off-white);}
+.btn-del{background:none;border:1px solid rgba(200,50,50,0.2);color:#d07070;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:7px 12px;cursor:pointer;transition:all 0.2s;}
+.btn-del:hover{background:rgba(200,50,50,0.1);}
+.btn-edit{background:none;border:1px solid #2a2a2a;color:rgba(240,234,216,0.5);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:7px 12px;cursor:pointer;transition:all 0.2s;margin-right:6px;}
+.btn-edit:hover{border-color:rgba(201,168,76,0.4);color:var(--gold);}
+.toggle-avail{background:none;border:1px solid #2a2a2a;color:rgba(240,234,216,0.45);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:5px 10px;cursor:pointer;transition:all 0.2s;}
+.toggle-avail.on{border-color:rgba(50,200,80,0.3);color:#60cc70;}
+
+/* ALERTS */
+.alert{padding:12px 15px;border-radius:2px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;margin-bottom:16px;display:none;}
+.alert.show{display:block;}
+.alert-ok{background:rgba(50,180,80,0.08);border:1px solid rgba(50,180,80,0.2);color:#70c878;}
+.alert-err{background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.25);color:#d97070;}
+
+/* INVOICE MODAL */
+#inv-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;overflow:auto;padding:40px 20px;}
+#inv-modal.show{display:flex;align-items:flex-start;justify-content:center;}
+.inv-paper{background:#f8f4ec;color:#111;max-width:680px;width:100%;padding:52px 56px;position:relative;}
+.inv-close{position:absolute;top:16px;right:20px;background:none;border:none;font-size:22px;cursor:pointer;color:#555;line-height:1;}
+.inv-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:36px;padding-bottom:24px;border-bottom:2px solid #222;}
+.inv-brand{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.1em;color:#111;}
+.inv-brand-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;color:#888;text-transform:uppercase;margin-top:4px;}
+.inv-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.12em;color:#333;text-align:right;}
+.inv-meta{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#666;text-align:right;margin-top:6px;line-height:1.9;}
+.inv-bill-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#aaa;margin-bottom:6px;}
+.inv-bill-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.08em;color:#111;margin-bottom:4px;}
+.inv-bill-info{font-family:'DM Mono',monospace;font-size:11px;color:#555;line-height:1.8;}
+table.inv-table{width:100%;border-collapse:collapse;margin:28px 0;}
+table.inv-table th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:#888;text-align:left;padding:8px 0;border-bottom:1px solid #ddd;}
+table.inv-table th:last-child,table.inv-table td:last-child{text-align:right;}
+table.inv-table td{padding:10px 0;border-bottom:1px solid #eee;font-family:'Barlow Condensed',sans-serif;font-size:15px;color:#222;}
+.inv-total-row{display:flex;justify-content:flex-end;gap:60px;margin-top:20px;padding-top:16px;border-top:2px solid #222;}
+.inv-total-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#555;}
+.inv-total-val{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.06em;color:#111;}
+.inv-notes{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#777;margin-top:28px;line-height:1.8;}
+.inv-footer{margin-top:48px;padding-top:20px;border-top:1px solid #ddd;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:#aaa;text-align:center;}
+.btn-print{display:block;width:100%;background:#111;color:#f8f4ec;border:none;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:14px;cursor:pointer;margin-top:24px;transition:background 0.2s;}
+.btn-print:hover{background:#333;}
+@media print{
+  #inv-modal{padding:0;background:white;}
+  .inv-paper{max-width:100%;box-shadow:none;padding:32px 40px;}
+  .inv-close,.btn-print{display:none!important;}
+}
+
+/* EMPTY / SPINNER */
+.empty-state,.spinner{text-align:center;padding:48px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;color:rgba(240,234,216,0.3);}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.filter-btn{background:none;border:1px solid #242424;color:rgba(240,234,216,0.45);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:7px 14px;cursor:pointer;transition:all 0.2s;}
+.filter-btn.active,.filter-btn:hover{border-color:rgba(201,168,76,0.4);color:var(--gold);}
+
+footer{border-top:1px solid var(--border);padding:28px;text-align:center;margin-top:auto;}
+footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:rgba(240,234,216,0.2);}
+
+@media(max-width:700px){
+  .stats-bar{grid-template-columns:repeat(2,1fr);}
+  header{padding:12px 16px;}
+  .container{padding:24px 14px 60px;}
+  .tab-btn{padding:12px 12px;font-size:10px;}
+  .inv-paper{padding:28px 20px;}
+}
+</style>
+</head>
+<body>
+
+<div id="site">
+  <header>
+    <a href="/" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+      <img src="../../images/MAIN-ROUND-1.png" alt="Logo" class="hlogo">
+      <div class="htext"><h1>Kong Concentrates</h1><p>Admin · Wholesale</p></div>
+    </a>
+    <div class="hnav">
+      <button class="btn-sm" onclick="refreshAll()">Refresh</button>
+      <button class="btn-sm" onclick="doSignOut()">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-val" id="st-total">—</div></div>
+      <div class="stat-card"><div class="stat-label">Received</div><div class="stat-val" id="st-received">—</div></div>
+      <div class="stat-card"><div class="stat-label">Processing</div><div class="stat-val" id="st-processing">—</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-val" id="st-revenue">—</div></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="openTab('orders',this)">Orders</button>
+      <button class="tab-btn" onclick="openTab('accounts',this)">Accounts</button>
+      <button class="tab-btn" onclick="openTab('products',this)">Products</button>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div id="tab-orders" class="tab-panel active">
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterOrders('all',this)">All</button>
+        <button class="filter-btn" onclick="filterOrders('received',this)">Received</button>
+        <button class="filter-btn" onclick="filterOrders('processing',this)">Processing</button>
+        <button class="filter-btn" onclick="filterOrders('out_for_delivery',this)">Out for Delivery</button>
+        <button class="filter-btn" onclick="filterOrders('complete',this)">Complete</button>
+      </div>
+      <div class="alert alert-ok" id="orders-ok"></div>
+      <div class="alert alert-err" id="orders-err"></div>
+      <div id="orders-spinner" class="spinner">Loading…</div>
+      <div id="orders-table" style="display:none;"></div>
+    </div>
+
+    <!-- ACCOUNTS TAB -->
+    <div id="tab-accounts" class="tab-panel">
+      <div class="alert alert-ok" id="accts-ok"></div>
+      <div id="accts-spinner" class="spinner">Loading…</div>
+      <div id="accts-content" style="display:none;"></div>
+    </div>
+
+    <!-- PRODUCTS TAB -->
+    <div id="tab-products" class="tab-panel">
+      <div class="sec-hd">
+        <div class="sec-title">Wholesale Products</div>
+        <button class="btn-add" onclick="showProductForm()">+ Add Product</button>
+      </div>
+      <div class="alert alert-ok" id="prods-ok"></div>
+      <div class="alert alert-err" id="prods-err"></div>
+      <!-- ADD/EDIT FORM -->
+      <div class="prod-form" id="prod-form">
+        <h3 id="form-title">New Product</h3>
+        <input type="hidden" id="f-id">
+        <div class="fg"><label class="fl">Product Name</label><input class="fi" type="text" id="f-name" placeholder="Live Hash Rosin — Full Melt" required></div>
+        <div class="fg"><label class="fl">Description</label><textarea class="fi" id="f-desc" placeholder="Fresh frozen, full-spectrum…"></textarea></div>
+        <div class="frow">
+          <div class="fg"><label class="fl">Category</label><input class="fi" type="text" id="f-cat" placeholder="Rosin"></div>
+          <div class="fg"><label class="fl">Wholesale Price ($)</label><input class="fi" type="number" id="f-price" placeholder="25.00" step="0.01" min="0" required></div>
+          <div class="fg"><label class="fl">Unit Label</label><input class="fi" type="text" id="f-unit" placeholder="per gram"></div>
+          <div class="fg"><label class="fl">Min Qty</label><input class="fi" type="number" id="f-min" placeholder="1" min="1" value="1"></div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-save" onclick="saveProduct()">Save Product</button>
+          <button class="btn-cancel" onclick="hideProductForm()">Cancel</button>
+        </div>
+      </div>
+      <div id="prods-spinner" class="spinner">Loading…</div>
+      <div id="prods-table" style="display:none;"></div>
+    </div>
+  </div>
+
+  <footer><p>© 2026 Kong Concentrates · Admin Dashboard · Authorized Access Only</p></footer>
+</div>
+
+<!-- INVOICE MODAL -->
+<div id="inv-modal">
+  <div class="inv-paper">
+    <button class="inv-close" onclick="closeInvoice()">✕</button>
+    <div id="inv-content"></div>
+    <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+/* ─────────────────────────────────────────────────────────────────
+   SETUP  ·  Replace with your values. Must match other portal pages.
+   ADMIN_EMAIL must also be set as WHOLESALE_ADMIN_EMAIL in Netlify env.
+   ───────────────────────────────────────────────────────────────── */
+const SUPABASE_URL      = 'YOUR_SUPABASE_PROJECT_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const ADMIN_EMAIL       = 'YOUR_ADMIN_EMAIL';
+/* ───────────────────────────────────────────────────────────────── */
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const API = '/.netlify/functions/wholesale-admin';
+
+let allOrders = [];
+let currentFilter = 'all';
+let accessToken = null;
+
+// ── Init
+(async()=>{
+  const {data:{session}} = await sb.auth.getSession();
+  if(!session || session.user.email !== ADMIN_EMAIL){
+    window.location.href='/wholesale/'; return;
+  }
+  accessToken = session.access_token;
+
+  // Verify with backend
+  const ok = await adminFetch('GET','ping');
+  if(!ok){ window.location.href='/wholesale/'; return; }
+
+  document.getElementById('site').classList.add('show');
+  await Promise.all([loadOrders(), loadAccounts(), loadProducts()]);
+})();
+
+// ── Admin API fetch
+async function adminFetch(method, action, body){
+  const opts = { method, headers:{'Authorization':'Bearer '+accessToken,'Content-Type':'application/json'} };
+  if(body) opts.body = JSON.stringify(body);
+  const url = method==='GET' ? `${API}?action=${action}` : API;
+  try{
+    const r = await fetch(url, opts);
+    if(!r.ok){ const j=await r.json().catch(()=>({})); console.error(j.error); return null; }
+    return await r.json();
+  }catch(e){ console.error(e); return null; }
+}
+
+// ── Tab switching
+function openTab(name, btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+async function refreshAll(){
+  await Promise.all([loadOrders(), loadAccounts(), loadProducts()]);
+}
+
+// ──────────────────────── ORDERS ─────────────────────────────────
+async function loadOrders(){
+  const data = await adminFetch('GET','orders');
+  if(!data){ document.getElementById('orders-spinner').textContent='Failed to load.'; return; }
+  allOrders = data;
+  renderOrders();
+  updateStats();
+}
+
+function filterOrders(f, btn){
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders();
+}
+
+function renderOrders(){
+  const spinner = document.getElementById('orders-spinner');
+  const tableEl = document.getElementById('orders-table');
+  spinner.style.display='none';
+  tableEl.style.display='block';
+
+  const orders = currentFilter==='all' ? allOrders : allOrders.filter(o=>o.status===currentFilter);
+  if(!orders.length){ tableEl.innerHTML='<div class="empty-state">No orders found.</div>'; return; }
+
+  const statusLabel = {received:'Received',processing:'Processing',out_for_delivery:'Out for Delivery',complete:'Complete'};
+
+  tableEl.innerHTML = orders.map(order=>{
+    const date = new Date(order.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const dispName = order.dispensaries?.name || '—';
+    const dispPhone = order.dispensaries?.phone || '';
+    const itemsHtml = (order.wholesale_order_items||[]).map(it=>`
+      <tr>
+        <td>${esc(it.product_name)}</td>
+        <td>${it.quantity}</td>
+        <td>$${Number(it.unit_price).toFixed(2)}</td>
+        <td>$${Number(it.subtotal).toFixed(2)}</td>
+      </tr>`).join('');
+    return `
+      <div style="background:#0d0d0d;border:1px solid #1e1e1e;margin-bottom:8px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;flex-wrap:wrap;cursor:pointer;" onclick="toggleDetail('od-${order.id}')">
+          <span class="mono" style="font-size:10px;color:rgba(240,234,216,0.4);">#${order.id.slice(-8).toUpperCase()}</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;">${esc(dispName)}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(240,234,216,0.35);">${date}</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold2);margin-left:auto;">$${Number(order.total).toFixed(2)}</span>
+          <select class="status-sel" onchange="updateStatus('${order.id}',this.value)" onclick="event.stopPropagation()">
+            ${['received','processing','out_for_delivery','complete'].map(s=>`<option value="${s}" ${order.status===s?'selected':''}>${statusLabel[s]}</option>`).join('')}
+          </select>
+          <button class="btn-invoice" onclick="event.stopPropagation();printInvoice('${order.id}')">Invoice</button>
+        </div>
+        <div id="od-${order.id}" class="order-detail">
+          <table class="detail-items-table">
+            <thead><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Subtotal</th></tr></thead>
+            <tbody>${itemsHtml||'<tr><td colspan="4" style="opacity:0.4;padding:10px 0;">No items</td></tr>'}</tbody>
+          </table>
+          ${order.notes?`<div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(240,234,216,0.35);margin-top:12px;">Notes: ${esc(order.notes)}</div>`:''}
+          ${dispPhone?`<div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(240,234,216,0.3);margin-top:6px;">${esc(dispPhone)}</div>`:''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleDetail(id){
+  const el=document.getElementById(id);
+  el.style.display=el.style.display==='none'||el.style.display===''?'block':'none';
+}
+
+async function updateStatus(orderId, status){
+  const ok = await adminFetch('POST','',{action:'update-status',orderId,status});
+  const okEl = document.getElementById('orders-ok');
+  const errEl = document.getElementById('orders-err');
+  if(ok){
+    const order = allOrders.find(o=>o.id===orderId);
+    if(order) order.status=status;
+    okEl.textContent='Order status updated.'; okEl.classList.add('show');
+    setTimeout(()=>okEl.classList.remove('show'),3000);
+  } else {
+    errEl.textContent='Failed to update status.'; errEl.classList.add('show');
+    setTimeout(()=>errEl.classList.remove('show'),4000);
+  }
+}
+
+function updateStats(){
+  document.getElementById('st-total').textContent = allOrders.length;
+  document.getElementById('st-received').textContent = allOrders.filter(o=>o.status==='received').length;
+  document.getElementById('st-processing').textContent = allOrders.filter(o=>o.status==='processing').length;
+  const rev = allOrders.filter(o=>o.status==='complete').reduce((s,o)=>s+Number(o.total),0);
+  document.getElementById('st-revenue').textContent = '$'+rev.toFixed(0);
+}
+
+// ──────────────────────── ACCOUNTS ───────────────────────────────
+async function loadAccounts(){
+  const data = await adminFetch('GET','dispensaries');
+  if(!data){ document.getElementById('accts-spinner').textContent='Failed to load.'; return; }
+
+  const spinner = document.getElementById('accts-spinner');
+  const content = document.getElementById('accts-content');
+  spinner.style.display='none'; content.style.display='block';
+
+  const pending = data.filter(d=>!d.approved);
+  const approved = data.filter(d=>d.approved);
+
+  let html = '';
+  if(pending.length){
+    html += `<div style="margin-bottom:28px;">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,100,50,0.8);margin-bottom:14px;">Pending Approval (${pending.length})</div>
+      <div class="tbl-wrap"><table class="data-tbl">
+        <thead><tr><th>Dispensary</th><th>Contact</th><th>Phone</th><th>Address</th><th>Applied</th><th>Actions</th></tr></thead>
+        <tbody>${pending.map(d=>`
+          <tr>
+            <td><strong>${esc(d.name)}</strong></td>
+            <td class="mono">${esc(d.contact_name||'')}</td>
+            <td class="mono">${esc(d.phone||'')}</td>
+            <td style="font-size:13px;">${esc(d.address||'')}</td>
+            <td class="mono">${new Date(d.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</td>
+            <td>
+              <button class="btn-approve" onclick="approveAccount('${d.id}',true,this)">Approve</button>
+              <button class="btn-reject" onclick="approveAccount('${d.id}',false,this)">Reject</button>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>
+    </div>`;
+  }
+
+  html += `<div>
+    <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.3);margin-bottom:14px;">Active Accounts (${approved.length})</div>
+    ${approved.length ? `<div class="tbl-wrap"><table class="data-tbl">
+      <thead><tr><th>Dispensary</th><th>Email</th><th>Phone</th><th>Address</th><th>Since</th><th>Status</th></tr></thead>
+      <tbody>${approved.map(d=>`
+        <tr>
+          <td><strong>${esc(d.name)}</strong></td>
+          <td class="mono" style="font-size:11px;">${esc(d.email||'')}</td>
+          <td class="mono">${esc(d.phone||'')}</td>
+          <td style="font-size:13px;">${esc(d.address||'')}</td>
+          <td class="mono">${new Date(d.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</td>
+          <td><span class="status-badge status-approved">Active</span></td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>` : '<div class="empty-state">No approved accounts yet.</div>'}
+  </div>`;
+
+  content.innerHTML = html;
+}
+
+async function approveAccount(id, approve, btn){
+  btn.disabled=true;
+  const ok = await adminFetch('POST','',{action: approve?'approve':'reject', id});
+  const okEl = document.getElementById('accts-ok');
+  if(ok){
+    okEl.textContent = approve ? 'Account approved.' : 'Account rejected.';
+    okEl.classList.add('show');
+    setTimeout(()=>okEl.classList.remove('show'),3000);
+    await loadAccounts();
+  } else { btn.disabled=false; }
+}
+
+// ──────────────────────── PRODUCTS ───────────────────────────────
+let allProducts = [];
+let editingProductId = null;
+
+async function loadProducts(){
+  const data = await adminFetch('GET','products');
+  if(!data){ document.getElementById('prods-spinner').textContent='Failed to load.'; return; }
+  allProducts = data;
+  renderProducts();
+}
+
+function renderProducts(){
+  const spinner = document.getElementById('prods-spinner');
+  const tableEl = document.getElementById('prods-table');
+  spinner.style.display='none'; tableEl.style.display='block';
+
+  if(!allProducts.length){ tableEl.innerHTML='<div class="empty-state">No products yet. Add your first product above.</div>'; return; }
+
+  tableEl.innerHTML = `<div class="tbl-wrap"><table class="data-tbl">
+    <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Unit</th><th>Min</th><th>Available</th><th>Actions</th></tr></thead>
+    <tbody>${allProducts.map(p=>`
+      <tr>
+        <td><strong>${esc(p.name)}</strong><br><span style="font-size:12px;color:rgba(240,234,216,0.4);">${esc(p.description||'').slice(0,60)}${(p.description||'').length>60?'…':''}</span></td>
+        <td class="mono">${esc(p.category||'')}</td>
+        <td style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold2);">$${Number(p.price_wholesale).toFixed(2)}</td>
+        <td class="mono">${esc(p.unit_label||'')}</td>
+        <td class="mono">${p.min_qty||1}</td>
+        <td><button class="toggle-avail ${p.available?'on':''}" onclick="toggleAvail('${p.id}',${p.available},this)">${p.available?'Active':'Hidden'}</button></td>
+        <td>
+          <button class="btn-edit" onclick="editProduct('${p.id}')">Edit</button>
+          <button class="btn-del" onclick="deleteProduct('${p.id}','${esc(p.name)}',this)">Delete</button>
+        </td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
+}
+
+function showProductForm(){ document.getElementById('prod-form').classList.add('show'); document.getElementById('f-name').focus(); }
+function hideProductForm(){ document.getElementById('prod-form').classList.remove('show'); clearForm(); }
+
+function clearForm(){
+  ['f-id','f-name','f-desc','f-cat','f-unit'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-price').value='';
+  document.getElementById('f-min').value='1';
+  document.getElementById('form-title').textContent='New Product';
+  editingProductId=null;
+}
+
+function editProduct(id){
+  const p = allProducts.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('f-id').value=p.id;
+  document.getElementById('f-name').value=p.name||'';
+  document.getElementById('f-desc').value=p.description||'';
+  document.getElementById('f-cat').value=p.category||'';
+  document.getElementById('f-price').value=p.price_wholesale||'';
+  document.getElementById('f-unit').value=p.unit_label||'';
+  document.getElementById('f-min').value=p.min_qty||1;
+  document.getElementById('form-title').textContent='Edit Product';
+  editingProductId=id;
+  showProductForm();
+  document.getElementById('prod-form').scrollIntoView({behavior:'smooth'});
+}
+
+async function saveProduct(){
+  const name = document.getElementById('f-name').value.trim();
+  const price = parseFloat(document.getElementById('f-price').value);
+  if(!name||isNaN(price)){ alert('Name and price are required.'); return; }
+
+  const payload = {
+    action: editingProductId ? 'update-product' : 'create-product',
+    id: editingProductId,
+    name,
+    description: document.getElementById('f-desc').value.trim(),
+    category: document.getElementById('f-cat').value.trim(),
+    price,
+    unit_label: document.getElementById('f-unit').value.trim(),
+    min_qty: parseInt(document.getElementById('f-min').value)||1,
+    available: true
+  };
+
+  const ok = await adminFetch('POST','',payload);
+  const okEl = document.getElementById('prods-ok');
+  const errEl = document.getElementById('prods-err');
+  if(ok){
+    okEl.textContent = editingProductId ? 'Product updated.' : 'Product added.';
+    okEl.classList.add('show');
+    setTimeout(()=>okEl.classList.remove('show'),3000);
+    hideProductForm();
+    await loadProducts();
+  } else {
+    errEl.textContent='Failed to save product.'; errEl.classList.add('show');
+    setTimeout(()=>errEl.classList.remove('show'),4000);
+  }
+}
+
+async function toggleAvail(id, current, btn){
+  btn.disabled=true;
+  const ok = await adminFetch('POST','',{action:'update-product',id,available:!current});
+  if(ok){ await loadProducts(); } else { btn.disabled=false; }
+}
+
+async function deleteProduct(id, name, btn){
+  if(!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  btn.disabled=true;
+  const ok = await adminFetch('POST','',{action:'delete-product',id});
+  if(ok){
+    const okEl = document.getElementById('prods-ok');
+    okEl.textContent='Product deleted.'; okEl.classList.add('show');
+    setTimeout(()=>okEl.classList.remove('show'),3000);
+    await loadProducts();
+  } else { btn.disabled=false; }
+}
+
+// ──────────────────────── INVOICE ────────────────────────────────
+async function printInvoice(orderId){
+  const order = allOrders.find(o=>o.id===orderId);
+  if(!order){ alert('Order not found.'); return; }
+
+  const d = order.dispensaries || {};
+  const date = new Date(order.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  const itemRows = (order.wholesale_order_items||[]).map(it=>`
+    <tr>
+      <td>${esc(it.product_name)}</td>
+      <td>${it.quantity}</td>
+      <td>$${Number(it.unit_price).toFixed(2)}</td>
+      <td>$${Number(it.subtotal).toFixed(2)}</td>
+    </tr>`).join('');
+
+  document.getElementById('inv-content').innerHTML = `
+    <div class="inv-header">
+      <div>
+        <div class="inv-brand">Kong Concentrates</div>
+        <div class="inv-brand-sub">Grove, Oklahoma · kongconcentrates.com</div>
+      </div>
+      <div>
+        <div class="inv-title">Wholesale Invoice</div>
+        <div class="inv-meta">Invoice #${orderId.slice(-8).toUpperCase()}<br>Date: ${date}</div>
+      </div>
+    </div>
+    <div>
+      <div class="inv-bill-label">Bill To</div>
+      <div class="inv-bill-name">${esc(d.name||'')}</div>
+      <div class="inv-bill-info">${esc(d.address||'')}${d.phone?'<br>'+esc(d.phone):''}${d.email?'<br>'+esc(d.email):''}</div>
+    </div>
+    <table class="inv-table">
+      <thead><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Subtotal</th></tr></thead>
+      <tbody>${itemRows}</tbody>
+    </table>
+    <div class="inv-total-row">
+      <div class="inv-total-label">Total</div>
+      <div class="inv-total-val">$${Number(order.total).toFixed(2)}</div>
+    </div>
+    ${order.notes?`<div class="inv-notes">Notes: ${esc(order.notes)}</div>`:''}
+    <div class="inv-footer">Thank you for your partnership · Kong Concentrates</div>`;
+
+  document.getElementById('inv-modal').classList.add('show');
+}
+
+function closeInvoice(){ document.getElementById('inv-modal').classList.remove('show'); }
+
+// ── Helpers
+function esc(s){ const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
+async function doSignOut(){ await sb.auth.signOut(); window.location.href='/wholesale/'; }
+</script>
+</body>
+</html>

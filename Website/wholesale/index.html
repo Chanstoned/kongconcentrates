@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wholesale Portal — Kong Concentrates</title>
+<meta name="robots" content="noindex, nofollow">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5YMLL0G1WB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-5YMLL0G1WB');</script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#0a0a0a;--off-white:#f0ead8;--gold:#c9a84c;--gold2:#e8c46a;--dark:#141414;--border:rgba(201,168,76,0.15);}
+html,body{height:100%;overflow-x:hidden}
+body{background:var(--black);font-family:'Barlow Condensed',sans-serif;color:var(--off-white);min-height:100vh;}
+
+/* INTRO */
+#intro{position:fixed;inset:0;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;transition:opacity 0.8s ease,transform 0.8s ease;}
+#intro.hide{opacity:0;transform:scale(1.02);pointer-events:none;visibility:hidden}
+.logo-wrap{position:relative;width:min(160px,42vw);opacity:0;transform:scale(0.85);animation:logoIn 1.1s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;}
+.logo-wrap img{width:100%;border-radius:50%;display:block;filter:drop-shadow(0 0 40px rgba(201,168,76,0.35));}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,0.25);animation:pulse 2.4s ease-in-out infinite alternate;pointer-events:none;}
+.ring1{inset:-16px;animation-delay:0s}
+.ring2{inset:-32px;animation-delay:0.5s;border-color:rgba(201,168,76,0.1)}
+.ring3{inset:-52px;animation-delay:0.9s;border-color:rgba(201,168,76,0.05)}
+.intro-tagline{margin-top:32px;font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,6vw,42px);letter-spacing:0.15em;color:var(--off-white);opacity:0;animation:fadeUp 0.7s ease 1.2s forwards;text-align:center;}
+.intro-sub{margin-top:10px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0;animation:fadeUp 0.7s ease 1.5s forwards;text-align:center;}
+@keyframes logoIn{to{opacity:1;transform:scale(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{from{opacity:0.2;transform:scale(1)}to{opacity:0.7;transform:scale(1.015)}}
+
+/* SITE */
+#site{display:none;flex-direction:column;min-height:100vh}
+#site.show{display:flex}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;flex-wrap:wrap;}
+.hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
+.htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
+.htext p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-top:3px;}
+.hnav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
+.hnav a{font-family:'DM Mono',monospace;font-size:clamp(9px,1.5vw,11px);letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,234,216,0.55);text-decoration:none;padding:6px clamp(6px,1vw,10px);border:1px solid #242424;transition:all 0.2s;}
+.hnav a:hover{color:var(--gold);border-color:rgba(201,168,76,0.4);}
+
+/* PAGE WRAP */
+.page-wrap{flex:1;max-width:500px;width:100%;margin:0 auto;padding:56px 24px 80px;}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,8vw,54px);letter-spacing:0.08em;color:var(--gold);text-align:center;margin-bottom:4px;}
+.page-sub{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:rgba(240,234,216,0.45);text-align:center;margin-bottom:48px;}
+
+/* TABS */
+.tab-nav{display:flex;border-bottom:1px solid var(--border);margin-bottom:36px;}
+.tab-btn{flex:1;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;color:rgba(240,234,216,0.45);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;padding:12px 8px;cursor:pointer;transition:color 0.2s,border-color 0.2s;}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* FORM */
+.fg{margin-bottom:18px;}
+label.fl{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;opacity:0.8;}
+input.fi,select.fi{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(201,168,76,0.18);border-radius:2px;color:var(--off-white);font-family:'Barlow Condensed',sans-serif;font-size:16px;padding:11px 14px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
+input.fi:focus,select.fi:focus{border-color:rgba(201,168,76,0.55);}
+input.fi::placeholder{color:rgba(240,234,216,0.25);}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.btn-gold{width:100%;background:var(--gold);color:#0a0a0a;border:none;border-radius:2px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;padding:15px;cursor:pointer;margin-top:8px;transition:background 0.2s,opacity 0.2s;}
+.btn-gold:hover{background:var(--gold2);}
+.btn-gold:disabled{opacity:0.45;cursor:not-allowed;}
+
+/* ALERTS */
+.alert{padding:13px 15px;border-radius:2px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.05em;line-height:1.7;margin-bottom:20px;display:none;}
+.alert.show{display:block;}
+.alert-err{background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.25);color:#d97070;}
+.alert-ok{background:rgba(50,180,80,0.08);border:1px solid rgba(50,180,80,0.2);color:#70c878;}
+.alert-info{background:rgba(201,168,76,0.08);border:1px solid var(--border);color:var(--gold);}
+
+/* PENDING */
+.pending-wrap{text-align:center;padding:52px 20px;}
+.pending-icon{font-size:2.8rem;margin-bottom:20px;}
+.pending-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:0.08em;color:var(--gold);margin-bottom:14px;}
+.pending-body{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;color:rgba(240,234,216,0.7);line-height:1.7;margin-bottom:30px;}
+.pending-body a{color:var(--gold);}
+.btn-ghost{background:none;border:1px solid rgba(201,168,76,0.25);color:rgba(240,234,216,0.6);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;padding:10px 22px;cursor:pointer;transition:all 0.2s;border-radius:2px;}
+.btn-ghost:hover{border-color:rgba(201,168,76,0.55);color:var(--off-white);}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:28px;text-align:center;}
+footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:rgba(240,234,216,0.25);}
+
+@media(max-width:520px){.frow{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+  <div class="logo-wrap">
+    <div class="ring ring1"></div><div class="ring ring2"></div><div class="ring ring3"></div>
+    <img src="../images/MAIN-ROUND-1.png" alt="Kong Concentrates">
+  </div>
+  <div class="intro-tagline">Kong Concentrates</div>
+  <div class="intro-sub">Wholesale Portal</div>
+</div>
+
+<!-- SITE -->
+<div id="site">
+  <header>
+    <a href="/" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+      <img src="../images/MAIN-ROUND-1.png" alt="Logo" class="hlogo">
+      <div class="htext"><h1>Kong Concentrates</h1><p>Grove, Oklahoma</p></div>
+    </a>
+    <nav class="hnav">
+      <a href="/menu">Menu</a>
+      <a href="/locations">Locations</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="page-wrap">
+    <div class="page-title">Wholesale</div>
+    <div class="page-sub">Dispensary Partner Portal</div>
+
+    <!-- AUTH SECTION -->
+    <div id="auth-section">
+      <div class="tab-nav">
+        <button class="tab-btn active" id="btn-login-tab" onclick="showTab('login')">Sign In</button>
+        <button class="tab-btn" id="btn-reg-tab" onclick="showTab('register')">Apply</button>
+      </div>
+
+      <!-- LOGIN TAB -->
+      <div id="tab-login" class="tab-panel active">
+        <div class="alert alert-err" id="login-err"></div>
+        <form onsubmit="doLogin(event)">
+          <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="l-email" placeholder="you@dispensary.com" required autocomplete="email"></div>
+          <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="l-pw" placeholder="••••••••" required autocomplete="current-password"></div>
+          <button class="btn-gold" type="submit" id="login-btn">Sign In</button>
+        </form>
+        <p style="text-align:center;margin-top:22px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(240,234,216,0.35);">New account? Click <span style="color:var(--gold);cursor:pointer;" onclick="showTab('register')">Apply</span> above.</p>
+      </div>
+
+      <!-- REGISTER TAB -->
+      <div id="tab-register" class="tab-panel">
+        <div class="alert alert-err" id="reg-err"></div>
+        <div class="alert alert-ok" id="reg-ok"></div>
+        <form onsubmit="doRegister(event)" id="reg-form">
+          <div class="fg"><label class="fl">Dispensary Name</label><input class="fi" type="text" id="r-biz" placeholder="Green Valley Dispensary" required></div>
+          <div class="frow">
+            <div class="fg"><label class="fl">Contact Person</label><input class="fi" type="text" id="r-contact" placeholder="Jane Smith" required></div>
+            <div class="fg"><label class="fl">Phone</label><input class="fi" type="tel" id="r-phone" placeholder="(918) 555-0100" required></div>
+          </div>
+          <div class="fg"><label class="fl">Address</label><input class="fi" type="text" id="r-addr" placeholder="123 Main St, City, OK 74000" required></div>
+          <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="r-email" placeholder="orders@dispensary.com" required autocomplete="email"></div>
+          <div class="frow">
+            <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="r-pw" placeholder="••••••••" minlength="8" required autocomplete="new-password"></div>
+            <div class="fg"><label class="fl">Confirm</label><input class="fi" type="password" id="r-pw2" placeholder="••••••••" minlength="8" required autocomplete="new-password"></div>
+          </div>
+          <button class="btn-gold" type="submit" id="reg-btn">Submit Application</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- PENDING APPROVAL -->
+    <div id="pending-section" style="display:none;">
+      <div class="pending-wrap">
+        <div class="pending-icon">⏳</div>
+        <div class="pending-title">Application Received</div>
+        <p class="pending-body">Your wholesale account is under review.<br>We'll reach out within 1–2 business days.<br><br>Questions? <a href="mailto:kongconcentrates@gmail.com">kongconcentrates@gmail.com</a></p>
+        <button class="btn-ghost" onclick="doSignOut()">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <footer><p>© 2026 Kong Concentrates · Grove, Oklahoma · Wholesale Partners Only</p></footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+/* ─────────────────────────────────────────────────────────────────
+   SETUP  ·  Replace with your Supabase project values
+   Dashboard → Settings → API → Project URL & anon/public key
+   ───────────────────────────────────────────────────────────────── */
+const SUPABASE_URL      = 'YOUR_SUPABASE_PROJECT_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+/* Admin email — users with this email go straight to /wholesale/admin/ */
+const ADMIN_EMAIL       = 'YOUR_ADMIN_EMAIL';
+/* ───────────────────────────────────────────────────────────────── */
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── intro
+setTimeout(()=>{
+  document.getElementById('intro').classList.add('hide');
+  setTimeout(()=>{
+    document.getElementById('intro').style.display='none';
+    document.getElementById('site').classList.add('show');
+  },800);
+},2200);
+
+// ── check existing session
+(async()=>{
+  const {data:{session}} = await sb.auth.getSession();
+  if(session) await afterAuth(session.user);
+})();
+
+async function afterAuth(user){
+  if(!user) return;
+  if(user.email === ADMIN_EMAIL){
+    window.location.href='/wholesale/admin/'; return;
+  }
+  const {data:profile} = await sb.from('dispensaries').select('approved').eq('id',user.id).single();
+  if(profile && profile.approved){
+    window.location.href='/wholesale/portal/';
+  } else {
+    document.getElementById('auth-section').style.display='none';
+    document.getElementById('pending-section').style.display='block';
+  }
+}
+
+// ── tab toggle
+function showTab(t){
+  ['login','register'].forEach(n=>{
+    document.getElementById('tab-'+n).classList.toggle('active', n===t);
+    document.getElementById('btn-'+n+'-tab').classList.toggle('active', n===t);
+  });
+}
+
+// ── login
+async function doLogin(e){
+  e.preventDefault();
+  const btn=document.getElementById('login-btn');
+  const errEl=document.getElementById('login-err');
+  errEl.classList.remove('show');
+  btn.disabled=true; btn.textContent='Signing in…';
+  const {data,error} = await sb.auth.signInWithPassword({
+    email:document.getElementById('l-email').value.trim(),
+    password:document.getElementById('l-pw').value
+  });
+  if(error){ errEl.textContent=error.message; errEl.classList.add('show'); btn.disabled=false; btn.textContent='Sign In'; return; }
+  await afterAuth(data.user);
+  btn.disabled=false; btn.textContent='Sign In';
+}
+
+// ── register
+async function doRegister(e){
+  e.preventDefault();
+  const btn=document.getElementById('reg-btn');
+  const errEl=document.getElementById('reg-err');
+  const okEl=document.getElementById('reg-ok');
+  errEl.classList.remove('show'); okEl.classList.remove('show');
+
+  const pw=document.getElementById('r-pw').value;
+  if(pw!==document.getElementById('r-pw2').value){
+    errEl.textContent='Passwords do not match.'; errEl.classList.add('show'); return;
+  }
+
+  btn.disabled=true; btn.textContent='Submitting…';
+
+  const email   = document.getElementById('r-email').value.trim();
+  const bizName = document.getElementById('r-biz').value.trim();
+  const contact = document.getElementById('r-contact').value.trim();
+  const phone   = document.getElementById('r-phone').value.trim();
+  const addr    = document.getElementById('r-addr').value.trim();
+
+  const {data,error} = await sb.auth.signUp({ email, password:pw });
+  if(error){ errEl.textContent=error.message; errEl.classList.add('show'); btn.disabled=false; btn.textContent='Submit Application'; return; }
+
+  const {error:pe} = await sb.from('dispensaries').insert({
+    id:data.user.id, name:bizName, contact_name:contact, phone, address:addr, email, approved:false
+  });
+  if(pe){ errEl.textContent='Profile setup failed — please contact us.'; errEl.classList.add('show'); }
+  else {
+    document.getElementById('reg-form').style.display='none';
+    okEl.textContent='Application submitted! We\'ll be in touch within 1–2 business days.';
+    okEl.classList.add('show');
+    setTimeout(()=>{ document.getElementById('auth-section').style.display='none'; document.getElementById('pending-section').style.display='block'; },1500);
+  }
+  btn.disabled=false; btn.textContent='Submit Application';
+}
+
+async function doSignOut(){ await sb.auth.signOut(); document.getElementById('auth-section').style.display='block'; document.getElementById('pending-section').style.display='none'; showTab('login'); }
+</script>
+</body>
+</html>
