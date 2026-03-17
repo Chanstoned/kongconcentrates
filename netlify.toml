@@ -2,6 +2,9 @@
   publish = "Website"
   functions = "netlify/functions"
 
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "WHOLESALE_ADMIN_EMAIL"
+
 [functions]
   node_bundler = "esbuild"
 
