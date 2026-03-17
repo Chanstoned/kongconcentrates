@@ -7,63 +7,40 @@
 <meta name="description" content="Browse Kong Concentrates' current lineup of artisan solventless concentrates — live rosin, hash holes, and vapes. Available at Oklahoma dispensaries.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kongconcentrates.com/menu">
-
-<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kong Concentrates">
 <meta property="og:title" content="Current Menu | Kong Concentrates">
 <meta property="og:description" content="Browse Kong Concentrates' current lineup of artisan solventless concentrates — live rosin, hash holes, and vapes. Available at Oklahoma dispensaries.">
 <meta property="og:url" content="https://kongconcentrates.com/menu">
 <meta property="og:image" content="https://kongconcentrates.com/images/MAIN-ROUND-1.png">
-
-<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Current Menu | Kong Concentrates">
 <meta name="twitter:description" content="Browse Kong Concentrates' current lineup of artisan solventless concentrates — live rosin, hash holes, and vapes. Available at Oklahoma dispensaries.">
 <meta name="twitter:image" content="https://kongconcentrates.com/images/MAIN-ROUND-1.png">
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-5YMLL0G1WB"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-5YMLL0G1WB');
-</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-5YMLL0G1WB');</script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --black:#0a0a0a;
-  --off-white:#f0ead8;
-  --gold:#c9a84c;
-  --gold2:#e8c46a;
-  --dark:#141414;
-  --border:rgba(201,168,76,0.15);
-}
+:root{--black:#0a0a0a;--off-white:#f0ead8;--gold:#c9a84c;--border:rgba(201,168,76,0.15);}
 html,body{height:100%;overflow-x:hidden}
 body{background:var(--black);font-family:'Barlow Condensed',sans-serif;color:var(--off-white);min-height:100vh;}
 
-/* ━━ INTRO ━━ */
 #intro{position:fixed;inset:0;background:var(--black);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;transition:opacity 0.8s ease,transform 0.8s ease;}
 #intro.hide{opacity:0;transform:scale(1.02);pointer-events:none;visibility:hidden}
 .logo-wrap{position:relative;width:min(220px,60vw);opacity:0;transform:scale(0.85);animation:logoIn 1.1s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;}
 .logo-wrap img{width:100%;border-radius:50%;display:block;filter:drop-shadow(0 0 60px rgba(201,168,76,0.45));}
 .ring{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,0.25);animation:pulse 2.4s ease-in-out infinite alternate;pointer-events:none;}
-.ring1{inset:-16px;animation-delay:0s}
-.ring2{inset:-32px;animation-delay:0.5s;border-color:rgba(201,168,76,0.1)}
-.ring3{inset:-52px;animation-delay:0.9s;border-color:rgba(201,168,76,0.05)}
+.ring1{inset:-16px;animation-delay:0s}.ring2{inset:-32px;animation-delay:0.5s;border-color:rgba(201,168,76,0.1)}.ring3{inset:-52px;animation-delay:0.9s;border-color:rgba(201,168,76,0.05)}
 .intro-tagline{margin-top:32px;font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,6vw,42px);letter-spacing:0.15em;color:var(--off-white);opacity:0;animation:fadeUp 0.7s ease 1.2s forwards;text-align:center;}
 .intro-sub{margin-top:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0;animation:fadeUp 0.7s ease 1.5s forwards;text-align:center;}
-
 @keyframes logoIn{to{opacity:1;transform:scale(1)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{from{opacity:0.2;transform:scale(1)}to{opacity:0.7;transform:scale(1.015)}}
 
-/* ━━ SITE ━━ */
 #site{display:none;flex-direction:column;min-height:100vh}
 #site.show{display:flex}
 
-/* header */
 header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;flex-wrap:wrap;}
 .hlogo{width:42px;height:42px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(201,168,76,0.3);}
 .htext h1{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.1em;line-height:1;}
@@ -73,66 +50,24 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 .hnav a:hover,.hnav a.active{color:var(--gold);border-color:rgba(201,168,76,0.4);}
 .hnav-ig{display:flex;align-items:center;justify-content:center;padding:8px 10px;}
 
+.menu-img-wrap{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:48px 24px 64px;}
+.menu-img-wrap img{max-width:900px;width:100%;height:auto;display:block;}
 
-/* ━━ MENU ━━ */
-.menu-wrap{padding:40px 40px 64px;max-width:1200px;margin:0 auto;}
-.section-lbl{display:flex;align-items:center;gap:16px;margin-bottom:28px;}
-.section-lbl .ln{flex:1;height:1px;background:var(--border);}
-.section-lbl span{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);white-space:nowrap;}
-.menu-section{margin-bottom:60px;}
-.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);}
-.prod-card{background:#0a0a0a;overflow:hidden;display:flex;flex-direction:column;transition:background 0.15s;}
-.prod-card:hover{background:#0d0d0d;}
-.prod-img{width:100%;height:200px;overflow:hidden;flex-shrink:0;}
-.prod-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;display:block;}
-.prod-card:hover .prod-img img{transform:scale(1.04);}
-.prod-body{padding:20px 20px 18px;flex:1;display:flex;flex-direction:column;}
-.prod-type{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.65;margin-bottom:7px;}
-.prod-name{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.05em;line-height:1.1;color:var(--off-white);margin-bottom:6px;}
-.prod-desc{font-family:'Barlow Condensed',sans-serif;font-size:14px;color:rgba(240,234,216,0.5);line-height:1.5;flex:1;margin-bottom:14px;}
-.prod-price{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.04em;color:var(--gold2);}
-.prod-unit{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,234,216,0.35);margin-top:2px;}
-@media(max-width:620px){
-  .menu-wrap{padding:32px 16px 48px;}
-  .section-lbl{margin-bottom:20px;}
-}
-
-/* footer */
-footer{margin-top:auto;border-top:1px solid #181818;padding:28px 40px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+footer{border-top:1px solid #181818;padding:28px 40px;display:flex;align-items:center;justify-content:center;}
 footer p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:rgba(240,234,216,0.25);text-align:center;}
 footer a{color:rgba(240,234,216,0.4);text-decoration:none;transition:color 0.2s;}
 footer a:hover{color:var(--gold);}
 
-/* responsive */
 @media(max-width:620px){
-  .hnav .hide-mobile{display:none}
-  .hnav{gap:6px;}
-  .hnav a{padding:4px 7px;font-size:9px;letter-spacing:0.06em;}
   header{padding:10px 16px;gap:10px;}
-  .filter-bar{padding:24px 20px 0;}
-  .products-section{padding:32px 20px 60px;}
-  .page-header{padding:48px 24px 36px;}
+  .hnav a{padding:4px 7px;font-size:9px;}
+  .menu-img-wrap{padding:32px 12px 48px;}
   footer{padding:24px 20px;}
 }
-
-/* ━━ EMAIL SIGNUP ━━ */
-.email-signup{border-top:1px solid #181818;padding:52px 40px;display:flex;justify-content:center;}
-.email-signup-inner{max-width:480px;width:100%;text-align:center;}
-.es-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:10px;}
-.es-sub{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;color:rgba(240,234,216,0.45);line-height:1.9;margin-bottom:24px;}
-.es-row{display:flex;gap:8px;}
-.es-input{flex:1;background:#0d0d0d;border:1px solid #242424;color:var(--off-white);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;padding:11px 14px;outline:none;transition:border-color 0.2s;min-width:0;}
-.es-input:focus{border-color:rgba(201,168,76,0.4);}
-.es-input::placeholder{color:#3a3a3a;}
-.es-btn{background:transparent;border:1px solid rgba(201,168,76,0.35);color:var(--gold);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:11px 20px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
-.es-btn:hover{background:rgba(201,168,76,0.08);border-color:var(--gold);}
-.es-msg{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-top:16px;display:none;}
-@media(max-width:520px){.es-row{flex-direction:column;}.email-signup{padding:40px 20px;}}
 </style>
 </head>
 <body>
 
-<!-- INTRO -->
 <div id="intro">
   <div class="logo-wrap">
     <div class="ring ring1"></div>
@@ -144,203 +79,36 @@ footer a:hover{color:var(--gold);}
   <div class="intro-sub">Current Menu</div>
 </div>
 
-<!-- SITE -->
 <div id="site">
-
   <header>
     <a href="/" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
       <img src="../images/MAIN-ROUND-1.png" alt="Logo" class="hlogo">
-      <div class="htext">
-        <h1>Kong Concentrates</h1>
-        <p>Grove, Oklahoma</p>
-      </div>
+      <div class="htext"><h1>Kong Concentrates</h1><p>Grove, Oklahoma</p></div>
     </a>
     <nav class="hnav">
       <a href="/menu" class="active">Menu</a>
-      <a href="/wholesale/">Wholesale</a>
       <a href="/locations">Locations</a>
       <a href="/merch">Merch</a>
-      
+      <a href="/coa">Lab Results</a>
       <a href="/contact">Contact</a>
       <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
     </nav>
   </header>
 
-  <!-- MENU -->
-  <div class="menu-wrap">
-
-    <!-- LIVE ROSINS -->
-    <div class="menu-section">
-      <div class="section-lbl">
-        <div class="ln"></div>
-        <span>Live Rosins &nbsp;&middot;&nbsp; Non-Solvent</span>
-        <div class="ln"></div>
-      </div>
-      <div class="prod-grid">
-
-        <div class="prod-card">
-          <div class="prod-img"><img src="../images/pink runtz.PNG" alt="Pink Runtz" loading="lazy"></div>
-          <div class="prod-body">
-            <div class="prod-type">Live Rosin</div>
-            <div class="prod-name">Pink Runtz</div>
-            <div class="prod-desc">75.4% THC · 12.0% Terpenes<br>Limonene · Trans-Caryophyllene · Beta-Myrcene</div>
-            <div class="prod-price">$30</div>
-            <div class="prod-unit">per gram</div>
-          </div>
-        </div>
-
-        <div class="prod-card">
-          <div class="prod-img"><img src="../images/bacio mints.PNG" alt="Bacio Mints" loading="lazy"></div>
-          <div class="prod-body">
-            <div class="prod-type">Live Rosin</div>
-            <div class="prod-name">Bacio Mints</div>
-            <div class="prod-desc">67.4% THC · 10.1% Terpenes<br>Beta-Myrcene · Alpha-Bisabolol · Trans-Caryophyllene</div>
-            <div class="prod-price">$30</div>
-            <div class="prod-unit">per gram</div>
-          </div>
-        </div>
-
-        <div class="prod-card">
-          <div class="prod-img"><img src="../images/hooch x white rainbow.PNG" alt="Hooch x White Rainbow" loading="lazy"></div>
-          <div class="prod-body">
-            <div class="prod-type">Live Rosin</div>
-            <div class="prod-name">Hooch x White Rainbow</div>
-            <div class="prod-desc">69.8% THC · 10.1% Terpenes<br>Trans-Caryophyllene · Limonene · Alpha-Bisabolol</div>
-            <div class="prod-price">$30</div>
-            <div class="prod-unit">per gram</div>
-          </div>
-        </div>
-
-        <div class="prod-card">
-          <div class="prod-img"><img src="../images/sticky buns.PNG" alt="Sticky Buns" loading="lazy"></div>
-          <div class="prod-body">
-            <div class="prod-type">Live Rosin</div>
-            <div class="prod-name">Sticky Buns</div>
-            <div class="prod-desc">67.3% THC · 9.55% Terpenes<br>Limonene · Trans-Caryophyllene · Alpha-Bisabolol</div>
-            <div class="prod-price">$30</div>
-            <div class="prod-unit">per gram</div>
-          </div>
-        </div>
-
-        <div class="prod-card">
-          <div class="prod-img"><img src="../images/devil driver.PNG" alt="Devil Driver" loading="lazy"></div>
-          <div class="prod-body">
-            <div class="prod-type">Live Rosin</div>
-            <div class="prod-name">Devil Driver</div>
-            <div class="prod-desc">74.0% THC · 9.54% Terpenes<br>Limonene · Trans-Caryophyllene · Beta-Myrcene</div>
-            <div class="prod-price">$30</div>
-            <div class="prod-unit">per gram</div>
-          </div>
-        </div>
-
-        <div class="prod-card">
-          <div class="prod-img"><img src="../images/grape pie.PNG" alt="Grape Pie" loading="lazy"></div>
-          <div class="prod-body">
-            <div class="prod-type">Live Rosin</div>
-            <div class="prod-name">Grape Pie</div>
-            <div class="prod-desc">70.2% THC · 10.0% Terpenes<br>Limonene · Alpha-Bisabolol · Beta-Pinene</div>
-            <div class="prod-price">$30</div>
-            <div class="prod-unit">per gram</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- VAPES -->
-    <div class="menu-section">
-      <div class="section-lbl">
-        <div class="ln"></div>
-        <span>Vapes</span>
-        <div class="ln"></div>
-      </div>
-      <div class="prod-grid">
-
-        <div class="prod-card">
-          <div class="prod-img"><img src="../images/bacio mints vape.png" alt="Bacio Mints Vape" loading="lazy"></div>
-          <div class="prod-body">
-            <div class="prod-type">Vape &nbsp;&middot;&nbsp; ½ gram</div>
-            <div class="prod-name">Bacio Mints Vape</div>
-            <div class="prod-desc">70.0% THC · 11.7% Terpenes<br>Beta-Myrcene · Alpha-Bisabolol · Trans-Caryophyllene</div>
-            <div class="prod-price">$30</div>
-            <div class="prod-unit">each (½ gram)</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- HASH HOLES -->
-    <div class="menu-section">
-      <div class="section-lbl">
-        <div class="ln"></div>
-        <span>Hash Holes &nbsp;&middot;&nbsp; Infused Pre-Rolls</span>
-        <div class="ln"></div>
-      </div>
-      <div class="prod-grid">
-
-        <div class="prod-card">
-          <div class="prod-img"><img src="../images/creme soda hash hole.jpg" alt="Creme Soda x Pink Runtz Hash Hole" loading="lazy"></div>
-          <div class="prod-body">
-            <div class="prod-type">Infused Pre-Roll &nbsp;&middot;&nbsp; Hash Hole</div>
-            <div class="prod-name">Creme Soda x Pink Runtz</div>
-            <div class="prod-desc">42.4% THC · 5.26% Terpenes<br>Trans-Caryophyllene · Limonene · Alpha-Bisabolol</div>
-            <div class="prod-price">$40</div>
-            <div class="prod-unit">each</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-
-  <!-- EMAIL SIGNUP -->
-  <div class="email-signup">
-    <div class="email-signup-inner">
-      <div class="es-label">Stay in the Loop</div>
-      <p class="es-sub">New drops, exclusive discounts, and giveaways.</p>
-      <form name="newsletter" netlify data-netlify-honeypot="bot-field" onsubmit="submitNewsletter(event,this)">
-        <input type="hidden" name="form-name" value="newsletter">
-        <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
-        <div class="es-row">
-          <input class="es-input" type="email" name="email" placeholder="your@email.com" required>
-          <button class="es-btn" type="submit">Subscribe</button>
-        </div>
-        <div class="es-msg" id="es-msg">You're on the list.</div>
-      </form>
-    </div>
+  <div class="menu-img-wrap">
+    <img src="../images/KONG Concentrate Product Menu 2.jpg" alt="Kong Concentrates — Current Menu">
   </div>
 
   <footer>
-    <p>&copy; 2025 Kong Concentrates &nbsp;&middot;&nbsp; <a href="/">Home</a> &nbsp;&middot;&nbsp; <a href="/blog">Blog</a> &nbsp;&middot;&nbsp; <a href="/wholesale/">Wholesale</a> &nbsp;&middot;&nbsp; <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a></p>
+    <p>&copy; 2025 Kong Concentrates &nbsp;&middot;&nbsp; <a href="/">Home</a> &nbsp;&middot;&nbsp; <a href="/blog">Blog</a> &nbsp;&middot;&nbsp; <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a></p>
   </footer>
-
-</div><!-- /#site -->
+</div>
 
 <script>
 setTimeout(()=>enterSite(), 2500);
 function enterSite(){
   document.getElementById('intro').classList.add('hide');
-  const site = document.getElementById('site');
-  site.classList.add('show');
-  setTimeout(()=>{ site.style.opacity='1'; },50);
-}
-
-
-
-function submitNewsletter(e, form) {
-  e.preventDefault();
-  fetch(window.location.pathname, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: new URLSearchParams(new FormData(form)).toString()
-  }).then(() => {
-    form.querySelector('.es-row').style.display = 'none';
-    form.querySelector('.es-msg').style.display = 'block';
-  }).catch(() => {
-    form.querySelector('.es-btn').textContent = 'Try again';
-  });
+  document.getElementById('site').classList.add('show');
 }
 </script>
 </body>
