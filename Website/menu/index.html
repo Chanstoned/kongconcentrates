@@ -74,16 +74,27 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 .hnav-ig{display:flex;align-items:center;justify-content:center;padding:8px 10px;}
 
 
-/* ━━ MENU IMAGE ━━ */
-.menu-image-wrap{
-  display:flex;justify-content:center;
-  padding:48px 24px 64px;
-}
-.menu-img{
-  max-width:800px;
-  width:100%;
-  display:block;
-  border:1px solid var(--border);
+/* ━━ MENU ━━ */
+.menu-wrap{padding:40px 40px 64px;max-width:1200px;margin:0 auto;}
+.section-lbl{display:flex;align-items:center;gap:16px;margin-bottom:28px;}
+.section-lbl .ln{flex:1;height:1px;background:var(--border);}
+.section-lbl span{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);white-space:nowrap;}
+.menu-section{margin-bottom:60px;}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);}
+.prod-card{background:#0a0a0a;overflow:hidden;display:flex;flex-direction:column;transition:background 0.15s;}
+.prod-card:hover{background:#0d0d0d;}
+.prod-img{width:100%;height:200px;overflow:hidden;flex-shrink:0;}
+.prod-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;display:block;}
+.prod-card:hover .prod-img img{transform:scale(1.04);}
+.prod-body{padding:20px 20px 18px;flex:1;display:flex;flex-direction:column;}
+.prod-type{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.65;margin-bottom:7px;}
+.prod-name{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.05em;line-height:1.1;color:var(--off-white);margin-bottom:6px;}
+.prod-desc{font-family:'Barlow Condensed',sans-serif;font-size:14px;color:rgba(240,234,216,0.5);line-height:1.5;flex:1;margin-bottom:14px;}
+.prod-price{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.04em;color:var(--gold2);}
+.prod-unit{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,234,216,0.35);margin-top:2px;}
+@media(max-width:620px){
+  .menu-wrap{padding:32px 16px 48px;}
+  .section-lbl{margin-bottom:20px;}
 }
 
 /* footer */
@@ -155,9 +166,133 @@ footer a:hover{color:var(--gold);}
     </nav>
   </header>
 
-  <!-- MENU IMAGE -->
-  <div class="menu-image-wrap">
-    <img src="../images/KONG Concentrate Product Menu 2.jpg" alt="Kong Concentrates Menu" class="menu-img">
+  <!-- MENU -->
+  <div class="menu-wrap">
+
+    <!-- LIVE ROSINS -->
+    <div class="menu-section">
+      <div class="section-lbl">
+        <div class="ln"></div>
+        <span>Live Rosins &nbsp;&middot;&nbsp; Non-Solvent</span>
+        <div class="ln"></div>
+      </div>
+      <div class="prod-grid">
+
+        <div class="prod-card">
+          <div class="prod-img"><img src="../images/pink runtz.PNG" alt="Pink Runtz" loading="lazy"></div>
+          <div class="prod-body">
+            <div class="prod-type">Live Rosin</div>
+            <div class="prod-name">Pink Runtz</div>
+            <div class="prod-desc">75.4% THC · 12.0% Terpenes<br>Limonene · Trans-Caryophyllene · Beta-Myrcene</div>
+            <div class="prod-price">$30</div>
+            <div class="prod-unit">per gram</div>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img"><img src="../images/bacio mints.PNG" alt="Bacio Mints" loading="lazy"></div>
+          <div class="prod-body">
+            <div class="prod-type">Live Rosin</div>
+            <div class="prod-name">Bacio Mints</div>
+            <div class="prod-desc">67.4% THC · 10.1% Terpenes<br>Beta-Myrcene · Alpha-Bisabolol · Trans-Caryophyllene</div>
+            <div class="prod-price">$30</div>
+            <div class="prod-unit">per gram</div>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img"><img src="../images/hooch x white rainbow.PNG" alt="Hooch x White Rainbow" loading="lazy"></div>
+          <div class="prod-body">
+            <div class="prod-type">Live Rosin</div>
+            <div class="prod-name">Hooch x White Rainbow</div>
+            <div class="prod-desc">69.8% THC · 10.1% Terpenes<br>Trans-Caryophyllene · Limonene · Alpha-Bisabolol</div>
+            <div class="prod-price">$30</div>
+            <div class="prod-unit">per gram</div>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img"><img src="../images/sticky buns.PNG" alt="Sticky Buns" loading="lazy"></div>
+          <div class="prod-body">
+            <div class="prod-type">Live Rosin</div>
+            <div class="prod-name">Sticky Buns</div>
+            <div class="prod-desc">67.3% THC · 9.55% Terpenes<br>Limonene · Trans-Caryophyllene · Alpha-Bisabolol</div>
+            <div class="prod-price">$30</div>
+            <div class="prod-unit">per gram</div>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img"><img src="../images/devil driver.PNG" alt="Devil Driver" loading="lazy"></div>
+          <div class="prod-body">
+            <div class="prod-type">Live Rosin</div>
+            <div class="prod-name">Devil Driver</div>
+            <div class="prod-desc">74.0% THC · 9.54% Terpenes<br>Limonene · Trans-Caryophyllene · Beta-Myrcene</div>
+            <div class="prod-price">$30</div>
+            <div class="prod-unit">per gram</div>
+          </div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img"><img src="../images/grape pie.PNG" alt="Grape Pie" loading="lazy"></div>
+          <div class="prod-body">
+            <div class="prod-type">Live Rosin</div>
+            <div class="prod-name">Grape Pie</div>
+            <div class="prod-desc">70.2% THC · 10.0% Terpenes<br>Limonene · Alpha-Bisabolol · Beta-Pinene</div>
+            <div class="prod-price">$30</div>
+            <div class="prod-unit">per gram</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VAPES -->
+    <div class="menu-section">
+      <div class="section-lbl">
+        <div class="ln"></div>
+        <span>Vapes</span>
+        <div class="ln"></div>
+      </div>
+      <div class="prod-grid">
+
+        <div class="prod-card">
+          <div class="prod-img"><img src="../images/bacio mints vape.png" alt="Bacio Mints Vape" loading="lazy"></div>
+          <div class="prod-body">
+            <div class="prod-type">Vape &nbsp;&middot;&nbsp; ½ gram</div>
+            <div class="prod-name">Bacio Mints Vape</div>
+            <div class="prod-desc">70.0% THC · 11.7% Terpenes<br>Beta-Myrcene · Alpha-Bisabolol · Trans-Caryophyllene</div>
+            <div class="prod-price">$30</div>
+            <div class="prod-unit">each (½ gram)</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- HASH HOLES -->
+    <div class="menu-section">
+      <div class="section-lbl">
+        <div class="ln"></div>
+        <span>Hash Holes &nbsp;&middot;&nbsp; Infused Pre-Rolls</span>
+        <div class="ln"></div>
+      </div>
+      <div class="prod-grid">
+
+        <div class="prod-card">
+          <div class="prod-img"><img src="../images/creme soda hash hole.jpg" alt="Creme Soda x Pink Runtz Hash Hole" loading="lazy"></div>
+          <div class="prod-body">
+            <div class="prod-type">Infused Pre-Roll &nbsp;&middot;&nbsp; Hash Hole</div>
+            <div class="prod-name">Creme Soda x Pink Runtz</div>
+            <div class="prod-desc">42.4% THC · 5.26% Terpenes<br>Trans-Caryophyllene · Limonene · Alpha-Bisabolol</div>
+            <div class="prod-price">$40</div>
+            <div class="prod-unit">each</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
   <!-- EMAIL SIGNUP -->

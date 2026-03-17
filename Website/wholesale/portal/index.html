@@ -126,7 +126,7 @@ textarea.fi:focus{border-color:rgba(201,168,76,0.45);}
 .inv-close{position:absolute;top:16px;right:20px;background:none;border:none;font-size:22px;cursor:pointer;color:#555;line-height:1;}
 .inv-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:36px;padding-bottom:24px;border-bottom:2px solid #222;}
 .inv-brand{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.1em;color:#111;}
-.inv-brand-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;color:#888;text-transform:uppercase;margin-top:4px;}
+.inv-brand-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;color:#888;text-transform:uppercase;margin-top:4px;line-height:1.8;}
 .inv-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.12em;color:#333;text-align:right;}
 .inv-meta{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#666;text-align:right;margin-top:6px;line-height:1.9;}
 .inv-bill-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#aaa;margin-bottom:6px;}
@@ -197,7 +197,7 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
 
     <!-- PLACE ORDER TAB -->
     <div id="tab-order" class="tab-panel">
-      <p class="order-intro">Select quantities for each product. Minimum order per item is noted below. All prices are wholesale rates.</p>
+      <p class="order-intro">Select quantities for each product. All prices are wholesale rates.</p>
       <div class="alert alert-err" id="order-err"></div>
       <div class="alert alert-ok" id="order-ok"></div>
       <div id="order-items" class="order-items"></div>
@@ -299,7 +299,7 @@ function renderMenuGrid(){
           <div class="prod-price">$${Number(p.price_wholesale).toFixed(2)}</div>
           <div class="prod-unit">${esc(p.unit_label||'per unit')}</div>
         </div>
-        <div class="prod-min">Min ${p.min_qty||1}</div>
+        <div class="prod-min">${esc(p.unit_label||'per unit')}</div>
       </div>
     </div>`).join('');
 }
@@ -310,7 +310,7 @@ function renderOrderRows(){
     <div class="order-row">
       <div class="order-row-info">
         <div class="order-row-name">${esc(p.name)}</div>
-        <div class="order-row-detail">$${Number(p.price_wholesale).toFixed(2)} ${esc(p.unit_label||'per unit')} · Min ${p.min_qty||1}</div>
+        <div class="order-row-detail">$${Number(p.price_wholesale).toFixed(2)} ${esc(p.unit_label||'per unit')}</div>
       </div>
       <div class="qty-wrap">
         <button class="qty-btn" onclick="adjustQty('${p.id}',-1)">−</button>
@@ -352,13 +352,6 @@ async function submitOrder(){
 
   const items = products.filter(p=>(cartQtys[p.id]||0)>0);
   if(!items.length){ errEl.textContent='Please select at least one product.'; errEl.classList.add('show'); return; }
-
-  // Validate min qty
-  const badItems = items.filter(p=>cartQtys[p.id]<(p.min_qty||1));
-  if(badItems.length){
-    errEl.textContent='Minimum quantity not met: '+badItems.map(p=>`${p.name} (min ${p.min_qty})`).join(', ')+'.';
-    errEl.classList.add('show'); return;
-  }
 
   const total = items.reduce((s,p)=>s+(cartQtys[p.id]*p.price_wholesale),0);
   const notes = document.getElementById('order-notes').value.trim();
@@ -469,8 +462,8 @@ async function printInvoice(orderId){
   document.getElementById('inv-content').innerHTML = `
     <div class="inv-header">
       <div>
-        <div class="inv-brand">Kong Concentrates</div>
-        <div class="inv-brand-sub">Grove, Oklahoma · kongconcentrates.com</div>
+        <div class="inv-brand">Kong Concentrates LLC</div>
+        <div class="inv-brand-sub">29141 S 647 Pl · Grove, OK 74344<br>process@kongconcentrates.com · PAAA-NYSE-PYO4</div>
       </div>
       <div>
         <div class="inv-title">Wholesale Invoice</div>
