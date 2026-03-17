@@ -115,7 +115,7 @@ exports.handler = async (event) => {
         if (e) throw e;
         if (disp) {
           const notifyFn = action === "approve" ? sendAccountApproved : sendAccountRejected;
-          notifyFn(disp).catch(console.error);
+          await notifyFn(disp).catch(console.error);
         }
         return ok({ ok: true });
       }
@@ -129,17 +129,14 @@ exports.handler = async (event) => {
           .update({ status: body.status, updated_at: new Date().toISOString() })
           .eq("id", body.orderId);
         if (e) throw e;
-        // Send status update email to dispensary (non-blocking)
-        supabaseAdmin
+        const { data: orderData } = await supabaseAdmin
           .from("wholesale_orders")
           .select("dispensary_id, dispensaries(name, contact_name, email)")
           .eq("id", body.orderId)
-          .single()
-          .then(({ data }) => {
-            if (data?.dispensaries) {
-              sendOrderStatusUpdate({ dispensary: data.dispensaries, status: body.status, orderId: body.orderId }).catch(console.error);
-            }
-          });
+          .single();
+        if (orderData?.dispensaries) {
+          await sendOrderStatusUpdate({ dispensary: orderData.dispensaries, status: body.status, orderId: body.orderId }).catch(console.error);
+        }
         return ok({ ok: true });
       }
 

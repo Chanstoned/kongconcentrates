@@ -58,8 +58,7 @@ exports.handler = async (event) => {
     return { statusCode: 500, headers, body: JSON.stringify({ error: "Profile setup failed — please contact us." }) };
   }
 
-  // Send notification emails (non-blocking)
-  sendApplicationReceived({ name, contact_name, email, phone, address, omma_license, obndd_license }).catch(console.error);
+  await sendApplicationReceived({ name, contact_name, email, phone, address, omma_license, obndd_license }).catch(console.error);
 
   return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
 };
