@@ -67,10 +67,8 @@ exports.handler = async (event) => {
       );
     if (itemsErr) throw itemsErr;
 
-    // Send confirmation emails with PDF invoice (non-fatal if it fails)
-    await sendOrderConfirmation({ order, items, dispensary }).catch((e) =>
-      console.error("Order confirmation email failed:", e)
-    );
+    // Send confirmation emails with PDF invoice attached
+    await sendOrderConfirmation({ order, items, dispensary });
 
     return { statusCode: 200, headers, body: JSON.stringify({ ok: true, orderId: order.id }) };
   } catch (e) {

@@ -6,7 +6,7 @@
   SECRETS_SCAN_OMIT_KEYS = "WHOLESALE_ADMIN_EMAIL"
 
 [functions]
-  node_bundler = "esbuild"
+  node_bundler = "nft"
 
 # Blog post clean URLs: /blog/my-post → /blog/post/?slug=my-post
 [[redirects]]
