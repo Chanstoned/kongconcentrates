@@ -133,12 +133,28 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
       <!-- LOGIN TAB -->
       <div id="tab-login" class="tab-panel active">
         <div class="alert alert-err" id="login-err"></div>
-        <form onsubmit="doLogin(event)">
-          <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="l-email" placeholder="you@dispensary.com" required autocomplete="email"></div>
-          <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="l-pw" placeholder="••••••••" required autocomplete="current-password"></div>
-          <button class="btn-gold" type="submit" id="login-btn">Sign In</button>
-        </form>
-        <p style="text-align:center;margin-top:22px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(240,234,216,0.35);">New account? Click <span style="color:var(--gold);cursor:pointer;" onclick="showTab('register')">Apply</span> above.</p>
+        <div id="login-form-wrap">
+          <form onsubmit="doLogin(event)">
+            <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="l-email" placeholder="you@dispensary.com" required autocomplete="email"></div>
+            <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="l-pw" placeholder="••••••••" required autocomplete="current-password"></div>
+            <button class="btn-gold" type="submit" id="login-btn">Sign In</button>
+          </form>
+          <p style="text-align:center;margin-top:18px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(240,234,216,0.35);">
+            <span style="color:var(--gold);cursor:pointer;" onclick="showForgot()">Forgot password?</span>
+            &nbsp;·&nbsp;
+            New account? <span style="color:var(--gold);cursor:pointer;" onclick="showTab('register')">Apply</span>
+          </p>
+        </div>
+        <div id="forgot-wrap" style="display:none;">
+          <div class="alert alert-err" id="forgot-err"></div>
+          <div class="alert alert-ok" id="forgot-ok"></div>
+          <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;color:rgba(240,234,216,0.45);margin-bottom:24px;line-height:1.9;">Enter your email and we'll send a password reset link.</p>
+          <form onsubmit="doForgotPassword(event)">
+            <div class="fg"><label class="fl">Email</label><input class="fi" type="email" id="forgot-email" placeholder="you@dispensary.com" required autocomplete="email"></div>
+            <button class="btn-gold" type="submit" id="forgot-btn">Send Reset Link</button>
+          </form>
+          <p style="text-align:center;margin-top:18px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:rgba(240,234,216,0.35);"><span style="color:var(--gold);cursor:pointer;" onclick="hideForgot()">← Back to Sign In</span></p>
+        </div>
       </div>
 
       <!-- REGISTER TAB -->
@@ -252,6 +268,32 @@ function showTab(t){
     document.getElementById('tab-'+n).classList.toggle('active', n===t);
     document.getElementById('btn-'+n+'-tab').classList.toggle('active', n===t);
   });
+}
+
+// ── forgot password
+function showForgot(){
+  document.getElementById('login-form-wrap').style.display='none';
+  document.getElementById('forgot-wrap').style.display='block';
+  document.getElementById('login-err').classList.remove('show');
+}
+function hideForgot(){
+  document.getElementById('forgot-wrap').style.display='none';
+  document.getElementById('login-form-wrap').style.display='block';
+  document.getElementById('forgot-err').classList.remove('show');
+  document.getElementById('forgot-ok').classList.remove('show');
+}
+async function doForgotPassword(e){
+  e.preventDefault();
+  const btn=document.getElementById('forgot-btn');
+  const errEl=document.getElementById('forgot-err');
+  const okEl=document.getElementById('forgot-ok');
+  errEl.classList.remove('show'); okEl.classList.remove('show');
+  btn.disabled=true; btn.textContent='Sending…';
+  const email=document.getElementById('forgot-email').value.trim();
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+'/wholesale/'});
+  if(error){ errEl.textContent=error.message; errEl.classList.add('show'); }
+  else { okEl.textContent='Check your email for a password reset link.'; okEl.classList.add('show'); }
+  btn.disabled=false; btn.textContent='Send Reset Link';
 }
 
 // ── login

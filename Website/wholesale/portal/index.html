@@ -28,7 +28,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 .btn-sm:hover{color:var(--gold);border-color:rgba(201,168,76,0.4);}
 
 /* LAYOUT */
-.container{flex:1;max-width:900px;width:100%;margin:0 auto;padding:40px 24px 80px;}
+.container{flex:1;max-width:960px;width:100%;margin:0 auto;padding:40px 24px 80px;}
 
 /* WELCOME */
 .welcome-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border);}
@@ -43,32 +43,31 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 .tab-panel.active{display:block;}
 
 /* PRODUCT GRID */
-.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
-.prod-card{background:#0d0d0d;border:1px solid #1e1e1e;padding:22px 18px;transition:border-color 0.2s;}
-.prod-card:hover{border-color:rgba(201,168,76,0.25);}
-.prod-cat{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.65;margin-bottom:8px;}
-.prod-name{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.06em;line-height:1.1;margin-bottom:6px;}
-.prod-desc{font-family:'Barlow Condensed',sans-serif;font-size:14px;color:rgba(240,234,216,0.55);line-height:1.5;margin-bottom:14px;min-height:40px;}
-.prod-footer{display:flex;align-items:flex-end;justify-content:space-between;border-top:1px solid #1a1a1a;padding-top:12px;margin-top:auto;}
-.prod-price{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.04em;color:var(--gold2);}
-.prod-unit{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;color:rgba(240,234,216,0.35);text-transform:uppercase;margin-top:2px;}
-.prod-min{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;color:rgba(240,234,216,0.3);text-transform:uppercase;}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
 
-/* ORDER FORM */
-.order-intro{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:rgba(240,234,216,0.4);margin-bottom:24px;line-height:1.9;}
-.order-items{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
-.order-row{display:flex;align-items:center;justify-content:space-between;background:#0d0d0d;border:1px solid #1e1e1e;padding:14px 16px;gap:12px;flex-wrap:wrap;}
-.order-row-info{flex:1;min-width:160px;}
-.order-row-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:0.06em;}
-.order-row-detail{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--gold);opacity:0.65;text-transform:uppercase;margin-top:2px;}
-.qty-wrap{display:flex;align-items:center;gap:8px;}
+/* PRODUCT CARD */
+.prod-card{background:#0d0d0d;border:1px solid #1e1e1e;transition:border-color 0.2s;display:flex;flex-direction:column;overflow:hidden;}
+.prod-card:hover{border-color:rgba(201,168,76,0.3);}
+.prod-img-wrap{width:100%;aspect-ratio:1;overflow:hidden;background:#111;flex-shrink:0;}
+.prod-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s ease;}
+.prod-card:hover .prod-img{transform:scale(1.03);}
+.prod-body{padding:18px 16px;flex:1;display:flex;flex-direction:column;}
+.prod-cat{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.65;margin-bottom:7px;}
+.prod-name{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:0.06em;line-height:1.1;margin-bottom:6px;}
+.prod-desc{font-family:'Barlow Condensed',sans-serif;font-size:13px;color:rgba(240,234,216,0.5);line-height:1.5;flex:1;}
+.prod-price-row{display:flex;align-items:baseline;gap:6px;margin-top:12px;padding-top:12px;border-top:1px solid #1a1a1a;}
+.prod-price{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:0.04em;color:var(--gold2);}
+.prod-unit{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;color:rgba(240,234,216,0.35);text-transform:uppercase;}
+.prod-qty-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+.qty-wrap{display:flex;align-items:center;gap:6px;}
 .qty-btn{width:28px;height:28px;background:none;border:1px solid #2a2a2a;color:var(--off-white);font-size:16px;line-height:1;cursor:pointer;transition:border-color 0.15s;flex-shrink:0;}
 .qty-btn:hover{border-color:var(--gold);}
-.qty-input{width:54px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid #2a2a2a;color:var(--off-white);font-family:'DM Mono',monospace;font-size:14px;padding:5px 4px;-webkit-appearance:none;-moz-appearance:textfield;outline:none;}
+.qty-input{width:50px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid #2a2a2a;color:var(--off-white);font-family:'DM Mono',monospace;font-size:13px;padding:5px 4px;-webkit-appearance:none;-moz-appearance:textfield;outline:none;}
 .qty-input::-webkit-outer-spin-button,.qty-input::-webkit-inner-spin-button{-webkit-appearance:none;}
-.row-subtotal{font-family:'DM Mono',monospace;font-size:13px;color:var(--off-white);min-width:60px;text-align:right;}
+.prod-sub{font-family:'DM Mono',monospace;font-size:13px;color:var(--gold2);min-width:48px;text-align:right;}
 
-.order-footer{background:#0d0d0d;border:1px solid var(--border);padding:20px 22px;}
+/* ORDER SUMMARY */
+.shop-summary{background:#0d0d0d;border:1px solid var(--border);padding:22px 24px;margin-top:28px;}
 .order-total-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
 .order-total-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,234,216,0.5);}
 .order-total-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.06em;color:var(--gold2);}
@@ -80,7 +79,7 @@ textarea.fi:focus{border-color:rgba(201,168,76,0.45);}
 .btn-gold:disabled{opacity:0.4;cursor:not-allowed;}
 
 /* ALERTS */
-.alert{padding:13px 15px;border-radius:2px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;line-height:1.7;margin-bottom:20px;display:none;}
+.alert{padding:13px 15px;border-radius:2px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;line-height:1.7;margin-bottom:16px;display:none;}
 .alert.show{display:block;}
 .alert-err{background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.25);color:#d97070;}
 .alert-ok{background:rgba(50,180,80,0.08);border:1px solid rgba(50,180,80,0.2);color:#70c878;}
@@ -158,6 +157,7 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
   .container{padding:28px 16px 60px;}
   .tab-btn{padding:12px 12px;font-size:10px;}
   .inv-paper{padding:32px 24px;}
+  .products-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
 }
 </style>
 </head>
@@ -184,30 +184,23 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
     </div>
 
     <div class="tab-nav">
-      <button class="tab-btn active" onclick="openTab('menu',this)">Browse Menu</button>
-      <button class="tab-btn" onclick="openTab('order',this)">Place Order</button>
+      <button class="tab-btn active" onclick="openTab('shop',this)">Shop</button>
       <button class="tab-btn" onclick="openTab('history',this)">My Orders</button>
     </div>
 
-    <!-- BROWSE MENU TAB -->
-    <div id="tab-menu" class="tab-panel active">
+    <!-- SHOP TAB -->
+    <div id="tab-shop" class="tab-panel active">
       <div id="menu-spinner" class="spinner">Loading products…</div>
       <div id="products-grid" class="products-grid" style="display:none;"></div>
-    </div>
-
-    <!-- PLACE ORDER TAB -->
-    <div id="tab-order" class="tab-panel">
-      <p class="order-intro">Select quantities for each product. All prices are wholesale rates.</p>
-      <div class="alert alert-err" id="order-err"></div>
-      <div class="alert alert-ok" id="order-ok"></div>
-      <div id="order-items" class="order-items"></div>
-      <div class="order-footer">
+      <div class="shop-summary" id="shop-summary" style="display:none;">
         <div class="order-total-row">
           <span class="order-total-label">Order Total</span>
           <span class="order-total-val" id="order-total">$0.00</span>
         </div>
         <div class="notes-label">Special Instructions</div>
         <textarea class="fi" id="order-notes" placeholder="Delivery preferences, special requests, etc."></textarea>
+        <div class="alert alert-err" id="order-err"></div>
+        <div class="alert alert-ok" id="order-ok"></div>
         <button class="btn-gold" id="submit-btn" onclick="submitOrder()">Place Order</button>
       </div>
     </div>
@@ -240,13 +233,28 @@ const SUPABASE_URL      = 'https://ttdaweelpsiifobcjrji.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_aDFqNrKQwaCmWDm3gdPLBg_VhQTpKEC';
 /* ───────────────────────────────────────────────────────────────── */
 
+const PRODUCT_IMAGES = {
+  'pink runtz':                         '../../images/pink runtz.PNG',
+  'bacio mints':                        '../../images/bacio mints.PNG',
+  'hooch x white rainbow':              '../../images/hooch x white rainbow.PNG',
+  'sticky buns':                        '../../images/sticky buns.PNG',
+  'devil driver':                       '../../images/devil driver.PNG',
+  'grape pie':                          '../../images/grape pie.PNG',
+  'bacio mints vape':                   '../../images/bacio mints vape.png',
+  'creme soda x pink runtz hash hole':  '../../images/creme soda hash hole.jpg',
+};
+
+function getProductImage(name){
+  return PRODUCT_IMAGES[name.toLowerCase()] || null;
+}
+
 const { createClient } = window.supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser = null;
 let currentProfile = null;
 let products = [];
-let cartQtys = {}; // productId → quantity
+let cartQtys = {};
 
 // ── Init
 (async()=>{
@@ -281,44 +289,41 @@ async function loadProducts(){
   products = data;
   products.forEach(p=>{ cartQtys[p.id]=0; });
 
-  renderMenuGrid();
-  renderOrderRows();
+  renderShopGrid();
   document.getElementById('menu-spinner').style.display='none';
   document.getElementById('products-grid').style.display='grid';
+  document.getElementById('shop-summary').style.display='block';
 }
 
-function renderMenuGrid(){
+function renderShopGrid(){
   const grid = document.getElementById('products-grid');
-  grid.innerHTML = products.map(p=>`
+  grid.innerHTML = products.map(p=>{
+    const img = getProductImage(p.name);
+    const imgHtml = img
+      ? `<div class="prod-img-wrap"><img class="prod-img" src="${img}" alt="${esc(p.name)}" loading="lazy" onerror="this.closest('.prod-img-wrap').style.display='none'"></div>`
+      : '';
+    return `
     <div class="prod-card">
-      <div class="prod-cat">${esc(p.category||'')}</div>
-      <div class="prod-name">${esc(p.name)}</div>
-      <div class="prod-desc">${esc(p.description||'')}</div>
-      <div class="prod-footer">
-        <div>
+      ${imgHtml}
+      <div class="prod-body">
+        <div class="prod-cat">${esc(p.category||'')}</div>
+        <div class="prod-name">${esc(p.name)}</div>
+        <div class="prod-desc">${esc(p.description||'')}</div>
+        <div class="prod-price-row">
           <div class="prod-price">$${Number(p.price_wholesale).toFixed(2)}</div>
           <div class="prod-unit">${esc(p.unit_label||'per unit')}</div>
         </div>
-        <div class="prod-min">${esc(p.unit_label||'per unit')}</div>
+        <div class="prod-qty-row">
+          <div class="qty-wrap">
+            <button class="qty-btn" onclick="adjustQty('${p.id}',-1)">−</button>
+            <input class="qty-input" type="number" min="0" value="0" id="qty-${p.id}" onchange="setQty('${p.id}',this.value)">
+            <button class="qty-btn" onclick="adjustQty('${p.id}',1)">+</button>
+          </div>
+          <div class="prod-sub" id="sub-${p.id}">—</div>
+        </div>
       </div>
-    </div>`).join('');
-}
-
-function renderOrderRows(){
-  const container = document.getElementById('order-items');
-  container.innerHTML = products.map(p=>`
-    <div class="order-row">
-      <div class="order-row-info">
-        <div class="order-row-name">${esc(p.name)}</div>
-        <div class="order-row-detail">$${Number(p.price_wholesale).toFixed(2)} ${esc(p.unit_label||'per unit')}</div>
-      </div>
-      <div class="qty-wrap">
-        <button class="qty-btn" onclick="adjustQty('${p.id}',-1)">−</button>
-        <input class="qty-input" type="number" min="0" value="0" id="qty-${p.id}" onchange="setQty('${p.id}',this.value)">
-        <button class="qty-btn" onclick="adjustQty('${p.id}',1)">+</button>
-      </div>
-      <div class="row-subtotal" id="sub-${p.id}">—</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function adjustQty(id, delta){
@@ -376,6 +381,8 @@ async function submitOrder(){
     products.forEach(p=>{ cartQtys[p.id]=0; document.getElementById('qty-'+p.id).value=0; document.getElementById('sub-'+p.id).textContent='—'; });
     updateTotal();
     document.getElementById('order-notes').value='';
+    // scroll summary into view
+    document.getElementById('shop-summary').scrollIntoView({behavior:'smooth',block:'nearest'});
   }
 
   btn.disabled=false; btn.textContent='Place Order';
