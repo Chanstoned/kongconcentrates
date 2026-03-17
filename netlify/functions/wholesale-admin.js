@@ -215,6 +215,21 @@ exports.handler = async (event) => {
         return ok({ ok: true });
       }
 
+      // Delete an order and its items
+      if (action === "delete-order") {
+        const { error: ie } = await supabaseAdmin
+          .from("wholesale_order_items")
+          .delete()
+          .eq("order_id", body.id);
+        if (ie) throw ie;
+        const { error: oe } = await supabaseAdmin
+          .from("wholesale_orders")
+          .delete()
+          .eq("id", body.id);
+        if (oe) throw oe;
+        return ok({ ok: true });
+      }
+
       return err("Unknown action");
     }
 

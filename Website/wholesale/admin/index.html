@@ -398,6 +398,7 @@ function renderOrders(){
             ${['received','processing','out_for_delivery','complete'].map(s=>`<option value="${s}" ${order.status===s?'selected':''}>${statusLabel[s]}</option>`).join('')}
           </select>
           <button class="btn-invoice" onclick="event.stopPropagation();printInvoice('${order.id}')">Invoice</button>
+          <button class="btn-del" onclick="event.stopPropagation();deleteOrder('${order.id}',this)">Delete</button>
         </div>
         <div id="od-${order.id}" class="order-detail">
           <table class="detail-items-table">
@@ -414,6 +415,20 @@ function renderOrders(){
 function toggleDetail(id){
   const el=document.getElementById(id);
   el.style.display=el.style.display==='none'||el.style.display===''?'block':'none';
+}
+
+async function deleteOrder(id, btn){
+  if(!confirm('Delete this order? This cannot be undone.')) return;
+  btn.disabled=true;
+  const ok = await adminFetch('POST','',{action:'delete-order',id});
+  if(ok){
+    allOrders = allOrders.filter(o=>o.id!==id);
+    renderOrders();
+    updateStats();
+    const okEl = document.getElementById('orders-ok');
+    okEl.textContent='Order deleted.'; okEl.classList.add('show');
+    setTimeout(()=>okEl.classList.remove('show'),3000);
+  } else { btn.disabled=false; }
 }
 
 async function updateStatus(orderId, status){
