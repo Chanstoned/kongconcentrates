@@ -166,6 +166,18 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
       </div>
     </div>
 
+    <!-- PASSWORD RESET -->
+    <div id="reset-section" style="display:none;">
+      <div class="alert alert-err" id="reset-err"></div>
+      <div class="alert alert-ok" id="reset-ok"></div>
+      <p style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(240,234,216,0.45);margin-bottom:28px;">Enter your new password below.</p>
+      <form onsubmit="doSetPassword(event)">
+        <div class="fg"><label class="fl">New Password</label><input class="fi" type="password" id="rp-pw" placeholder="••••••••" minlength="8" required autocomplete="new-password"></div>
+        <div class="fg"><label class="fl">Confirm Password</label><input class="fi" type="password" id="rp-pw2" placeholder="••••••••" minlength="8" required autocomplete="new-password"></div>
+        <button class="btn-gold" type="submit" id="reset-btn">Set New Password</button>
+      </form>
+    </div>
+
     <!-- PENDING APPROVAL -->
     <div id="pending-section" style="display:none;">
       <div class="pending-wrap">
@@ -204,7 +216,14 @@ setTimeout(()=>{
   },800);
 },2200);
 
-// ── check existing session
+// ── handle password recovery and existing session
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    document.getElementById('auth-section').style.display = 'none';
+    document.getElementById('reset-section').style.display = 'block';
+  }
+});
+
 (async()=>{
   const {data:{session}} = await sb.auth.getSession();
   if(session) await afterAuth(session.user);
@@ -292,6 +311,26 @@ async function doRegister(e){
   okEl.classList.add('show');
   setTimeout(()=>{ document.getElementById('auth-section').style.display='none'; document.getElementById('pending-section').style.display='block'; },1500);
   btn.disabled=false; btn.textContent='Submit Application';
+}
+
+async function doSetPassword(e){
+  e.preventDefault();
+  const btn=document.getElementById('reset-btn');
+  const errEl=document.getElementById('reset-err');
+  const okEl=document.getElementById('reset-ok');
+  errEl.classList.remove('show'); okEl.classList.remove('show');
+  const pw=document.getElementById('rp-pw').value;
+  if(pw!==document.getElementById('rp-pw2').value){
+    errEl.textContent='Passwords do not match.'; errEl.classList.add('show'); return;
+  }
+  btn.disabled=true; btn.textContent='Saving…';
+  const {error}=await sb.auth.updateUser({password:pw});
+  if(error){ errEl.textContent=error.message; errEl.classList.add('show'); btn.disabled=false; btn.textContent='Set New Password'; return; }
+  okEl.textContent='Password updated! Redirecting…'; okEl.classList.add('show');
+  setTimeout(async()=>{
+    const {data:{user}}=await sb.auth.getUser();
+    await afterAuth(user);
+  },1500);
 }
 
 async function doSignOut(){ await sb.auth.signOut(); document.getElementById('auth-section').style.display='block'; document.getElementById('pending-section').style.display='none'; showTab('login'); }
