@@ -1,19 +1,27 @@
-const { Resend } = require("resend");
+const nodemailer = require("nodemailer");
 
 const ADMIN_EMAIL = "process@kongconcentrates.com";
 const FROM = "Kong Concentrates <process@kongconcentrates.com>";
 
-function getResend() {
-  return new Resend(process.env.RESEND_API_KEY);
+function getTransport() {
+  return nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: "a53daf001@smtp-brevo.com",
+      pass: process.env.BREVO_SMTP_KEY,
+    },
+  });
 }
 
 async function sendEmail({ to, subject, html, text }) {
-  if (!process.env.RESEND_API_KEY) {
-    console.log("RESEND_API_KEY not set — skipping send:", subject);
+  if (!process.env.BREVO_SMTP_KEY) {
+    console.log("BREVO_SMTP_KEY not set — skipping send:", subject);
     return;
   }
-  const resend = getResend();
-  await resend.emails.send({ from: FROM, to, subject, html, text });
+  const transport = getTransport();
+  await transport.sendMail({ from: FROM, to, subject, html, text });
 }
 
 // ── New application received ──────────────────────────────────────
