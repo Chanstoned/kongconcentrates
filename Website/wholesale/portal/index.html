@@ -471,13 +471,13 @@ async function printInvoice(orderId){
   };
   const itemRows = (order.wholesale_order_items||[]).map(it=>{
     const info = productInfo[(it.product_name||'').toLowerCase()];
-    return `
-    <tr>
-      <td>${esc(it.product_name)}${info?`<br><span style="font-size:10px;color:#999;">Batch: ${info.batch} &nbsp;·&nbsp; Metrc: ${info.metrc}</span>`:''}</td>
-      <td>${it.quantity}</td>
-      <td>$${Number(it.unit_price).toFixed(2)}</td>
-      <td>$${Number(it.subtotal).toFixed(2)}</td>
-    </tr>`;
+    const batchLine = info ? '<br><span style="font-size:10px;color:#999;">Batch: ' + info.batch + ' \u00b7 Metrc: ' + info.metrc + '</span>' : '';
+    return '<tr>'
+      + '<td>' + esc(it.product_name) + batchLine + '</td>'
+      + '<td>' + it.quantity + '</td>'
+      + '<td>$' + Number(it.unit_price).toFixed(2) + '</td>'
+      + '<td>$' + Number(it.subtotal).toFixed(2) + '</td>'
+      + '</tr>';
   }).join('');
 
   document.getElementById('inv-content').innerHTML = `
