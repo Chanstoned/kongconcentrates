@@ -4,24 +4,26 @@ const PDFDocument = require("pdfkit");
 const ADMIN_EMAIL = "process@kongconcentrates.com";
 const FROM = "Kong Concentrates <process@kongconcentrates.com>";
 
-function getTransport() {
-  return nodemailer.createTransport({
-    host: "smtp-relay.brevo.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: "a53daf001@smtp-brevo.com",
-      pass: process.env.BREVO_SMTP_KEY,
-    },
-  });
-}
+// Single pooled transport — reuses the SMTP connection across calls
+const transport = nodemailer.createTransport({
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false,
+  pool: true,
+  maxConnections: 3,
+  auth: {
+    user: "a53daf001@smtp-brevo.com",
+    pass: process.env.BREVO_SMTP_KEY,
+  },
+  connectionTimeout: 8000,
+  greetingTimeout: 8000,
+  socketTimeout: 15000,
+});
 
 async function sendEmail({ to, subject, html, text, attachments }) {
   if (!process.env.BREVO_SMTP_KEY) {
-    console.log("BREVO_SMTP_KEY not set — skipping send:", subject);
-    return;
+    throw new Error("BREVO_SMTP_KEY environment variable is not set");
   }
-  const transport = getTransport();
   await transport.sendMail({ from: FROM, to, subject, html, text, attachments });
 }
 
@@ -135,69 +137,69 @@ async function sendOrderConfirmation({ order, items, dispensary }) {
     `  ${it.product_name} × ${it.quantity}  —  $${Number(it.subtotal).toFixed(2)}`
   ).join("\n");
 
-  // To dispensary
-  await sendEmail({
-    to: dispensary.email,
-    subject: `Order Received #${shortId} — Kong Concentrates`,
-    attachments: [attachment],
-    html: `
-      <h2 style="font-family:sans-serif;">Order Received</h2>
-      <p style="font-family:sans-serif;">Hi ${dispensary.contact_name || dispensary.name},</p>
-      <p style="font-family:sans-serif;">We've received your order <strong>#${shortId}</strong> on ${date}. Your invoice is attached.</p>
-      <table style="border-collapse:collapse;width:100%;max-width:480px;">
-        <thead>
-          <tr>
-            <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:left;padding:0 12px 8px 0;border-bottom:2px solid #222;">Product</th>
-            <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:center;padding:0 12px 8px 0;border-bottom:2px solid #222;">Qty</th>
-            <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:right;padding:0 0 8px;border-bottom:2px solid #222;">Price</th>
-            <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:right;padding:0 0 8px 12px;border-bottom:2px solid #222;">Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>${itemsTableRows}</tbody>
-      </table>
-      <p style="font-family:sans-serif;font-size:18px;font-weight:bold;margin-top:16px;">Total: $${Number(order.total).toFixed(2)}</p>
-      ${order.notes ? `<p style="font-family:sans-serif;font-size:13px;color:#666;">Notes: ${order.notes}</p>` : ""}
-      <p style="font-family:sans-serif;">We'll be in touch once your order is being processed.</p>
-      <p style="font-family:sans-serif;color:#888;font-size:12px;">— Kong Concentrates LLC · 29141 S 647 Pl · Grove, OK 74344 · process@kongconcentrates.com</p>`,
-    text: `Hi ${dispensary.contact_name || dispensary.name},\n\nOrder #${shortId} received on ${date}.\n\n${itemsText}\n\nTotal: $${Number(order.total).toFixed(2)}${order.notes ? "\nNotes: " + order.notes : ""}\n\nYour invoice is attached.\n\n— Kong Concentrates LLC`,
-  });
-
-  // To admin
-  await sendEmail({
-    to: ADMIN_EMAIL,
-    subject: `New Order #${shortId} — ${dispensary.name}`,
-    attachments: [attachment],
-    html: `
-      <h2 style="font-family:sans-serif;">New Wholesale Order</h2>
-      <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;margin-bottom:16px;">
-        <tr><td style="padding:4px 16px 4px 0;color:#888;">Order</td><td><strong>#${shortId}</strong></td></tr>
-        <tr><td style="padding:4px 16px 4px 0;color:#888;">Dispensary</td><td>${dispensary.name}</td></tr>
-        <tr><td style="padding:4px 16px 4px 0;color:#888;">Contact</td><td>${dispensary.contact_name || "—"}</td></tr>
-        <tr><td style="padding:4px 16px 4px 0;color:#888;">Phone</td><td>${dispensary.phone || "—"}</td></tr>
-        <tr><td style="padding:4px 16px 4px 0;color:#888;">Total</td><td><strong>$${Number(order.total).toFixed(2)}</strong></td></tr>
-      </table>
-      <table style="border-collapse:collapse;width:100%;max-width:480px;">
-        <thead>
-          <tr>
-            <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:left;padding:0 12px 8px 0;border-bottom:2px solid #222;">Product</th>
-            <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:center;padding:0 12px 8px 0;border-bottom:2px solid #222;">Qty</th>
-            <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:right;padding:0 0 8px 12px;border-bottom:2px solid #222;">Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>${items.map((it) => `
-          <tr>
-            <td style="padding:8px 12px 8px 0;border-bottom:1px solid #eee;font-family:sans-serif;font-size:14px;">${it.product_name}</td>
-            <td style="padding:8px 12px 8px 0;border-bottom:1px solid #eee;font-family:sans-serif;font-size:14px;text-align:center;">${it.quantity}</td>
-            <td style="padding:8px 0 8px 12px;border-bottom:1px solid #eee;font-family:sans-serif;font-size:14px;text-align:right;">$${Number(it.subtotal).toFixed(2)}</td>
-          </tr>`).join("")}
-        </tbody>
-      </table>
-      ${order.notes ? `<p style="font-family:sans-serif;font-size:13px;color:#666;margin-top:12px;">Notes: ${order.notes}</p>` : ""}
-      <p style="font-family:sans-serif;margin-top:20px;">
-        <a href="https://kongconcentrates.com/wholesale/admin/" style="background:#c9a84c;color:#000;padding:10px 20px;text-decoration:none;font-weight:bold;">View in Admin Dashboard</a>
-      </p>`,
-    text: `New Order #${shortId}\n\nDispensary: ${dispensary.name}\nPhone: ${dispensary.phone || "—"}\nTotal: $${Number(order.total).toFixed(2)}\n\n${itemsText}${order.notes ? "\nNotes: " + order.notes : ""}\n\nhttps://kongconcentrates.com/wholesale/admin/`,
-  });
+  // Send to dispensary and admin in parallel
+  await Promise.all([
+    sendEmail({
+      to: dispensary.email,
+      subject: `Order Received #${shortId} — Kong Concentrates`,
+      attachments: [attachment],
+      html: `
+        <h2 style="font-family:sans-serif;">Order Received</h2>
+        <p style="font-family:sans-serif;">Hi ${dispensary.contact_name || dispensary.name},</p>
+        <p style="font-family:sans-serif;">We've received your order <strong>#${shortId}</strong> on ${date}. Your invoice is attached.</p>
+        <table style="border-collapse:collapse;width:100%;max-width:480px;">
+          <thead>
+            <tr>
+              <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:left;padding:0 12px 8px 0;border-bottom:2px solid #222;">Product</th>
+              <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:center;padding:0 12px 8px 0;border-bottom:2px solid #222;">Qty</th>
+              <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:right;padding:0 0 8px;border-bottom:2px solid #222;">Price</th>
+              <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:right;padding:0 0 8px 12px;border-bottom:2px solid #222;">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>${itemsTableRows}</tbody>
+        </table>
+        <p style="font-family:sans-serif;font-size:18px;font-weight:bold;margin-top:16px;">Total: $${Number(order.total).toFixed(2)}</p>
+        ${order.notes ? `<p style="font-family:sans-serif;font-size:13px;color:#666;">Notes: ${order.notes}</p>` : ""}
+        <p style="font-family:sans-serif;">We'll be in touch once your order is being processed.</p>
+        <p style="font-family:sans-serif;color:#888;font-size:12px;">— Kong Concentrates LLC · 29141 S 647 Pl · Grove, OK 74344 · process@kongconcentrates.com</p>`,
+      text: `Hi ${dispensary.contact_name || dispensary.name},\n\nOrder #${shortId} received on ${date}.\n\n${itemsText}\n\nTotal: $${Number(order.total).toFixed(2)}${order.notes ? "\nNotes: " + order.notes : ""}\n\nYour invoice is attached.\n\n— Kong Concentrates LLC`,
+    }),
+    sendEmail({
+      to: ADMIN_EMAIL,
+      subject: `New Order #${shortId} — ${dispensary.name}`,
+      attachments: [attachment],
+      html: `
+        <h2 style="font-family:sans-serif;">New Wholesale Order</h2>
+        <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;margin-bottom:16px;">
+          <tr><td style="padding:4px 16px 4px 0;color:#888;">Order</td><td><strong>#${shortId}</strong></td></tr>
+          <tr><td style="padding:4px 16px 4px 0;color:#888;">Dispensary</td><td>${dispensary.name}</td></tr>
+          <tr><td style="padding:4px 16px 4px 0;color:#888;">Contact</td><td>${dispensary.contact_name || "—"}</td></tr>
+          <tr><td style="padding:4px 16px 4px 0;color:#888;">Phone</td><td>${dispensary.phone || "—"}</td></tr>
+          <tr><td style="padding:4px 16px 4px 0;color:#888;">Total</td><td><strong>$${Number(order.total).toFixed(2)}</strong></td></tr>
+        </table>
+        <table style="border-collapse:collapse;width:100%;max-width:480px;">
+          <thead>
+            <tr>
+              <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:left;padding:0 12px 8px 0;border-bottom:2px solid #222;">Product</th>
+              <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:center;padding:0 12px 8px 0;border-bottom:2px solid #222;">Qty</th>
+              <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:right;padding:0 0 8px 12px;border-bottom:2px solid #222;">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>${items.map((it) => `
+            <tr>
+              <td style="padding:8px 12px 8px 0;border-bottom:1px solid #eee;font-family:sans-serif;font-size:14px;">${it.product_name}</td>
+              <td style="padding:8px 12px 8px 0;border-bottom:1px solid #eee;font-family:sans-serif;font-size:14px;text-align:center;">${it.quantity}</td>
+              <td style="padding:8px 0 8px 12px;border-bottom:1px solid #eee;font-family:sans-serif;font-size:14px;text-align:right;">$${Number(it.subtotal).toFixed(2)}</td>
+            </tr>`).join("")}
+          </tbody>
+        </table>
+        ${order.notes ? `<p style="font-family:sans-serif;font-size:13px;color:#666;margin-top:12px;">Notes: ${order.notes}</p>` : ""}
+        <p style="font-family:sans-serif;margin-top:20px;">
+          <a href="https://kongconcentrates.com/wholesale/admin/" style="background:#c9a84c;color:#000;padding:10px 20px;text-decoration:none;font-weight:bold;">View in Admin Dashboard</a>
+        </p>`,
+      text: `New Order #${shortId}\n\nDispensary: ${dispensary.name}\nPhone: ${dispensary.phone || "—"}\nTotal: $${Number(order.total).toFixed(2)}\n\n${itemsText}${order.notes ? "\nNotes: " + order.notes : ""}\n\nhttps://kongconcentrates.com/wholesale/admin/`,
+    }),
+  ]);
 }
 
 // ── New application received ──────────────────────────────────────
