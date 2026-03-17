@@ -203,13 +203,17 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
 
     <!-- ORDERS TAB -->
     <div id="tab-orders" class="tab-panel active">
-      <div class="filter-bar">
-        <button class="filter-btn active" onclick="filterOrders('all',this)">All</button>
-        <button class="filter-btn" onclick="filterOrders('received',this)">Received</button>
-        <button class="filter-btn" onclick="filterOrders('processing',this)">Processing</button>
-        <button class="filter-btn" onclick="filterOrders('out_for_delivery',this)">Out for Delivery</button>
-        <button class="filter-btn" onclick="filterOrders('complete',this)">Complete</button>
+      <div class="sec-hd">
+        <div class="filter-bar" style="margin-bottom:0;">
+          <button class="filter-btn active" onclick="filterOrders('all',this)">All</button>
+          <button class="filter-btn" onclick="filterOrders('received',this)">Received</button>
+          <button class="filter-btn" onclick="filterOrders('processing',this)">Processing</button>
+          <button class="filter-btn" onclick="filterOrders('out_for_delivery',this)">Out for Delivery</button>
+          <button class="filter-btn" onclick="filterOrders('complete',this)">Complete</button>
+        </div>
+        <button class="btn-add" onclick="openCreateOrder()">+ Create Order</button>
       </div>
+      <div style="margin-bottom:18px;"></div>
       <div class="alert alert-ok" id="orders-ok"></div>
       <div class="alert alert-err" id="orders-err"></div>
       <div id="orders-spinner" class="spinner">Loading…</div>
@@ -218,6 +222,10 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
 
     <!-- ACCOUNTS TAB -->
     <div id="tab-accounts" class="tab-panel">
+      <div class="sec-hd">
+        <div class="sec-title">Accounts</div>
+        <button class="btn-add" onclick="openCreateAccount()">+ Create Account</button>
+      </div>
       <div class="alert alert-ok" id="accts-ok"></div>
       <div id="accts-spinner" class="spinner">Loading…</div>
       <div id="accts-content" style="display:none;"></div>
@@ -254,6 +262,59 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
   </div>
 
   <footer><p>© 2026 Kong Concentrates · Admin Dashboard · Authorized Access Only</p></footer>
+</div>
+
+<!-- CREATE ACCOUNT MODAL -->
+<div id="create-acct-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;overflow:auto;padding:40px 20px;">
+  <div class="acct-modal-inner">
+    <button class="acct-modal-close" onclick="closeCreateAccount()">✕</button>
+    <h3>Create Account</h3>
+    <div class="fg"><label class="fl">Dispensary Name *</label><input class="fi" type="text" id="ca-name" placeholder="Green Leaf Dispensary"></div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Email *</label><input class="fi" type="email" id="ca-email" placeholder="contact@dispensary.com"></div>
+      <div class="fg"><label class="fl">Password *</label><input class="fi" type="text" id="ca-password" placeholder="Temp password"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Contact Name</label><input class="fi" type="text" id="ca-contact" placeholder="Jane Smith"></div>
+      <div class="fg"><label class="fl">Phone</label><input class="fi" type="tel" id="ca-phone" placeholder="(918) 555-0100"></div>
+    </div>
+    <div class="fg"><label class="fl">Address</label><input class="fi" type="text" id="ca-addr" placeholder="123 Main St, City, OK"></div>
+    <div class="frow">
+      <div class="fg"><label class="fl">OMMA License #</label><input class="fi" type="text" id="ca-omma" placeholder="OMMA-00000000"></div>
+      <div class="fg"><label class="fl">OBNDD License #</label><input class="fi" type="text" id="ca-obndd" placeholder="OBNDD-00000000"></div>
+    </div>
+    <div class="alert alert-err" id="ca-err"></div>
+    <div class="form-actions" style="margin-top:16px;">
+      <button class="btn-save" onclick="submitCreateAccount()">Create Account</button>
+      <button class="btn-cancel" onclick="closeCreateAccount()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE ORDER MODAL -->
+<div id="create-order-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;overflow:auto;padding:40px 20px;">
+  <div class="acct-modal-inner" style="max-width:720px;">
+    <button class="acct-modal-close" onclick="closeCreateOrder()">✕</button>
+    <h3>Create Order</h3>
+    <div class="fg">
+      <label class="fl">Account *</label>
+      <select class="fi" id="co-account" style="font-family:'Barlow Condensed',sans-serif;font-size:15px;">
+        <option value="">— Select a dispensary —</option>
+      </select>
+    </div>
+    <div style="margin-bottom:12px;">
+      <label class="fl" style="display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;opacity:0.8;">Line Items</label>
+      <div id="co-items"></div>
+      <button type="button" onclick="addOrderLine()" style="margin-top:10px;background:none;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.7);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:7px 14px;cursor:pointer;">+ Add Line Item</button>
+    </div>
+    <div class="fg"><label class="fl">Notes</label><textarea class="fi" id="co-notes" placeholder="Any special instructions…" style="min-height:56px;"></textarea></div>
+    <div style="text-align:right;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold2);margin:8px 0 16px;">Total: $<span id="co-total">0.00</span></div>
+    <div class="alert alert-err" id="co-err"></div>
+    <div class="form-actions">
+      <button class="btn-save" onclick="submitCreateOrder()">Place Order</button>
+      <button class="btn-cancel" onclick="closeCreateOrder()">Cancel</button>
+    </div>
+  </div>
 </div>
 
 <!-- ACCOUNT EDIT MODAL -->
@@ -746,6 +807,151 @@ async function printInvoice(orderId){
 }
 
 function closeInvoice(){ document.getElementById('inv-modal').classList.remove('show'); }
+
+// ──────────────────────── CREATE ACCOUNT ─────────────────────────
+function openCreateAccount(){
+  ['ca-name','ca-email','ca-password','ca-contact','ca-phone','ca-addr','ca-omma','ca-obndd'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ca-err').classList.remove('show');
+  document.getElementById('create-acct-modal').style.display='flex';
+  document.getElementById('create-acct-modal').style.alignItems='flex-start';
+  document.getElementById('create-acct-modal').style.justifyContent='center';
+}
+function closeCreateAccount(){ document.getElementById('create-acct-modal').style.display='none'; }
+
+async function submitCreateAccount(){
+  const name = document.getElementById('ca-name').value.trim();
+  const email = document.getElementById('ca-email').value.trim();
+  const password = document.getElementById('ca-password').value.trim();
+  const errEl = document.getElementById('ca-err');
+  errEl.classList.remove('show');
+  if(!name || !email || !password){ errEl.textContent='Name, email, and password are required.'; errEl.classList.add('show'); return; }
+  const ok = await adminFetch('POST','',{
+    action:'create-account', name, email, password,
+    contact_name: document.getElementById('ca-contact').value.trim(),
+    phone: document.getElementById('ca-phone').value.trim(),
+    address: document.getElementById('ca-addr').value.trim(),
+    omma_license: document.getElementById('ca-omma').value.trim(),
+    obndd_license: document.getElementById('ca-obndd').value.trim(),
+  });
+  if(ok){
+    closeCreateAccount();
+    const okEl = document.getElementById('accts-ok');
+    okEl.textContent='Account created and approved.'; okEl.classList.add('show');
+    setTimeout(()=>okEl.classList.remove('show'),4000);
+    await loadAccounts();
+  } else {
+    errEl.textContent='Failed to create account. Email may already be in use.'; errEl.classList.add('show');
+  }
+}
+
+// ──────────────────────── CREATE ORDER ───────────────────────────
+function openCreateOrder(){
+  // Populate account selector with approved dispensaries
+  const sel = document.getElementById('co-account');
+  sel.innerHTML = '<option value="">— Select a dispensary —</option>';
+  allAccounts.filter(d=>d.approved).sort((a,b)=>a.name.localeCompare(b.name)).forEach(d=>{
+    const opt = document.createElement('option');
+    opt.value = d.id;
+    opt.textContent = d.name;
+    sel.appendChild(opt);
+  });
+  document.getElementById('co-items').innerHTML = '';
+  document.getElementById('co-notes').value = '';
+  document.getElementById('co-total').textContent = '0.00';
+  document.getElementById('co-err').classList.remove('show');
+  addOrderLine();
+  document.getElementById('create-order-modal').style.display='flex';
+  document.getElementById('create-order-modal').style.alignItems='flex-start';
+  document.getElementById('create-order-modal').style.justifyContent='center';
+}
+function closeCreateOrder(){ document.getElementById('create-order-modal').style.display='none'; }
+
+function addOrderLine(){
+  const container = document.getElementById('co-items');
+  const productOptions = allProducts.filter(p=>p.available).map(p=>`<option value="${p.id}" data-price="${p.price_wholesale}" data-name="${esc(p.name)}">${esc(p.name)} — $${Number(p.price_wholesale).toFixed(2)}/${esc(p.unit_label||'unit')}</option>`).join('');
+  const row = document.createElement('div');
+  row.style.cssText='margin-bottom:10px;';
+  row.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 80px 100px 90px 36px;gap:8px;align-items:center;">
+      <select class="fi co-prod" onchange="onProductChange(this)" style="font-size:13px;padding:8px 10px;">
+        <option value="">— Custom product —</option>
+        ${productOptions}
+      </select>
+      <input class="fi co-qty" type="number" min="1" value="1" placeholder="Qty" style="padding:8px 10px;text-align:center;" oninput="recalcLine(this.closest('div').parentElement)">
+      <input class="fi co-price" type="number" step="0.01" min="0" placeholder="Price" style="padding:8px 10px;" oninput="recalcLine(this.closest('div').parentElement)">
+      <input class="fi co-sub" type="text" placeholder="$0.00" style="padding:8px 10px;opacity:0.6;" readonly>
+      <button type="button" onclick="this.closest('div').parentElement.remove();recalcOrderTotal();" style="background:none;border:1px solid rgba(200,50,50,0.2);color:#d07070;padding:0;width:36px;height:38px;cursor:pointer;font-size:16px;line-height:1;">✕</button>
+    </div>
+    <input class="fi co-custom-name" type="text" placeholder="Custom product name (required if not selecting above)" style="margin-top:6px;font-size:13px;padding:8px 10px;display:none;" oninput="recalcLine(this.closest('div').parentElement)">`;
+  container.appendChild(row);
+}
+
+function onProductChange(sel){
+  const row = sel.closest('div').parentElement;
+  const opt = sel.selectedOptions[0];
+  const customInput = row.querySelector('.co-custom-name');
+  if(opt && opt.dataset.price){
+    row.querySelector('.co-price').value = Number(opt.dataset.price).toFixed(2);
+    customInput.style.display='none';
+    recalcLine(row);
+  } else {
+    customInput.style.display='block';
+    row.querySelector('.co-price').value='';
+    recalcLine(row);
+  }
+}
+
+function recalcLine(row){
+  const qty = parseFloat(row.querySelector('.co-qty').value)||0;
+  const price = parseFloat(row.querySelector('.co-price').value)||0;
+  const sub = qty*price;
+  row.querySelector('.co-sub').value = '$'+sub.toFixed(2);
+  recalcOrderTotal();
+}
+
+function recalcOrderTotal(){
+  let total=0;
+  document.querySelectorAll('#co-items>div').forEach(row=>{
+    const qty = parseFloat(row.querySelector('.co-qty').value)||0;
+    const price = parseFloat(row.querySelector('.co-price').value)||0;
+    total += qty*price;
+  });
+  document.getElementById('co-total').textContent = total.toFixed(2);
+}
+
+async function submitCreateOrder(){
+  const dispensary_id = document.getElementById('co-account').value;
+  const errEl = document.getElementById('co-err');
+  errEl.classList.remove('show');
+  if(!dispensary_id){ errEl.textContent='Please select a dispensary.'; errEl.classList.add('show'); return; }
+
+  const items = [];
+  let valid=true;
+  document.querySelectorAll('#co-items>div').forEach(row=>{
+    const sel = row.querySelector('.co-prod');
+    const qty = parseInt(row.querySelector('.co-qty').value)||0;
+    const price = parseFloat(row.querySelector('.co-price').value)||0;
+    const opt = sel.selectedOptions[0];
+    const customName = row.querySelector('.co-custom-name');
+    const product_name = (opt && opt.dataset.name) ? opt.dataset.name : (customName ? customName.value.trim() : '');
+    const product_id = (opt && opt.value && opt.value!=='') ? opt.value : null;
+    if(!product_name||qty<1||price<=0){ valid=false; return; }
+    items.push({ product_id, product_name, quantity:qty, unit_price:price, subtotal:qty*price });
+  });
+  if(!valid||!items.length){ errEl.textContent='All line items must have a product name, quantity ≥ 1, and price > 0.'; errEl.classList.add('show'); return; }
+
+  const notes = document.getElementById('co-notes').value.trim();
+  const result = await adminFetch('POST','',{action:'create-order',dispensary_id,items,notes:notes||null});
+  if(result){
+    closeCreateOrder();
+    const okEl = document.getElementById('orders-ok');
+    okEl.textContent='Order created successfully.'; okEl.classList.add('show');
+    setTimeout(()=>okEl.classList.remove('show'),4000);
+    await loadOrders();
+  } else {
+    errEl.textContent='Failed to create order.'; errEl.classList.add('show');
+  }
+}
 
 // ── Helpers
 function esc(s){ const d=document.createElement('div'); d.textContent=String(s||''); return d.innerHTML; }
