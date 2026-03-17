@@ -77,13 +77,19 @@ function generateInvoicePDF({ order, items, dispensary }) {
     // ── Item rows
     let y = tTop + 22;
     items.forEach((it) => {
+      const info = getProductInfo(it.product_name);
       doc.fontSize(11).font("Helvetica").fillColor("#222")
         .text(it.product_name, 50, y, { width: 300 });
       doc.text(String(it.quantity),                    370, y, { width: 50,  align: "right" });
       doc.text("$" + Number(it.unit_price).toFixed(2), 430, y, { width: 65,  align: "right" });
       doc.text("$" + Number(it.subtotal).toFixed(2),   500, y, { width: 62,  align: "right" });
-      doc.moveTo(50, y + 17).lineTo(562, y + 17).lineWidth(0.3).strokeColor("#eee").stroke();
-      y += 26;
+      if (info) {
+        doc.fontSize(8).font("Helvetica").fillColor("#999")
+          .text(`Batch: ${info.batch}  ·  Metrc: ${info.metrc}`, 50, y + 14, { width: 400 });
+      }
+      const rowH = info ? 38 : 26;
+      doc.moveTo(50, y + rowH - 3).lineTo(562, y + rowH - 3).lineWidth(0.3).strokeColor("#eee").stroke();
+      y += rowH;
     });
 
     // ── Total
@@ -109,6 +115,19 @@ function generateInvoicePDF({ order, items, dispensary }) {
 
     doc.end();
   });
+}
+
+// ── Product batch / Metrc info ────────────────────────────────────
+function getProductInfo(productName) {
+  const map = {
+    "bacio mints":             { batch: "KC-26-KC-01",  metrc: "1A40E0100002F6A000000___" },
+    "pink runtz":              { batch: "KC-26-ECE-01", metrc: "1A40E0100002F6A000000___" },
+    "sticky buns":             { batch: "KC-26-ECE-02", metrc: "1A40E0100002F6A000000___" },
+    "hooch x white rainbow":   { batch: "KC-26-ECE-03", metrc: "1A40E0100002F6A000000___" },
+    "grape pie":               { batch: "KC-26-ECE-04", metrc: "1A40E0100002F6A000000___" },
+    "devil driver":            { batch: "KC-26-ECE-05", metrc: "1A40E0100002F6A000000___" },
+  };
+  return map[(productName || "").toLowerCase()] || null;
 }
 
 // ── Product image URL lookup ───────────────────────────────────────
