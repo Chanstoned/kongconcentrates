@@ -355,33 +355,36 @@ async function submitOrder(){
   const okEl = document.getElementById('order-ok');
   errEl.classList.remove('show'); okEl.classList.remove('show');
 
-  const items = products.filter(p=>(cartQtys[p.id]||0)>0);
-  if(!items.length){ errEl.textContent='Please select at least one product.'; errEl.classList.add('show'); return; }
+  const selectedProducts = products.filter(p=>(cartQtys[p.id]||0)>0);
+  if(!selectedProducts.length){ errEl.textContent='Please select at least one product.'; errEl.classList.add('show'); return; }
 
-  const total = items.reduce((s,p)=>s+(cartQtys[p.id]*p.price_wholesale),0);
   const notes = document.getElementById('order-notes').value.trim();
+  const items = selectedProducts.map(p=>({
+    product_id: p.id,
+    product_name: p.name,
+    quantity: cartQtys[p.id],
+    unit_price: p.price_wholesale,
+    subtotal: cartQtys[p.id] * p.price_wholesale,
+  }));
 
   btn.disabled=true; btn.textContent='Placing order…';
 
-  const {data:order,error:oe} = await sb.from('wholesale_orders').insert({
-    dispensary_id:currentUser.id, status:'received', total, notes
-  }).select().single();
+  const {data:{session}} = await sb.auth.getSession();
+  const res = await fetch('/.netlify/functions/wholesale-place-order', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
+    body: JSON.stringify({items, notes}),
+  });
+  const json = await res.json();
 
-  if(oe){ errEl.textContent='Order failed: '+oe.message; errEl.classList.add('show'); btn.disabled=false; btn.textContent='Place Order'; return; }
-
-  const {error:ie} = await sb.from('wholesale_order_items').insert(
-    items.map(p=>({ order_id:order.id, product_id:p.id, product_name:p.name, quantity:cartQtys[p.id], unit_price:p.price_wholesale, subtotal:cartQtys[p.id]*p.price_wholesale }))
-  );
-
-  if(ie){ errEl.textContent='Order partially failed: '+ie.message; errEl.classList.add('show'); }
-  else {
-    okEl.textContent='Order placed! Reference #'+order.id.slice(-8).toUpperCase()+'. We\'ll be in touch shortly.';
+  if(!res.ok){
+    errEl.textContent='Order failed: '+(json.error||'Please try again.'); errEl.classList.add('show');
+  } else {
+    okEl.textContent='Order placed! Reference #'+json.orderId.slice(-8).toUpperCase()+'. A confirmation with your invoice has been sent to your email.';
     okEl.classList.add('show');
-    // reset cart
     products.forEach(p=>{ cartQtys[p.id]=0; document.getElementById('qty-'+p.id).value=0; document.getElementById('sub-'+p.id).textContent='—'; });
     updateTotal();
     document.getElementById('order-notes').value='';
-    // scroll summary into view
     document.getElementById('shop-summary').scrollIntoView({behavior:'smooth',block:'nearest'});
   }
 
