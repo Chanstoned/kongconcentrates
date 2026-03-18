@@ -358,7 +358,6 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
    ───────────────────────────────────────────────────────────────── */
 const SUPABASE_URL      = 'https://ttdaweelpsiifobcjrji.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_aDFqNrKQwaCmWDm3gdPLBg_VhQTpKEC';
-const ADMIN_EMAIL       = 'process@kongconcentrates.com';
 /* ───────────────────────────────────────────────────────────────── */
 
 const { createClient } = window.supabase;
@@ -373,12 +372,10 @@ let accessToken = null;
 // ── Init
 (async()=>{
   const {data:{session}} = await sb.auth.getSession();
-  if(!session || session.user.email !== ADMIN_EMAIL){
-    window.location.href='/wholesale/'; return;
-  }
+  if(!session){ window.location.href='/wholesale/'; return; }
   accessToken = session.access_token;
 
-  // Verify with backend
+  // Verify admin access with backend — this is the authoritative check
   const ok = await adminFetch('GET','ping');
   if(!ok){ window.location.href='/wholesale/'; return; }
 
