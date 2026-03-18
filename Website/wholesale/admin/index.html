@@ -251,6 +251,7 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
           <div class="fg"><label class="fl">Unit Label</label><input class="fi" type="text" id="f-unit" placeholder="per gram"></div>
           <div class="fg"><label class="fl">Min Qty</label><input class="fi" type="number" id="f-min" placeholder="1" min="1" value="1"></div>
         </div>
+        <div class="fg"><label class="fl">Product Image URL</label><input class="fi" type="text" id="f-image" placeholder="/images/pink runtz.png"></div>
         <div class="form-actions">
           <button class="btn-save" onclick="saveProduct()">Save Product</button>
           <button class="btn-cancel" onclick="hideProductForm()">Cancel</button>
@@ -704,7 +705,7 @@ function showProductForm(){ document.getElementById('prod-form').classList.add('
 function hideProductForm(){ document.getElementById('prod-form').classList.remove('show'); clearForm(); }
 
 function clearForm(){
-  ['f-id','f-name','f-desc','f-cat','f-unit'].forEach(id=>document.getElementById(id).value='');
+  ['f-id','f-name','f-desc','f-cat','f-unit','f-image'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-price').value='';
   document.getElementById('f-min').value='1';
   document.getElementById('form-title').textContent='New Product';
@@ -721,6 +722,7 @@ function editProduct(id){
   document.getElementById('f-price').value=p.price_wholesale||'';
   document.getElementById('f-unit').value=p.unit_label||'';
   document.getElementById('f-min').value=p.min_qty||1;
+  document.getElementById('f-image').value=p.image_url||'';
   document.getElementById('form-title').textContent='Edit Product';
   editingProductId=id;
   showProductForm();
@@ -741,6 +743,7 @@ async function saveProduct(){
     price,
     unit_label: document.getElementById('f-unit').value.trim(),
     min_qty: parseInt(document.getElementById('f-min').value)||1,
+    image_url: document.getElementById('f-image').value.trim() || null,
     available: true
   };
 
