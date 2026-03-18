@@ -1,5 +1,5 @@
 const { createClient } = require("@supabase/supabase-js");
-const { sendAccountApproved, sendAccountRejected, sendOrderStatusUpdate, sendOrderConfirmation } = require("./email-helper");
+const { sendAccountApproved, sendAccountRejected, sendOrderStatusUpdate, sendOrderConfirmation, sendOrderUpdated } = require("./email-helper");
 
 // Supabase admin client — uses service role key to bypass RLS
 const supabaseAdmin = createClient(
@@ -225,6 +225,58 @@ exports.handler = async (event) => {
           .delete()
           .eq("id", body.id);
         if (e) throw e;
+        return ok({ ok: true });
+      }
+
+      // Edit an existing order's items, notes, and total — then resend invoice
+      if (action === "update-order") {
+        const { orderId, items, notes } = body;
+        if (!orderId || !items || !items.length) return err("orderId and items are required.");
+        const total = Math.round(items.reduce((sum, it) => sum + Number(it.subtotal), 0) * 100) / 100;
+
+        // Replace all order items
+        const { error: delErr } = await supabaseAdmin
+          .from("wholesale_order_items")
+          .delete()
+          .eq("order_id", orderId);
+        if (delErr) throw delErr;
+
+        const { error: insertErr } = await supabaseAdmin
+          .from("wholesale_order_items")
+          .insert(items.map((it) => ({
+            order_id: orderId,
+            product_id: it.product_id || null,
+            product_name: it.product_name,
+            quantity: it.quantity,
+            unit_price: it.unit_price,
+            subtotal: it.subtotal,
+          })));
+        if (insertErr) throw insertErr;
+
+        // Update order total and notes
+        const { error: updateErr } = await supabaseAdmin
+          .from("wholesale_orders")
+          .update({ total, notes: notes || null, updated_at: new Date().toISOString() })
+          .eq("id", orderId);
+        if (updateErr) throw updateErr;
+
+        // Fetch updated order + dispensary for email
+        const { data: orderData } = await supabaseAdmin
+          .from("wholesale_orders")
+          .select("*, dispensaries(*)")
+          .eq("id", orderId)
+          .single();
+
+        if (orderData?.dispensaries) {
+          const productIds = items.map((it) => it.product_id).filter(Boolean);
+          let imgMap = {};
+          if (productIds.length) {
+            const { data: prods } = await supabaseAdmin.from("wholesale_products").select("id, image_url").in("id", productIds);
+            if (prods) prods.forEach((p) => { imgMap[p.id] = p.image_url; });
+          }
+          const itemsWithImages = items.map((it) => ({ ...it, image_url: imgMap[it.product_id] || null }));
+          await sendOrderUpdated({ order: orderData, items: itemsWithImages, dispensary: orderData.dispensaries }).catch(console.error);
+        }
         return ok({ ok: true });
       }
 

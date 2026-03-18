@@ -436,10 +436,123 @@ async function sendOrderStatusUpdate({ dispensary, status, orderId, total }) {
   });
 }
 
+// ── Order updated (items edited by admin) ────────────────────────
+async function sendOrderUpdated({ order, items, dispensary }) {
+  const shortId = order.id.slice(-8).toUpperCase();
+  const date = new Date(order.updated_at || order.created_at).toLocaleDateString("en-US", {
+    month: "long", day: "numeric", year: "numeric",
+  });
+
+  const pdfBuffer = await generateInvoicePDF({ order, items, dispensary });
+  const attachment = {
+    filename: `Kong-Invoice-${shortId}-Updated.pdf`,
+    content: pdfBuffer,
+    contentType: "application/pdf",
+  };
+
+  const itemsTableRows = items.map((it) => {
+    const imgUrl = getProductImageUrl(it);
+    return `
+    <tr>
+      <td style="padding:12px 12px 12px 0;border-bottom:1px solid #eee;vertical-align:middle;">
+        <table cellpadding="0" cellspacing="0" border="0"><tr>
+          ${imgUrl ? `<td style="vertical-align:middle;padding-right:12px;"><img src="${imgUrl}" alt="${it.product_name}" width="72" height="72" style="width:72px;height:72px;object-fit:cover;border-radius:6px;display:block;"></td>` : ""}
+          <td style="vertical-align:middle;">
+            <div style="font-family:sans-serif;font-size:14px;font-weight:bold;color:#111;">${it.product_name}</div>
+            <div style="font-family:sans-serif;font-size:12px;color:#888;margin-top:3px;">Qty: ${it.quantity} &nbsp;·&nbsp; $${Number(it.unit_price).toFixed(2)}/unit</div>
+          </td>
+        </tr></table>
+      </td>
+      <td style="padding:12px 0;border-bottom:1px solid #eee;font-family:sans-serif;font-size:15px;font-weight:bold;text-align:right;vertical-align:middle;">$${Number(it.subtotal).toFixed(2)}</td>
+    </tr>`;
+  }).join("");
+
+  const itemsText = items.map((it) =>
+    `  ${it.product_name} × ${it.quantity}  —  $${Number(it.subtotal).toFixed(2)}`
+  ).join("\n");
+
+  await Promise.all([
+    sendEmail({
+      to: dispensary.email,
+      subject: `Order #${shortId} Updated — Kong Concentrates`,
+      attachments: [attachment],
+      html: `
+        <div style="font-family:sans-serif;max-width:600px;margin:0 auto;background:#fff;">
+          <div style="background:#111;padding:24px;text-align:center;">
+            <img src="https://kongconcentrates.com/images/MAIN-ROUND-1.png" alt="Kong Concentrates" height="80" style="height:80px;">
+          </div>
+          <div style="background:#c9a84c;padding:18px;text-align:center;">
+            <h1 style="margin:0;color:#111;font-size:22px;font-weight:bold;font-family:sans-serif;">Your Order Has Been Updated</h1>
+          </div>
+          <div style="padding:32px 24px;">
+            <p style="font-family:sans-serif;font-size:15px;">Hi ${dispensary.contact_name || dispensary.name},</p>
+            <p style="font-family:sans-serif;">Your order has been updated. A revised invoice is attached to this email for your records.</p>
+            <p style="font-family:sans-serif;font-size:13px;color:#888;margin-bottom:20px;">Order <strong style="color:#222;">#${shortId}</strong> &nbsp;·&nbsp; Updated ${date}</p>
+            <table style="border-collapse:collapse;width:100%;max-width:560px;">
+              <thead>
+                <tr>
+                  <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:left;padding:0 0 10px;border-bottom:2px solid #222;">Product</th>
+                  <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:right;padding:0 0 10px;border-bottom:2px solid #222;">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>${itemsTableRows}</tbody>
+            </table>
+            <p style="font-family:sans-serif;font-size:20px;font-weight:bold;text-align:right;border-top:2px solid #222;padding-top:12px;margin-top:4px;">Total: $${Number(order.total).toFixed(2)}</p>
+            ${order.notes ? `<p style="font-family:sans-serif;font-size:13px;color:#666;background:#f5f5f5;padding:12px;border-radius:4px;">Notes: ${order.notes}</p>` : ""}
+            <p style="font-family:sans-serif;">If you have any questions about these changes, please don't hesitate to reach out.</p>
+            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;background:#111;border-radius:6px;margin-top:24px;">
+              <tr><td style="padding:20px 24px;">
+                <p style="font-family:sans-serif;margin:0 0 6px;font-weight:bold;font-size:15px;color:#fff;">Questions or Problems?</p>
+                <p style="font-family:sans-serif;margin:0 0 10px;color:#aaa;font-size:13px;">We're here to help — reach out anytime and we'll get back to you right away.</p>
+                <a href="mailto:process@kongconcentrates.com" style="font-family:sans-serif;color:#c9a84c;text-decoration:none;font-weight:bold;">process@kongconcentrates.com</a>
+                <p style="font-family:sans-serif;margin:6px 0 0;color:#666;font-size:12px;">Kong Concentrates LLC &nbsp;·&nbsp; 29141 S 647 Pl, Grove, OK 74344</p>
+              </td></tr>
+            </table>
+          </div>
+        </div>`,
+      text: `Hi ${dispensary.contact_name || dispensary.name},\n\nYour order #${shortId} has been updated. A revised invoice is attached.\n\n${itemsText}\n\nTotal: $${Number(order.total).toFixed(2)}${order.notes ? "\nNotes: " + order.notes : ""}\n\nQuestions? Contact us at process@kongconcentrates.com\n— Kong Concentrates LLC · 29141 S 647 Pl, Grove, OK 74344`,
+    }),
+    sendEmail({
+      to: ADMIN_EMAIL,
+      subject: `Order #${shortId} Updated — ${dispensary.name}`,
+      attachments: [attachment],
+      html: `
+        <h2 style="font-family:sans-serif;">Order Updated</h2>
+        <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;margin-bottom:16px;">
+          <tr><td style="padding:4px 16px 4px 0;color:#888;">Order</td><td><strong>#${shortId}</strong></td></tr>
+          <tr><td style="padding:4px 16px 4px 0;color:#888;">Dispensary</td><td>${dispensary.name}</td></tr>
+          <tr><td style="padding:4px 16px 4px 0;color:#888;">Total</td><td><strong>$${Number(order.total).toFixed(2)}</strong></td></tr>
+        </table>
+        <table style="border-collapse:collapse;width:100%;max-width:480px;">
+          <thead>
+            <tr>
+              <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:left;padding:0 12px 8px 0;border-bottom:2px solid #222;">Product</th>
+              <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:center;padding:0 12px 8px 0;border-bottom:2px solid #222;">Qty</th>
+              <th style="font-family:sans-serif;font-size:11px;color:#888;text-align:right;padding:0 0 8px 12px;border-bottom:2px solid #222;">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>${items.map((it) => `
+            <tr>
+              <td style="padding:8px 12px 8px 0;border-bottom:1px solid #eee;font-family:sans-serif;font-size:14px;">${it.product_name}</td>
+              <td style="padding:8px 12px 8px 0;border-bottom:1px solid #eee;font-family:sans-serif;font-size:14px;text-align:center;">${it.quantity}</td>
+              <td style="padding:8px 0 8px 12px;border-bottom:1px solid #eee;font-family:sans-serif;font-size:14px;text-align:right;">$${Number(it.subtotal).toFixed(2)}</td>
+            </tr>`).join("")}
+          </tbody>
+        </table>
+        ${order.notes ? `<p style="font-family:sans-serif;font-size:13px;color:#666;margin-top:12px;">Notes: ${order.notes}</p>` : ""}
+        <p style="font-family:sans-serif;margin-top:20px;">
+          <a href="https://kongconcentrates.com/wholesale/admin/" style="background:#c9a84c;color:#000;padding:10px 20px;text-decoration:none;font-weight:bold;">View in Admin Dashboard</a>
+        </p>`,
+      text: `Order #${shortId} Updated\n\nDispensary: ${dispensary.name}\nTotal: $${Number(order.total).toFixed(2)}\n\n${itemsText}${order.notes ? "\nNotes: " + order.notes : ""}\n\nhttps://kongconcentrates.com/wholesale/admin/`,
+    }),
+  ]);
+}
+
 module.exports = {
   sendApplicationReceived,
   sendAccountApproved,
   sendAccountRejected,
   sendOrderStatusUpdate,
   sendOrderConfirmation,
+  sendOrderUpdated,
 };
