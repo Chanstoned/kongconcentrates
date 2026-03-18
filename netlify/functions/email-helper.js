@@ -133,18 +133,28 @@ function getProductInfo(productName) {
 }
 
 // ── Product image URL lookup ───────────────────────────────────────
-function getProductImageUrl(productName) {
+// Accepts an item object so it can use DB-stored image_url when available.
+function getProductImageUrl(item) {
+  // 1. Use image_url stored in DB (set via admin Products tab) — most reliable
+  if (item.image_url) return item.image_url;
+
+  // 2. Fall back to hardcoded map (lowercase .png — case-sensitive on Netlify CDN)
   const map = {
-    "pink runtz":                        "https://kongconcentrates.com/images/pink%20runtz.PNG",
-    "bacio mints":                       "https://kongconcentrates.com/images/bacio%20mints.PNG",
-    "hooch x white rainbow":             "https://kongconcentrates.com/images/hooch%20x%20white%20rainbow.PNG",
-    "sticky buns":                       "https://kongconcentrates.com/images/sticky%20buns.PNG",
-    "devil driver":                      "https://kongconcentrates.com/images/devil%20driver.PNG",
-    "grape pie":                         "https://kongconcentrates.com/images/grape%20pie.PNG",
+    "pink runtz":                        "https://kongconcentrates.com/images/pink%20runtz.png",
+    "bacio mints":                       "https://kongconcentrates.com/images/bacio%20mints.png",
+    "hooch x white rainbow":             "https://kongconcentrates.com/images/hooch%20x%20white%20rainbow.png",
+    "sticky buns":                       "https://kongconcentrates.com/images/sticky%20buns.png",
+    "devil driver":                      "https://kongconcentrates.com/images/devil%20driver.png",
+    "grape pie":                         "https://kongconcentrates.com/images/grape%20pie.png",
     "bacio mints vape":                  "https://kongconcentrates.com/images/bacio%20mints%20vape.png",
     "creme soda x pink runtz hash hole": "https://kongconcentrates.com/images/creme%20soda%20hash%20hole.jpg",
   };
-  return map[(productName || "").toLowerCase()] || null;
+  const lower = (item.product_name || "").toLowerCase();
+  // Exact match first, then substring match to survive renames
+  return map[lower] || Object.entries(map).reduce((found, [key, url]) => {
+    if (found) return found;
+    return (lower.includes(key) || key.includes(lower)) ? url : null;
+  }, null);
 }
 
 // ── Order placed confirmation (to dispensary + admin) ─────────────
@@ -162,7 +172,7 @@ async function sendOrderConfirmation({ order, items, dispensary }) {
   };
 
   const itemsTableRows = items.map((it) => {
-    const imgUrl = getProductImageUrl(it.product_name);
+    const imgUrl = getProductImageUrl(it);
     return `
     <tr>
       <td style="padding:12px 12px 12px 0;border-bottom:1px solid #eee;vertical-align:middle;">

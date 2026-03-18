@@ -311,7 +311,14 @@ exports.handler = async (event) => {
           .eq("id", dispensary_id)
           .then(({ error }) => { if (error) console.warn("reward_points column not yet migrated:", error.message); });
         if (dispensary) {
-          await sendOrderConfirmation({ order, items, dispensary }).catch(console.error);
+          const productIds = items.map((it) => it.product_id).filter(Boolean);
+          let imgMap = {};
+          if (productIds.length) {
+            const { data: prods } = await supabaseAdmin.from("wholesale_products").select("id, image_url").in("id", productIds);
+            if (prods) prods.forEach((p) => { imgMap[p.id] = p.image_url; });
+          }
+          const itemsWithImages = items.map((it) => ({ ...it, image_url: imgMap[it.product_id] || null }));
+          await sendOrderConfirmation({ order, items: itemsWithImages, dispensary }).catch(console.error);
         }
         return ok({ ok: true, orderId: order.id });
       }
