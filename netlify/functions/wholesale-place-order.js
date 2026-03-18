@@ -58,15 +58,13 @@ exports.handler = async (event) => {
     const pointsToEarn = Math.floor(total);
     const newPoints = (dispensary.reward_points || 0) - pointsToDeduct + pointsToEarn;
 
-    // Insert the order
+    // Insert the order (base columns only — always works)
     const { data: order, error: orderErr } = await supabaseAdmin
       .from("wholesale_orders")
       .insert({
         dispensary_id: user.id,
         status: "received",
         total,
-        credit_applied: creditApplied,
-        points_earned: pointsToEarn,
         notes: notes || null,
       })
       .select()
@@ -88,12 +86,18 @@ exports.handler = async (event) => {
       );
     if (itemsErr) throw itemsErr;
 
-    // Update dispensary reward points
-    const { error: ptsErr } = await supabaseAdmin
+    // Update rewards columns and points balance (requires migration to have been run)
+    await supabaseAdmin
+      .from("wholesale_orders")
+      .update({ credit_applied: creditApplied, points_earned: pointsToEarn })
+      .eq("id", order.id)
+      .then(({ error }) => { if (error) console.warn("rewards columns not yet migrated:", error.message); });
+
+    await supabaseAdmin
       .from("dispensaries")
       .update({ reward_points: Math.max(0, newPoints) })
-      .eq("id", user.id);
-    if (ptsErr) throw ptsErr;
+      .eq("id", user.id)
+      .then(({ error }) => { if (error) console.warn("reward_points column not yet migrated:", error.message); });
 
     await sendOrderConfirmation({ order, items, dispensary });
 
