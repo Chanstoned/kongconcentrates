@@ -136,7 +136,15 @@ function getProductInfo(productName) {
 // Accepts an item object so it can use DB-stored image_url when available.
 function getProductImageUrl(item) {
   // 1. Use image_url stored in DB (set via admin Products tab) — most reliable
-  if (item.image_url) return item.image_url;
+  if (item.image_url) {
+    let url = item.image_url;
+    // Admin panel stores relative paths (e.g. "/images/pink runtz.png").
+    // Email clients need absolute URLs with encoded spaces.
+    if (url.startsWith("/")) {
+      url = "https://kongconcentrates.com" + url.replace(/ /g, "%20");
+    }
+    return url;
+  }
 
   // 2. Fall back to hardcoded map (lowercase .png — case-sensitive on Netlify CDN)
   const map = {
