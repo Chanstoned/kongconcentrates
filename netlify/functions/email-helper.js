@@ -141,13 +141,16 @@ function getProductImageUrl(item) {
   // 2. Fall back to hardcoded map (lowercase .png — case-sensitive on Netlify CDN)
   const map = {
     "pink runtz":                        "https://kongconcentrates.com/images/pink%20runtz.png",
+    "bacio mints vape":                  "https://kongconcentrates.com/images/bacio%20mints%20vape.png",
     "bacio mints":                       "https://kongconcentrates.com/images/bacio%20mints.png",
     "hooch x white rainbow":             "https://kongconcentrates.com/images/hooch%20x%20white%20rainbow.png",
     "sticky buns":                       "https://kongconcentrates.com/images/sticky%20buns.png",
     "devil driver":                      "https://kongconcentrates.com/images/devil%20driver.png",
     "grape pie":                         "https://kongconcentrates.com/images/grape%20pie.png",
-    "bacio mints vape":                  "https://kongconcentrates.com/images/bacio%20mints%20vape.png",
-    "creme soda x pink runtz hash hole": "https://kongconcentrates.com/images/creme%20soda%20hash%20hole.jpg",
+    "creme soda":                        "https://kongconcentrates.com/images/creme%20soda%20hash%20hole.jpg",
+    "deepwell":                          "https://kongconcentrates.com/images/deepwell%20png.png",
+    "flavor chasers":                    "https://kongconcentrates.com/images/flavor%20chasers%20png.png",
+    "natural health":                    "https://kongconcentrates.com/images/natural%20health%20png.png",
   };
   const lower = (item.product_name || "").toLowerCase();
   // Exact match first, then substring match to survive renames

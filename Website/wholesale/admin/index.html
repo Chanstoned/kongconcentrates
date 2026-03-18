@@ -252,7 +252,27 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
           <div class="fg"><label class="fl">Unit Label</label><input class="fi" type="text" id="f-unit" placeholder="per gram"></div>
           <div class="fg"><label class="fl">Min Qty</label><input class="fi" type="number" id="f-min" placeholder="1" min="1" value="1"></div>
         </div>
-        <div class="fg"><label class="fl">Product Image URL</label><input class="fi" type="text" id="f-image" placeholder="/images/pink runtz.png"></div>
+        <div class="fg">
+          <label class="fl">Product Image</label>
+          <select class="fi" id="f-image" onchange="updateImagePreview()">
+            <option value="">— No Image —</option>
+            <option value="/images/pink runtz.png">pink runtz.png</option>
+            <option value="/images/bacio mints.png">bacio mints.png</option>
+            <option value="/images/hooch x white rainbow.png">hooch x white rainbow.png</option>
+            <option value="/images/sticky buns.png">sticky buns.png</option>
+            <option value="/images/devil driver.png">devil driver.png</option>
+            <option value="/images/grape pie.png">grape pie.png</option>
+            <option value="/images/bacio mints vape.png">bacio mints vape.png</option>
+            <option value="/images/creme soda hash hole.jpg">creme soda hash hole.jpg</option>
+            <option value="/images/deepwell png.png">deepwell png.png</option>
+            <option value="/images/flavor chasers png.png">flavor chasers png.png</option>
+            <option value="/images/natural health png.png">natural health png.png</option>
+            <option value="/images/stickerpack.jpg">stickerpack.jpg</option>
+            <option value="/images/kongshirt front.png">kongshirt front.png</option>
+            <option value="/images/kongshirt back 512.png">kongshirt back 512.png</option>
+          </select>
+          <img id="f-image-preview" src="" alt="" style="max-width:80px;max-height:80px;margin-top:8px;border-radius:6px;display:none;object-fit:cover;">
+        </div>
         <div class="frow">
           <div class="fg"><label class="fl">Batch #</label><input class="fi" type="text" id="f-batch" placeholder="KC-26-KC-01"></div>
           <div class="fg"><label class="fl">Metrc Tag</label><input class="fi" type="text" id="f-metrc" placeholder="1A40E0100002F6A000000001"></div>
@@ -856,11 +876,20 @@ function renderProducts(){
   </table></div>`;
 }
 
+function updateImagePreview(){
+  const val = document.getElementById('f-image').value;
+  const img = document.getElementById('f-image-preview');
+  if(val){ img.src=val; img.style.display='block'; }
+  else { img.src=''; img.style.display='none'; }
+}
+
 function showProductForm(){ document.getElementById('prod-form').classList.add('show'); document.getElementById('f-name').focus(); }
 function hideProductForm(){ document.getElementById('prod-form').classList.remove('show'); clearForm(); }
 
 function clearForm(){
-  ['f-id','f-name','f-desc','f-cat','f-unit','f-image','f-batch','f-metrc'].forEach(id=>document.getElementById(id).value='');
+  ['f-id','f-name','f-desc','f-cat','f-unit','f-batch','f-metrc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-image').value='';
+  updateImagePreview();
   document.getElementById('f-price').value='';
   document.getElementById('f-min').value='1';
   document.getElementById('form-title').textContent='New Product';
@@ -878,6 +907,7 @@ function editProduct(id){
   document.getElementById('f-unit').value=p.unit_label||'';
   document.getElementById('f-min').value=p.min_qty||1;
   document.getElementById('f-image').value=p.image_url||'';
+  updateImagePreview();
   document.getElementById('f-batch').value=p.batch_number||'';
   document.getElementById('f-metrc').value=p.metrc_id||'';
   document.getElementById('form-title').textContent='Edit Product';
