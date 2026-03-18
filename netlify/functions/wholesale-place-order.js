@@ -42,18 +42,26 @@ exports.handler = async (event) => {
       return { statusCode: 400, headers, body: JSON.stringify({ error: "No items provided" }) };
     }
 
-    const subtotal = items.reduce((sum, it) => sum + Number(it.subtotal), 0);
+    const subtotal = Math.round(items.reduce((sum, it) => sum + Number(it.subtotal), 0) * 100) / 100;
 
-    // Validate requested credit
+    // Minimum order
+    if (subtotal < 600) {
+      return { statusCode: 400, headers, body: JSON.stringify({ error: "Minimum order is $600." }) };
+    }
+
+    // Delivery fee for orders under $900 (based on product subtotal before credit)
+    const deliveryFee = subtotal < 900 ? 50 : 0;
+
+    // Validate requested credit (capped against subtotal + delivery, never negative)
     const requestedCredit = Math.round((Number(rawCredit) || 0) * 100) / 100;
     const availableCredit = Math.floor((dispensary.reward_points || 0) / 100) * 5;
-    const creditApplied = Math.min(requestedCredit, availableCredit, subtotal);
+    const creditApplied = Math.min(requestedCredit, availableCredit, subtotal + deliveryFee);
 
     if (creditApplied < 0) {
       return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid credit amount" }) };
     }
 
-    const total = Math.round((subtotal - creditApplied) * 100) / 100;
+    const total = Math.round((subtotal + deliveryFee - creditApplied) * 100) / 100;
     const pointsToDeduct = Math.round((creditApplied / 5) * 100);
     const pointsToEarn = Math.floor(total);
     const newPoints = (dispensary.reward_points || 0) - pointsToDeduct + pointsToEarn;
@@ -71,19 +79,19 @@ exports.handler = async (event) => {
       .single();
     if (orderErr) throw orderErr;
 
-    // Insert order items
-    const { error: itemsErr } = await supabaseAdmin
-      .from("wholesale_order_items")
-      .insert(
-        items.map((it) => ({
-          order_id: order.id,
-          product_id: it.product_id,
-          product_name: it.product_name,
-          quantity: it.quantity,
-          unit_price: it.unit_price,
-          subtotal: it.subtotal,
-        }))
-      );
+    // Insert order items (plus delivery fee line if applicable)
+    const lineItems = items.map((it) => ({
+      order_id: order.id,
+      product_id: it.product_id,
+      product_name: it.product_name,
+      quantity: it.quantity,
+      unit_price: it.unit_price,
+      subtotal: it.subtotal,
+    }));
+    if (deliveryFee > 0) {
+      lineItems.push({ order_id: order.id, product_id: null, product_name: "Delivery Fee", quantity: 1, unit_price: deliveryFee, subtotal: deliveryFee });
+    }
+    const { error: itemsErr } = await supabaseAdmin.from("wholesale_order_items").insert(lineItems);
     if (itemsErr) throw itemsErr;
 
     // Update rewards columns and points balance (requires migration to have been run)

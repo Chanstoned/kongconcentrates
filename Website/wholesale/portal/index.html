@@ -208,6 +208,10 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
       <div id="menu-spinner" class="spinner">Loading products…</div>
       <div id="products-grid" class="products-grid" style="display:none;"></div>
       <div class="shop-summary" id="shop-summary" style="display:none;">
+        <div class="order-total-row" id="delivery-fee-row" style="display:none;">
+          <span class="order-total-label">Delivery Fee</span>
+          <span class="order-total-label" id="delivery-fee-val" style="color:rgba(240,234,216,0.7);">$50.00</span>
+        </div>
         <div class="order-total-row">
           <span class="order-total-label">Order Total</span>
           <span class="order-total-val" id="order-total">$0.00</span>
@@ -394,10 +398,14 @@ function updateTotal(){
   let subtotal = 0;
   products.forEach(p=>{ subtotal += (cartQtys[p.id]||0)*p.price_wholesale; });
 
+  const deliveryFee = subtotal > 0 && subtotal < 900 ? 50 : 0;
+  const deliveryRow = document.getElementById('delivery-fee-row');
+  deliveryRow.style.display = deliveryFee > 0 ? 'flex' : 'none';
+
   const credit = availableCredit();
   const rewardsSection = document.getElementById('rewards-section');
   if(credit > 0 && subtotal > 0){
-    const applying = Math.min(credit, subtotal);
+    const applying = Math.min(credit, subtotal + deliveryFee);
     document.getElementById('rewards-pts-info').textContent = (currentProfile?.reward_points||0) + ' pts available';
     document.getElementById('credit-toggle-label').textContent = 'Apply $'+applying.toFixed(2)+' reward credit toward this order';
     rewardsSection.style.display = 'block';
@@ -408,8 +416,8 @@ function updateTotal(){
     rewardsSection.style.display = 'none';
   }
 
-  const applying = creditEnabled ? Math.min(credit, subtotal) : 0;
-  document.getElementById('order-total').textContent = '$'+(subtotal - applying).toFixed(2);
+  const applying = creditEnabled ? Math.min(credit, subtotal + deliveryFee) : 0;
+  document.getElementById('order-total').textContent = '$'+(subtotal + deliveryFee - applying).toFixed(2);
 }
 
 // ── Submit order
@@ -421,6 +429,9 @@ async function submitOrder(){
 
   const selectedProducts = products.filter(p=>(cartQtys[p.id]||0)>0);
   if(!selectedProducts.length){ errEl.textContent='Please select at least one product.'; errEl.classList.add('show'); return; }
+
+  const orderSubtotal = selectedProducts.reduce((s,p)=>s+(cartQtys[p.id]||0)*p.price_wholesale, 0);
+  if(orderSubtotal < 600){ errEl.textContent='Minimum order is $600.'; errEl.classList.add('show'); return; }
 
   const notes = document.getElementById('order-notes').value.trim();
   const items = selectedProducts.map(p=>({
