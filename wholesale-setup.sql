@@ -121,6 +121,10 @@ alter table wholesale_orders add column if not exists points_earned  integer    
 -- ── Product image migration (run if table already exists) ──────────
 alter table wholesale_products add column if not exists image_url text;
 
+-- ── Batch & Metrc migration (run if table already exists) ──────────
+alter table wholesale_products add column if not exists batch_number text;
+alter table wholesale_products add column if not exists metrc_id text;
+
 -- ── Commission payments (run once) ────────────────────────────────
 create table if not exists wholesale_commission_payments (
   id         uuid primary key default gen_random_uuid(),
