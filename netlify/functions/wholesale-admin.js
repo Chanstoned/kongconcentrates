@@ -151,6 +151,7 @@ exports.handler = async (event) => {
             price_wholesale: body.price,
             unit_label: body.unit_label || "per unit",
             min_qty: body.min_qty || 1,
+            image_url: body.image_url || null,
             available: true,
           });
         if (e) throw e;
@@ -166,6 +167,7 @@ exports.handler = async (event) => {
         if (body.price !== undefined) update.price_wholesale = body.price;
         if (body.unit_label !== undefined) update.unit_label = body.unit_label;
         if (body.min_qty !== undefined) update.min_qty = body.min_qty;
+        if (body.image_url !== undefined) update.image_url = body.image_url || null;
         if (body.available !== undefined) update.available = body.available;
         const { error: e } = await supabaseAdmin
           .from("wholesale_products")
