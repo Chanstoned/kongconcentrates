@@ -126,6 +126,8 @@ function getProductInfo(productName) {
     "hooch x white rainbow":   { batch: "KC-26-ECE-03", metrc: "1A40E0100002F6A000000___" },
     "grape pie":               { batch: "KC-26-ECE-04", metrc: "1A40E0100002F6A000000___" },
     "devil driver":            { batch: "KC-26-ECE-05", metrc: "1A40E0100002F6A000000___" },
+    "bacio mints vape":                  { batch: "KC-26-KC-02",  metrc: "1A40E0100002F6A000000___" },
+    "creme soda x pink runtz hash hole": { batch: "KC-26-KC-03",  metrc: "1A40E0100002F6A000000___" },
   };
   return map[(productName || "").toLowerCase()] || null;
 }
