@@ -353,9 +353,8 @@ async function sendOrderStatusUpdate({ dispensary, status, orderId }) {
       text: `We are currently arranging delivery of your order. Delivery runs Monday–Friday and is subject to transporter availability.\n\nIf you have any specific days or times you prefer for delivery, please let us know by replying to this email or reaching out at process@kongconcentrates.com.`,
     },
     out_for_delivery: {
-      html: `<p style="font-family:sans-serif;">A transporter is on the way to you with your order right now.</p>
-      <p style="font-family:sans-serif;">Please log in to <strong>Metrc</strong> and confirm that the information within the transportation manifest looks correct before the delivery arrives.</p>`,
-      text: `A transporter is on the way to you with your order right now.\n\nPlease log in to Metrc and confirm that the information within the transportation manifest looks correct before the delivery arrives.`,
+      html: `<p style="font-family:sans-serif;">A transporter is on the way to you with your order right now.</p>`,
+      text: `A transporter is on the way to you with your order right now.`,
     },
     complete: {
       html: `<p style="font-family:sans-serif;">Thank you for your business — we truly appreciate your partnership!</p>
@@ -374,7 +373,7 @@ async function sendOrderStatusUpdate({ dispensary, status, orderId }) {
       <p style="font-family:sans-serif;">Hi ${name},</p>
       <p style="font-family:sans-serif;">Your order <strong>#${shortId}</strong> status has been updated to <strong>${label}</strong>.</p>
       ${msg.html}
-      <p style="font-family:sans-serif;">
+      <p style="font-family:sans-serif;text-align:center;">
         <a href="https://kongconcentrates.com/wholesale/portal/" style="background:#c9a84c;color:#000;padding:10px 20px;text-decoration:none;font-weight:bold;">View Order Details</a>
       </p>
       <p style="font-family:sans-serif;color:#888;font-size:12px;">— Kong Concentrates LLC · 29141 S 647 Pl · Grove, OK 74344 · process@kongconcentrates.com</p>`,
