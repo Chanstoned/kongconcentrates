@@ -159,6 +159,29 @@ table.inv-table td{padding:10px 0;border-bottom:1px solid #eee;font-family:'Barl
 .points-welcome-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:4px;}
 .points-welcome-val{font-family:'DM Mono',monospace;font-size:13px;letter-spacing:0.06em;color:var(--gold);}
 
+/* POINTS TO EARN ROW */
+.pts-earn-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:10px 14px;background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.15);}
+.pts-earn-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(201,168,76,0.6);}
+.pts-earn-val{font-family:'DM Mono',monospace;font-size:12px;color:var(--gold);}
+
+/* REWARDS TAB */
+.rewards-hero{background:#0d0d0d;border:1px solid var(--border);padding:24px 26px;margin-bottom:24px;}
+.rewards-hero-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.08em;margin-bottom:16px;}
+.rewards-stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;}
+.rewards-stat{flex:1;min-width:120px;background:#111;border:1px solid #1e1e1e;padding:14px 16px;}
+.rewards-stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:0.05em;color:var(--gold2);}
+.rewards-stat-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,234,216,0.35);margin-top:3px;}
+.rewards-fine{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.05em;color:rgba(240,234,216,0.35);line-height:1.9;}
+.rewards-balance-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);margin-bottom:20px;}
+.rewards-balance-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(201,168,76,0.65);}
+.rewards-balance-val{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:0.06em;color:var(--gold2);}
+.pts-tbl{width:100%;border-collapse:collapse;}
+.pts-tbl th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,234,216,0.3);text-align:left;padding:0 8px 10px 0;border-bottom:1px solid #1e1e1e;}
+.pts-tbl th:last-child,.pts-tbl td:last-child{text-align:right;padding-right:0;}
+.pts-tbl td{padding:10px 8px 10px 0;border-bottom:1px solid #141414;font-family:'Barlow Condensed',sans-serif;font-size:14px;color:rgba(240,234,216,0.7);}
+.pts-pos{color:#70c878;}
+.pts-neg{color:#d97070;}
+
 /* FOOTER */
 footer{border-top:1px solid var(--border);padding:28px;text-align:center;margin-top:auto;}
 footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:rgba(240,234,216,0.2);}
@@ -201,6 +224,7 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
     <div class="tab-nav">
       <button class="tab-btn active" onclick="openTab('shop',this)">Shop</button>
       <button class="tab-btn" onclick="openTab('history',this)">My Orders</button>
+      <button class="tab-btn" onclick="openTab('rewards',this)">Rewards</button>
     </div>
 
     <!-- SHOP TAB -->
@@ -209,12 +233,16 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
       <div id="products-grid" class="products-grid" style="display:none;"></div>
       <div class="shop-summary" id="shop-summary" style="display:none;">
         <div class="order-total-row" id="delivery-fee-row" style="display:none;">
-          <span class="order-total-label">Delivery Fee</span>
-          <span class="order-total-label" id="delivery-fee-val" style="color:rgba(240,234,216,0.7);">$50.00</span>
+          <span class="order-total-label">Delivery Fee <span style="font-size:9px;opacity:0.55;">(orders under $900)</span></span>
+          <span class="order-total-label" id="delivery-fee-val" style="color:rgba(240,234,216,0.7);">+$50.00</span>
         </div>
         <div class="order-total-row">
           <span class="order-total-label">Order Total</span>
           <span class="order-total-val" id="order-total">$0.00</span>
+        </div>
+        <div class="pts-earn-row" id="pts-earn-row" style="display:none;">
+          <span class="pts-earn-label">Points you'll earn</span>
+          <span class="pts-earn-val" id="pts-earn-val">+0 pts</span>
         </div>
         <div class="notes-label">Special Instructions</div>
         <textarea class="fi" id="order-notes" placeholder="Delivery preferences, special requests, etc."></textarea>
@@ -238,6 +266,34 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
     <div id="tab-history" class="tab-panel">
       <div id="history-spinner" class="spinner">Loading orders…</div>
       <div id="orders-list" class="orders-list" style="display:none;"></div>
+    </div>
+
+    <!-- REWARDS TAB -->
+    <div id="tab-rewards" class="tab-panel">
+      <div class="rewards-hero">
+        <div class="rewards-hero-title">Reward Points</div>
+        <div class="rewards-stats">
+          <div class="rewards-stat">
+            <div class="rewards-stat-val">1 PT</div>
+            <div class="rewards-stat-lbl">Per $1 spent</div>
+          </div>
+          <div class="rewards-stat">
+            <div class="rewards-stat-val">5%</div>
+            <div class="rewards-stat-lbl">Back on every order</div>
+          </div>
+          <div class="rewards-stat">
+            <div class="rewards-stat-val">$5</div>
+            <div class="rewards-stat-lbl">Per 100 pts redeemed</div>
+          </div>
+        </div>
+        <div class="rewards-fine">Points are awarded automatically when each order is placed. Available credit appears at checkout and is applied to your order total. Points never expire.</div>
+      </div>
+      <div class="rewards-balance-bar">
+        <span class="rewards-balance-lbl">Your Balance</span>
+        <span class="rewards-balance-val" id="rewards-balance-val">—</span>
+      </div>
+      <div id="rewards-history-spinner" class="spinner" style="display:none;">Loading history…</div>
+      <div id="rewards-history"></div>
     </div>
   </div>
 
@@ -308,6 +364,7 @@ function openTab(name, btn){
   document.getElementById('tab-'+name).classList.add('active');
   btn.classList.add('active');
   if(name==='history') loadHistory();
+  if(name==='rewards') loadRewards();
 }
 
 // ── Load products
@@ -414,7 +471,16 @@ function updateTotal(){
   }
 
   const applying = creditEnabled ? Math.min(credit, subtotal + deliveryFee) : 0;
-  document.getElementById('order-total').textContent = '$'+(subtotal + deliveryFee - applying).toFixed(2);
+  const total = subtotal + deliveryFee - applying;
+  document.getElementById('order-total').textContent = '$'+total.toFixed(2);
+
+  const ptsEarnRow = document.getElementById('pts-earn-row');
+  if(subtotal > 0){
+    document.getElementById('pts-earn-val').textContent = '+'+Math.floor(total)+' pts';
+    ptsEarnRow.style.display = 'flex';
+  } else {
+    ptsEarnRow.style.display = 'none';
+  }
 }
 
 // ── Submit order
@@ -530,6 +596,55 @@ async function loadHistory(){
         </div>
       </div>`;
   }).join('');
+}
+
+// ── Rewards tab
+async function loadRewards(){
+  const pts = currentProfile?.reward_points || 0;
+  const credit = availableCredit();
+  document.getElementById('rewards-balance-val').textContent =
+    pts + ' pts' + (credit > 0 ? '  ·  $'+credit.toFixed(2)+' credit available' : '');
+
+  const spinner = document.getElementById('rewards-history-spinner');
+  const histEl  = document.getElementById('rewards-history');
+  spinner.style.display = 'block';
+  histEl.innerHTML = '';
+
+  const {data, error} = await sb
+    .from('wholesale_orders')
+    .select('id,created_at,total,points_earned,credit_applied')
+    .eq('dispensary_id', currentUser.id)
+    .order('created_at', {ascending: true});
+
+  spinner.style.display = 'none';
+
+  if(error || !data || !data.length){
+    histEl.innerHTML = '<div class="empty-state"><p>No points history yet.</p></div>'; return;
+  }
+
+  // Build running balance oldest→newest, then reverse for display
+  let running = 0;
+  const rows = data.map(o=>{
+    const earned   = o.points_earned || 0;
+    const redeemed = o.credit_applied > 0 ? Math.round((Number(o.credit_applied)/5)*100) : 0;
+    running += earned - redeemed;
+    return {o, earned, redeemed, balance: running};
+  }).reverse();
+
+  histEl.innerHTML = `<table class="pts-tbl">
+    <thead><tr><th>Date</th><th>Order</th><th>Earned</th><th>Redeemed</th><th>Balance</th></tr></thead>
+    <tbody>${rows.map(r=>{
+      const date = new Date(r.o.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      const creditVal = r.redeemed > 0 ? ' ($'+((r.redeemed/100)*5).toFixed(2)+')' : '';
+      return `<tr>
+        <td style="color:rgba(240,234,216,0.45);font-family:'DM Mono',monospace;font-size:10px;">${date}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(240,234,216,0.35);">#${r.o.id.slice(-8).toUpperCase()}</td>
+        <td class="pts-pos">${r.earned > 0 ? '+'+r.earned+' pts' : '—'}</td>
+        <td class="pts-neg">${r.redeemed > 0 ? '-'+r.redeemed+' pts'+creditVal : '—'}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);">${r.balance} pts</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
 }
 
 function toggleOrder(id){
