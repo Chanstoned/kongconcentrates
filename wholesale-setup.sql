@@ -120,3 +120,14 @@ alter table wholesale_orders add column if not exists points_earned  integer    
 
 -- ── Product image migration (run if table already exists) ──────────
 alter table wholesale_products add column if not exists image_url text;
+
+-- ── Commission payments (run once) ────────────────────────────────
+create table if not exists wholesale_commission_payments (
+  id         uuid primary key default gen_random_uuid(),
+  amount     numeric(10,2) not null,
+  note       text,
+  paid_at    timestamptz not null default now(),
+  created_at timestamptz default now()
+);
+alter table wholesale_commission_payments enable row level security;
+-- No public policies — only accessible via service role key (admin API)

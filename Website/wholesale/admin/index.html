@@ -199,6 +199,7 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
       <button class="tab-btn active" onclick="openTab('orders',this)">Orders</button>
       <button class="tab-btn" onclick="openTab('accounts',this)">Accounts</button>
       <button class="tab-btn" onclick="openTab('products',this)">Products</button>
+      <button class="tab-btn" onclick="openTab('commission',this)">Commission</button>
     </div>
 
     <!-- ORDERS TAB -->
@@ -259,6 +260,23 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
       </div>
       <div id="prods-spinner" class="spinner">Loading…</div>
       <div id="prods-table" style="display:none;"></div>
+    </div>
+
+    <!-- COMMISSION TAB -->
+    <div id="tab-commission" class="tab-panel">
+      <div class="sec-hd">
+        <div class="sec-title">Sales Commission</div>
+        <button class="btn-add" onclick="openLogPayment()">+ Log Payment</button>
+      </div>
+      <div class="stats-bar" style="grid-template-columns:repeat(3,1fr);margin-bottom:28px;">
+        <div class="stat-card"><div class="stat-label">Total Commission (10%)</div><div class="stat-val" id="comm-earned">—</div></div>
+        <div class="stat-card"><div class="stat-label">Total Paid</div><div class="stat-val" id="comm-paid">—</div></div>
+        <div class="stat-card"><div class="stat-label">Balance Owed</div><div class="stat-val" id="comm-owed" style="color:var(--gold);">—</div></div>
+      </div>
+      <div class="alert alert-ok" id="comm-ok"></div>
+      <div class="alert alert-err" id="comm-err"></div>
+      <div id="comm-spinner" class="spinner">Loading…</div>
+      <div id="comm-table" style="display:none;"></div>
     </div>
   </div>
 
@@ -356,6 +374,22 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
   </div>
 </div>
 
+<!-- LOG PAYMENT MODAL -->
+<div id="log-payment-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;overflow:auto;padding:40px 20px;">
+  <div class="acct-modal-inner" style="max-width:440px;">
+    <button class="acct-modal-close" onclick="closeLogPayment()">✕</button>
+    <h3>Log Commission Payment</h3>
+    <div class="fg"><label class="fl">Amount ($) *</label><input class="fi" type="number" id="lp-amount" placeholder="250.00" step="0.01" min="0.01"></div>
+    <div class="fg"><label class="fl">Note</label><input class="fi" type="text" id="lp-note" placeholder="Wire transfer, check #1234, etc."></div>
+    <div class="fg"><label class="fl">Date</label><input class="fi" type="date" id="lp-date"></div>
+    <div class="alert alert-err" id="lp-err"></div>
+    <div class="form-actions" style="margin-top:16px;">
+      <button class="btn-save" onclick="submitLogPayment()">Log Payment</button>
+      <button class="btn-cancel" onclick="closeLogPayment()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- INVOICE MODAL -->
 <div id="inv-modal">
   <div class="inv-paper">
@@ -395,7 +429,7 @@ let accessToken = null;
   if(!ok){ window.location.href='/wholesale/'; return; }
 
   document.getElementById('site').classList.add('show');
-  await Promise.all([loadOrders(), loadAccounts(), loadProducts()]);
+  await Promise.all([loadOrders(), loadAccounts(), loadProducts(), loadCommission()]);
 })();
 
 // ── Admin API fetch
@@ -419,7 +453,7 @@ function openTab(name, btn){
 }
 
 async function refreshAll(){
-  await Promise.all([loadOrders(), loadAccounts(), loadProducts()]);
+  await Promise.all([loadOrders(), loadAccounts(), loadProducts(), loadCommission()]);
 }
 
 // ──────────────────────── ORDERS ─────────────────────────────────
@@ -640,9 +674,9 @@ function viewPointsHistory(id){
 
   const pts = acct.reward_points || 0;
   const credit = ((pts / 100) * 5).toFixed(2);
-  document.getElementById('pts-history-title').textContent = acct.name + ' — Points History';
+  document.getElementById('pts-history-title').textContent = acct.name + ' — History';
   document.getElementById('pts-history-summary').innerHTML =
-    `Balance: <strong style="color:var(--gold);font-size:14px;">${pts} pts</strong>`
+    `Points balance: <strong style="color:var(--gold);font-size:14px;">${pts} pts</strong>`
     + (pts >= 100 ? ` &nbsp;·&nbsp; $${credit} credit available` : ' &nbsp;·&nbsp; Need ' + (100 - (pts % 100)) + ' more pts for next $5 credit');
 
   const orders = allOrders.filter(o=>o.dispensary_id===id)
@@ -651,6 +685,7 @@ function viewPointsHistory(id){
   if(!orders.length){
     document.getElementById('pts-history-table').innerHTML='<div class="empty-state">No order history yet.</div>';
   } else {
+    const statusLabel = {received:'Received',processing:'Processing',out_for_delivery:'Out for Delivery',complete:'Complete'};
     let running = 0;
     const rowsData = orders.map(o=>{
       const earned = o.points_earned || 0;
@@ -658,26 +693,55 @@ function viewPointsHistory(id){
       const redeemed = creditUsed > 0 ? Math.round((creditUsed / 5) * 100) : 0;
       running += earned - redeemed;
       const date = new Date(o.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-      return {earned, redeemed, balance: running, date, o};
+      const items = o.wholesale_order_items || [];
+      const itemsHtml = items.length ? items.map(it=>`
+        <tr>
+          <td>${esc(it.product_name)}</td>
+          <td style="text-align:center;">${it.quantity}</td>
+          <td style="text-align:right;">$${Number(it.unit_price).toFixed(2)}</td>
+          <td style="text-align:right;">$${Number(it.subtotal).toFixed(2)}</td>
+        </tr>`).join('') : '<tr><td colspan="4" style="opacity:0.4;padding:8px 0;">No items</td></tr>';
+      const detailId = 'hd-'+o.id.slice(-8);
+      return {earned, redeemed, balance: running, date, o, itemsHtml, detailId, creditUsed, statusLabel};
     });
-    const rows = rowsData.slice().reverse().map(({earned,redeemed,balance,date,o})=>`
-      <tr>
+    const tbodyRows = rowsData.slice().reverse().map(({earned,redeemed,balance,date,o,itemsHtml,detailId,creditUsed,statusLabel})=>`
+      <tr onclick="toggleHistDetail('${detailId}')" style="cursor:pointer;">
         <td class="mono">${date}</td>
         <td class="mono" style="font-size:10px;">#${o.id.slice(-8).toUpperCase()}</td>
         <td style="font-family:'Bebas Neue',sans-serif;color:var(--gold2);">$${Number(o.total).toFixed(2)}</td>
         <td class="mono" style="color:#60cc80;">${earned>0?'+'+earned:'—'}</td>
         <td class="mono" style="color:#d07070;">${redeemed>0?'-'+redeemed:'—'}</td>
         <td class="mono" style="color:var(--gold);font-weight:bold;">${balance}</td>
+        <td class="mono" style="font-size:9px;color:rgba(240,234,216,0.2);">▶</td>
+      </tr>
+      <tr id="${detailId}" style="display:none;">
+        <td colspan="7" style="padding:0;background:#080808;border-bottom:1px solid #1a1a1a;">
+          <div style="padding:12px 14px;">
+            <table class="detail-items-table">
+              <thead><tr><th>Product</th><th style="text-align:center;">Qty</th><th style="text-align:right;">Unit</th><th style="text-align:right;">Subtotal</th></tr></thead>
+              <tbody>${itemsHtml}</tbody>
+            </table>
+            ${creditUsed>0?`<div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(201,168,76,0.65);margin-top:8px;">Credit applied: -$${Number(creditUsed).toFixed(2)}</div>`:''}
+            ${o.notes?`<div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(240,234,216,0.3);margin-top:6px;">Notes: ${esc(o.notes)}</div>`:''}
+            <div style="font-family:'DM Mono',monospace;font-size:9px;color:rgba(240,234,216,0.2);margin-top:6px;text-transform:uppercase;letter-spacing:0.1em;">Status: ${statusLabel[o.status]||o.status}</div>
+          </div>
+        </td>
       </tr>`).join('');
     document.getElementById('pts-history-table').innerHTML = `
       <div class="tbl-wrap"><table class="data-tbl">
-        <thead><tr><th>Date</th><th>Order #</th><th>Total</th><th>Earned</th><th>Redeemed</th><th>Balance</th></tr></thead>
-        <tbody>${rows}</tbody>
+        <thead><tr><th>Date</th><th>Order #</th><th>Total</th><th>Earned</th><th>Redeemed</th><th>Balance</th><th></th></tr></thead>
+        <tbody>${tbodyRows}</tbody>
       </table></div>`;
   }
 
   const modal = document.getElementById('pts-history-modal');
   modal.style.display='flex'; modal.style.alignItems='flex-start'; modal.style.justifyContent='center';
+}
+
+function toggleHistDetail(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.display = (el.style.display==='none'||el.style.display==='') ? 'table-row' : 'none';
 }
 
 function closePtsHistory(){
@@ -885,7 +949,11 @@ async function printInvoice(orderId){
     'creme soda x pink runtz hash hole': { batch:'KC-26-KC-03', metrc:'1A40E0100002F6A000000___' },
   };
   const itemRows = (order.wholesale_order_items||[]).map(it=>{
-    const info = productInfo[(it.product_name||'').toLowerCase()];
+    const lower = (it.product_name||'').toLowerCase();
+    const info = productInfo[lower] || Object.entries(productInfo).reduce((found,[key,val])=>{
+      if(found) return found;
+      return (lower.includes(key)||key.includes(lower)) ? val : null;
+    }, null);
     const batchLine = info ? '<br><span style="font-size:10px;color:#999;">Batch: ' + info.batch + ' \u00b7 Metrc: ' + info.metrc + '</span>' : '';
     return '<tr>'
       + '<td>' + esc(it.product_name) + batchLine + '</td>'
@@ -1073,6 +1141,89 @@ async function submitCreateOrder(){
   } else {
     errEl.textContent='Failed to create order.'; errEl.classList.add('show');
   }
+}
+
+// ──────────────────────── COMMISSION ─────────────────────────────
+let commPayments = [];
+
+async function loadCommission(){
+  const data = await adminFetch('GET','commission-payments');
+  if(!data){ document.getElementById('comm-spinner').textContent='Failed to load.'; return; }
+  commPayments = data;
+  renderCommission();
+}
+
+function renderCommission(){
+  const spinner = document.getElementById('comm-spinner');
+  const tableEl = document.getElementById('comm-table');
+  spinner.style.display='none'; tableEl.style.display='block';
+
+  const totalComm = allOrders.reduce((s,o)=>s+Number(o.total)*0.10, 0);
+  const totalPaid = commPayments.reduce((s,p)=>s+Number(p.amount), 0);
+  const owed = Math.max(0, totalComm - totalPaid);
+
+  document.getElementById('comm-earned').textContent = '$'+totalComm.toFixed(2);
+  document.getElementById('comm-paid').textContent = '$'+totalPaid.toFixed(2);
+  document.getElementById('comm-owed').textContent = '$'+owed.toFixed(2);
+
+  if(!commPayments.length){
+    tableEl.innerHTML='<div class="empty-state">No payments logged yet.</div>';
+    return;
+  }
+
+  tableEl.innerHTML = `<div class="tbl-wrap"><table class="data-tbl">
+    <thead><tr><th>Date</th><th>Amount</th><th>Note</th><th>Actions</th></tr></thead>
+    <tbody>${commPayments.map(p=>`
+      <tr>
+        <td class="mono">${new Date(p.paid_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</td>
+        <td style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold2);">$${Number(p.amount).toFixed(2)}</td>
+        <td>${esc(p.note||'—')}</td>
+        <td><button class="btn-del" onclick="deleteCommPayment('${p.id}',this)">Delete</button></td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
+}
+
+function openLogPayment(){
+  document.getElementById('lp-amount').value='';
+  document.getElementById('lp-note').value='';
+  document.getElementById('lp-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('lp-err').classList.remove('show');
+  const m=document.getElementById('log-payment-modal');
+  m.style.display='flex'; m.style.alignItems='flex-start'; m.style.justifyContent='center';
+}
+function closeLogPayment(){ document.getElementById('log-payment-modal').style.display='none'; }
+
+async function submitLogPayment(){
+  const amount = parseFloat(document.getElementById('lp-amount').value);
+  const errEl = document.getElementById('lp-err');
+  errEl.classList.remove('show');
+  if(!amount || amount <= 0){ errEl.textContent='Enter a valid amount.'; errEl.classList.add('show'); return; }
+  const note = document.getElementById('lp-note').value.trim();
+  const dateVal = document.getElementById('lp-date').value;
+  const paid_at = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
+  const res = await adminFetch('POST','',{action:'add-commission-payment', amount, note:note||null, paid_at});
+  if(res){
+    closeLogPayment();
+    const okEl = document.getElementById('comm-ok');
+    okEl.textContent='Payment logged.'; okEl.classList.add('show');
+    setTimeout(()=>okEl.classList.remove('show'),3000);
+    await loadCommission();
+  } else {
+    errEl.textContent='Failed to log payment.'; errEl.classList.add('show');
+  }
+}
+
+async function deleteCommPayment(id, btn){
+  if(!confirm('Delete this payment record? This cannot be undone.')) return;
+  btn.disabled=true;
+  const res = await adminFetch('POST','',{action:'delete-commission-payment', id});
+  if(res){
+    const okEl = document.getElementById('comm-ok');
+    okEl.textContent='Payment deleted.'; okEl.classList.add('show');
+    setTimeout(()=>okEl.classList.remove('show'),3000);
+    await loadCommission();
+  } else { btn.disabled=false; }
 }
 
 // ── Helpers
