@@ -14,6 +14,7 @@ create table if not exists dispensaries (
   phone         text,
   address       text,
   approved      boolean default false,
+  reward_points integer not null default 0,
   created_at    timestamptz default now()
 );
 
@@ -37,6 +38,8 @@ create table if not exists wholesale_orders (
   status         text default 'received'
                    check (status in ('received','processing','out_for_delivery','complete')),
   total          numeric(10,2) not null,
+  credit_applied numeric(10,2) not null default 0,
+  points_earned  integer not null default 0,
   notes          text,
   created_at     timestamptz default now(),
   updated_at     timestamptz default now()
@@ -109,3 +112,8 @@ insert into wholesale_products (name, description, category, price_wholesale, un
   ('Bacio Mints Vape', 'Live rosin vape cartridge.', 'Vape', 30.00, 'each', 1),
   ('Creme Soda x Pink Runtz Hash Hole', 'Infused pre-roll with live rosin hash hole.', 'Pre-Roll', 40.00, 'each', 1)
 on conflict do nothing;
+
+-- ── Reward Points migration (run if tables already exist) ─────────
+alter table dispensaries    add column if not exists reward_points  integer      not null default 0;
+alter table wholesale_orders add column if not exists credit_applied numeric(10,2) not null default 0;
+alter table wholesale_orders add column if not exists points_earned  integer      not null default 0;

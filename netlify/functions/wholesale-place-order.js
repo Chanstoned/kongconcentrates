@@ -36,18 +36,39 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { items, notes } = JSON.parse(event.body || "{}");
+    const { items, notes, creditApplied: rawCredit } = JSON.parse(event.body || "{}");
 
     if (!items || !items.length) {
       return { statusCode: 400, headers, body: JSON.stringify({ error: "No items provided" }) };
     }
 
-    const total = items.reduce((sum, it) => sum + Number(it.subtotal), 0);
+    const subtotal = items.reduce((sum, it) => sum + Number(it.subtotal), 0);
+
+    // Validate requested credit
+    const requestedCredit = Math.round((Number(rawCredit) || 0) * 100) / 100;
+    const availableCredit = Math.floor((dispensary.reward_points || 0) / 100) * 5;
+    const creditApplied = Math.min(requestedCredit, availableCredit, subtotal);
+
+    if (creditApplied < 0) {
+      return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid credit amount" }) };
+    }
+
+    const total = Math.round((subtotal - creditApplied) * 100) / 100;
+    const pointsToDeduct = Math.round((creditApplied / 5) * 100);
+    const pointsToEarn = Math.floor(total);
+    const newPoints = (dispensary.reward_points || 0) - pointsToDeduct + pointsToEarn;
 
     // Insert the order
     const { data: order, error: orderErr } = await supabaseAdmin
       .from("wholesale_orders")
-      .insert({ dispensary_id: user.id, status: "received", total, notes: notes || null })
+      .insert({
+        dispensary_id: user.id,
+        status: "received",
+        total,
+        credit_applied: creditApplied,
+        points_earned: pointsToEarn,
+        notes: notes || null,
+      })
       .select()
       .single();
     if (orderErr) throw orderErr;
@@ -67,9 +88,20 @@ exports.handler = async (event) => {
       );
     if (itemsErr) throw itemsErr;
 
+    // Update dispensary reward points
+    const { error: ptsErr } = await supabaseAdmin
+      .from("dispensaries")
+      .update({ reward_points: Math.max(0, newPoints) })
+      .eq("id", user.id);
+    if (ptsErr) throw ptsErr;
+
     await sendOrderConfirmation({ order, items, dispensary });
 
-    return { statusCode: 200, headers, body: JSON.stringify({ ok: true, orderId: order.id }) };
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ ok: true, orderId: order.id, reward_points: Math.max(0, newPoints) }),
+    };
   } catch (e) {
     console.error("wholesale-place-order error:", e);
     return { statusCode: 500, headers, body: JSON.stringify({ error: e.message || "Internal error" }) };

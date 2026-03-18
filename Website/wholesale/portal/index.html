@@ -148,6 +148,17 @@ table.inv-table td{padding:10px 0;border-bottom:1px solid #eee;font-family:'Barl
   .inv-close,.btn-print{display:none!important;}
 }
 
+/* REWARDS */
+.rewards-section{margin-bottom:16px;padding:14px 16px;border:1px solid rgba(201,168,76,0.2);background:rgba(201,168,76,0.04);}
+.rewards-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.rewards-pts{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:rgba(201,168,76,0.65);}
+.rewards-toggle-row{display:flex;align-items:center;gap:10px;}
+.rewards-check{width:15px;height:15px;cursor:pointer;accent-color:var(--gold);flex-shrink:0;}
+.rewards-toggle-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;color:var(--off-white);cursor:pointer;}
+.points-welcome{text-align:right;}
+.points-welcome-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:4px;}
+.points-welcome-val{font-family:'DM Mono',monospace;font-size:13px;letter-spacing:0.06em;color:var(--gold);}
+
 /* FOOTER */
 footer{border-top:1px solid var(--border);padding:28px;text-align:center;margin-top:auto;}
 footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;color:rgba(240,234,216,0.2);}
@@ -181,6 +192,10 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
         <div class="welcome-label">Welcome back</div>
         <div class="welcome-name" id="welcome-name">—</div>
       </div>
+      <div class="points-welcome" id="points-welcome" style="display:none;">
+        <div class="points-welcome-label">Reward Points</div>
+        <div class="points-welcome-val" id="points-welcome-val">—</div>
+      </div>
     </div>
 
     <div class="tab-nav">
@@ -199,6 +214,16 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
         </div>
         <div class="notes-label">Special Instructions</div>
         <textarea class="fi" id="order-notes" placeholder="Delivery preferences, special requests, etc."></textarea>
+        <div id="rewards-section" class="rewards-section" style="display:none;">
+          <div class="rewards-section-header">
+            <span class="notes-label" style="margin-bottom:0;">Reward Credit</span>
+            <span class="rewards-pts" id="rewards-pts-info"></span>
+          </div>
+          <div class="rewards-toggle-row">
+            <input type="checkbox" class="rewards-check" id="credit-toggle" onchange="toggleCredit()">
+            <label for="credit-toggle" class="rewards-toggle-label" id="credit-toggle-label"></label>
+          </div>
+        </div>
         <div class="alert alert-err" id="order-err"></div>
         <div class="alert alert-ok" id="order-ok"></div>
         <button class="btn-gold" id="submit-btn" onclick="submitOrder()">Place Order</button>
@@ -255,6 +280,7 @@ let currentUser = null;
 let currentProfile = null;
 let products = [];
 let cartQtys = {};
+let creditEnabled = false;
 
 // ── Init
 (async()=>{
@@ -269,6 +295,7 @@ let cartQtys = {};
   document.getElementById('welcome-name').textContent = profile.name;
   document.getElementById('user-name-display').textContent = profile.name;
   document.getElementById('site').classList.add('show');
+  updatePointsDisplay();
 
   await loadProducts();
 })();
@@ -342,10 +369,47 @@ function setQty(id, val){
   updateTotal();
 }
 
+function availableCredit(){
+  return Math.floor((currentProfile?.reward_points||0) / 100) * 5;
+}
+
+function updatePointsDisplay(){
+  const pts = currentProfile?.reward_points || 0;
+  const credit = availableCredit();
+  const el = document.getElementById('points-welcome');
+  if(pts > 0){
+    document.getElementById('points-welcome-val').textContent = pts + ' pts' + (credit > 0 ? ' · $'+credit.toFixed(2)+' credit' : '');
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+function toggleCredit(){
+  creditEnabled = document.getElementById('credit-toggle').checked;
+  updateTotal();
+}
+
 function updateTotal(){
-  let total = 0;
-  products.forEach(p=>{ total += (cartQtys[p.id]||0)*p.price_wholesale; });
-  document.getElementById('order-total').textContent = '$'+total.toFixed(2);
+  let subtotal = 0;
+  products.forEach(p=>{ subtotal += (cartQtys[p.id]||0)*p.price_wholesale; });
+
+  const credit = availableCredit();
+  const rewardsSection = document.getElementById('rewards-section');
+  if(credit > 0 && subtotal > 0){
+    const applying = Math.min(credit, subtotal);
+    document.getElementById('rewards-pts-info').textContent = (currentProfile?.reward_points||0) + ' pts available';
+    document.getElementById('credit-toggle-label').textContent = 'Apply $'+applying.toFixed(2)+' reward credit toward this order';
+    rewardsSection.style.display = 'block';
+  } else {
+    creditEnabled = false;
+    const tog = document.getElementById('credit-toggle');
+    if(tog) tog.checked = false;
+    rewardsSection.style.display = 'none';
+  }
+
+  const applying = creditEnabled ? Math.min(credit, subtotal) : 0;
+  document.getElementById('order-total').textContent = '$'+(subtotal - applying).toFixed(2);
 }
 
 // ── Submit order
@@ -367,19 +431,31 @@ async function submitOrder(){
     subtotal: cartQtys[p.id] * p.price_wholesale,
   }));
 
+  const subtotal = items.reduce((s,it)=>s+it.subtotal, 0);
+  const creditApplied = creditEnabled ? Math.min(availableCredit(), subtotal) : 0;
+
   btn.disabled=true; btn.textContent='Placing order…';
 
   const {data:{session}} = await sb.auth.getSession();
   const res = await fetch('/.netlify/functions/wholesale-place-order', {
     method: 'POST',
     headers: {'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
-    body: JSON.stringify({items, notes}),
+    body: JSON.stringify({items, notes, creditApplied}),
   });
   const json = await res.json();
 
   if(!res.ok){
     errEl.textContent='Order failed: '+(json.error||'Please try again.'); errEl.classList.add('show');
   } else {
+    // Update local points balance
+    if(json.reward_points !== undefined){
+      currentProfile.reward_points = json.reward_points;
+      updatePointsDisplay();
+    }
+    creditEnabled = false;
+    const tog = document.getElementById('credit-toggle');
+    if(tog) tog.checked = false;
+
     okEl.textContent='Order placed! Reference #'+json.orderId.slice(-8).toUpperCase()+'. A confirmation with your invoice has been sent to your email.';
     okEl.classList.add('show');
     products.forEach(p=>{ cartQtys[p.id]=0; document.getElementById('qty-'+p.id).value=0; document.getElementById('sub-'+p.id).textContent='—'; });
@@ -441,6 +517,7 @@ async function loadHistory(){
             <tbody>${itemsHtml}</tbody>
           </table>
           ${order.notes?`<div class="order-notes">Notes: ${esc(order.notes)}</div>`:''}
+          ${(order.credit_applied > 0 || order.points_earned > 0) ? `<div class="order-notes" style="color:rgba(201,168,76,0.6);margin-top:8px;">${order.credit_applied>0?'Credit applied: -$'+Number(order.credit_applied).toFixed(2):''}${order.credit_applied>0&&order.points_earned>0?' · ':''}${order.points_earned>0?'+'+order.points_earned+' pts earned':''}</div>` : ''}
           <button class="btn-invoice" onclick="printInvoice('${order.id}')">Print Invoice</button>
         </div>
       </div>`;

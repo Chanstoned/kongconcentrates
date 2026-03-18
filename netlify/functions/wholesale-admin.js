@@ -260,9 +260,10 @@ exports.handler = async (event) => {
         const { dispensary_id, items, notes } = body;
         if (!dispensary_id || !items || !items.length) return err("dispensary_id and items are required.");
         const total = items.reduce((sum, it) => sum + Number(it.subtotal), 0);
+        const pointsToEarn = Math.floor(total);
         const { data: order, error: orderErr } = await supabaseAdmin
           .from("wholesale_orders")
-          .insert({ dispensary_id, status: "received", total, notes: notes || null })
+          .insert({ dispensary_id, status: "received", total, credit_applied: 0, points_earned: pointsToEarn, notes: notes || null })
           .select()
           .single();
         if (orderErr) throw orderErr;
@@ -282,10 +283,26 @@ exports.handler = async (event) => {
           .select("*")
           .eq("id", dispensary_id)
           .single();
+        // Award points
+        await supabaseAdmin
+          .from("dispensaries")
+          .update({ reward_points: Math.max(0, (dispensary?.reward_points || 0) + pointsToEarn) })
+          .eq("id", dispensary_id);
         if (dispensary) {
           await sendOrderConfirmation({ order, items, dispensary }).catch(console.error);
         }
         return ok({ ok: true, orderId: order.id });
+      }
+
+      // Manually adjust reward points for a dispensary
+      if (action === "adjust-points") {
+        const { id, delta } = body;
+        if (!id) return err("id is required.");
+        const { data: d } = await supabaseAdmin.from("dispensaries").select("reward_points").eq("id", id).single();
+        const newPts = Math.max(0, (d?.reward_points || 0) + Number(delta));
+        const { error: e } = await supabaseAdmin.from("dispensaries").update({ reward_points: newPts }).eq("id", id);
+        if (e) throw e;
+        return ok({ ok: true, reward_points: newPts });
       }
 
       return err("Unknown action");
