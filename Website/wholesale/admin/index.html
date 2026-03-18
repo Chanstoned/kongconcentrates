@@ -360,6 +360,30 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
   </div>
 </div>
 
+<!-- EDIT ORDER MODAL -->
+<div id="edit-order-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;overflow:auto;padding:40px 20px;">
+  <div class="acct-modal-inner" style="max-width:720px;">
+    <button class="acct-modal-close" onclick="closeEditOrder()">✕</button>
+    <h3>Edit Order</h3>
+    <div class="fg">
+      <label class="fl">Account</label>
+      <div id="eo-dispensary-name" style="font-family:'Barlow Condensed',sans-serif;font-size:16px;color:var(--off-white);padding:10px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(201,168,76,0.18);"></div>
+    </div>
+    <div style="margin-bottom:12px;">
+      <label class="fl" style="display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;opacity:0.8;">Line Items</label>
+      <div id="eo-items"></div>
+      <button type="button" onclick="addEditOrderLine()" style="margin-top:10px;background:none;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.7);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:7px 14px;cursor:pointer;">+ Add Line Item</button>
+    </div>
+    <div class="fg"><label class="fl">Notes</label><textarea class="fi" id="eo-notes" placeholder="Any special instructions…" style="min-height:56px;"></textarea></div>
+    <div style="text-align:right;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold2);margin:8px 0 16px;">Total: $<span id="eo-total">0.00</span></div>
+    <div class="alert alert-err" id="eo-err"></div>
+    <div class="form-actions">
+      <button class="btn-save" onclick="submitEditOrder()">Save &amp; Resend Invoice</button>
+      <button class="btn-cancel" onclick="closeEditOrder()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- ACCOUNT EDIT MODAL -->
 <div id="acct-modal">
   <div class="acct-modal-inner">
@@ -529,6 +553,7 @@ function renderOrders(){
             ${['received','processing','out_for_delivery','complete'].map(s=>`<option value="${s}" ${order.status===s?'selected':''}>${statusLabel[s]}</option>`).join('')}
           </select>
           <button class="btn-invoice" onclick="event.stopPropagation();printInvoice('${order.id}')">Invoice</button>
+          <button class="btn-edit" onclick="event.stopPropagation();openEditOrder('${order.id}')">Edit</button>
           <button class="btn-del" onclick="event.stopPropagation();deleteOrder('${order.id}',this)">Delete</button>
         </div>
         <div id="od-${order.id}" class="order-detail">
@@ -1189,6 +1214,158 @@ async function submitCreateOrder(){
     await loadOrders();
   } else {
     errEl.textContent='Failed to create order.'; errEl.classList.add('show');
+  }
+}
+
+// ──────────────────────── EDIT ORDER ─────────────────────────────
+let editingOrderId = null;
+
+function openEditOrder(orderId) {
+  const order = allOrders.find(o => o.id === orderId);
+  if (!order) return;
+  editingOrderId = orderId;
+
+  const dispName = order.dispensaries?.name || '—';
+  document.getElementById('eo-dispensary-name').textContent = dispName;
+
+  // Populate items
+  document.getElementById('eo-items').innerHTML = '';
+  const existingItems = order.wholesale_order_items || [];
+  if (existingItems.length) {
+    existingItems.forEach(it => addEditOrderLine(it));
+  } else {
+    addEditOrderLine();
+  }
+
+  document.getElementById('eo-notes').value = order.notes || '';
+  recalcEditOrderTotal();
+  document.getElementById('eo-err').classList.remove('show');
+
+  const modal = document.getElementById('edit-order-modal');
+  modal.style.display = 'flex';
+  modal.style.alignItems = 'flex-start';
+  modal.style.justifyContent = 'center';
+}
+
+function closeEditOrder() {
+  document.getElementById('edit-order-modal').style.display = 'none';
+  editingOrderId = null;
+}
+
+function addEditOrderLine(existingItem) {
+  const container = document.getElementById('eo-items');
+  // Include all products — even unavailable ones may be on existing orders
+  const productOptions = allProducts.map(p => `<option value="${p.id}" data-price="${p.price_wholesale}" data-name="${esc(p.name)}">${esc(p.name)} — $${Number(p.price_wholesale).toFixed(2)}/${esc(p.unit_label||'unit')}</option>`).join('');
+  const row = document.createElement('div');
+  row.className = 'eo-line';
+  row.style.cssText = 'border:1px solid #1e1e1e;padding:10px;margin-bottom:8px;background:#080808;';
+  row.innerHTML = `
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+      <select class="fi eo-prod" onchange="onEditProductChange(this)" style="flex:1;font-size:13px;padding:8px 10px;">
+        <option value="">— Custom product —</option>
+        ${productOptions}
+      </select>
+      <button type="button" onclick="this.closest('.eo-line').remove();recalcEditOrderTotal();" style="flex-shrink:0;background:none;border:1px solid rgba(200,50,50,0.2);color:#d07070;padding:0;width:36px;height:38px;cursor:pointer;font-size:16px;line-height:1;">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:80px 1fr 100px;gap:8px;align-items:center;">
+      <input class="fi eo-qty" type="number" min="1" value="1" placeholder="Qty" style="padding:8px 10px;text-align:center;" oninput="recalcEditLine(this.closest('.eo-line'))">
+      <input class="fi eo-price" type="number" step="0.01" min="0" placeholder="Unit price ($)" style="padding:8px 10px;" oninput="recalcEditLine(this.closest('.eo-line'))">
+      <input class="fi eo-sub" type="text" placeholder="Subtotal" style="padding:8px 10px;opacity:0.6;" readonly>
+    </div>
+    <input class="fi eo-custom-name" type="text" placeholder="Custom product name (required if not selecting above)" style="margin-top:8px;font-size:13px;padding:8px 10px;display:none;" oninput="recalcEditLine(this.closest('.eo-line'))">`;
+  container.appendChild(row);
+
+  if (existingItem) {
+    const sel = row.querySelector('.eo-prod');
+    const customNameInput = row.querySelector('.eo-custom-name');
+    if (existingItem.product_id) {
+      const matchingOpt = Array.from(sel.options).find(o => o.value === existingItem.product_id);
+      if (matchingOpt) {
+        sel.value = existingItem.product_id;
+      } else {
+        sel.value = '';
+        customNameInput.value = existingItem.product_name;
+        customNameInput.style.display = 'block';
+      }
+    } else {
+      sel.value = '';
+      customNameInput.value = existingItem.product_name;
+      customNameInput.style.display = 'block';
+    }
+    row.querySelector('.eo-qty').value = existingItem.quantity;
+    row.querySelector('.eo-price').value = Number(existingItem.unit_price).toFixed(2);
+    recalcEditLine(row);
+  }
+}
+
+function onEditProductChange(sel) {
+  const row = sel.closest('.eo-line');
+  const opt = sel.selectedOptions[0];
+  const customInput = row.querySelector('.eo-custom-name');
+  if (opt && opt.dataset.price) {
+    row.querySelector('.eo-price').value = Number(opt.dataset.price).toFixed(2);
+    customInput.style.display = 'none';
+    recalcEditLine(row);
+  } else {
+    customInput.style.display = 'block';
+    row.querySelector('.eo-price').value = '';
+    recalcEditLine(row);
+  }
+}
+
+function recalcEditLine(row) {
+  const qty = parseFloat(row.querySelector('.eo-qty').value) || 0;
+  const price = parseFloat(row.querySelector('.eo-price').value) || 0;
+  row.querySelector('.eo-sub').value = '$' + (qty * price).toFixed(2);
+  recalcEditOrderTotal();
+}
+
+function recalcEditOrderTotal() {
+  let total = 0;
+  document.querySelectorAll('#eo-items>.eo-line').forEach(row => {
+    const qty = parseFloat(row.querySelector('.eo-qty').value) || 0;
+    const price = parseFloat(row.querySelector('.eo-price').value) || 0;
+    total += qty * price;
+  });
+  document.getElementById('eo-total').textContent = total.toFixed(2);
+}
+
+async function submitEditOrder() {
+  const errEl = document.getElementById('eo-err');
+  errEl.classList.remove('show');
+
+  const items = [];
+  let valid = true;
+  document.querySelectorAll('#eo-items>.eo-line').forEach(row => {
+    const sel = row.querySelector('.eo-prod');
+    const qty = parseInt(row.querySelector('.eo-qty').value) || 0;
+    const price = parseFloat(row.querySelector('.eo-price').value) || 0;
+    const opt = sel.selectedOptions[0];
+    const customName = row.querySelector('.eo-custom-name');
+    const product_name = (opt && opt.dataset.name) ? opt.dataset.name : (customName ? customName.value.trim() : '');
+    const product_id = (opt && opt.value && opt.value !== '') ? opt.value : null;
+    if (!product_name || qty < 1 || price <= 0) { valid = false; return; }
+    items.push({ product_id, product_name, quantity: qty, unit_price: price, subtotal: qty * price });
+  });
+
+  if (!valid || !items.length) {
+    errEl.textContent = 'All line items must have a product name, quantity ≥ 1, and price > 0.';
+    errEl.classList.add('show');
+    return;
+  }
+
+  const notes = document.getElementById('eo-notes').value.trim();
+  const result = await adminFetch('POST', '', { action: 'update-order', orderId: editingOrderId, items, notes: notes || null });
+  if (result) {
+    closeEditOrder();
+    const okEl = document.getElementById('orders-ok');
+    okEl.textContent = 'Order updated and invoice emailed.';
+    okEl.classList.add('show');
+    setTimeout(() => okEl.classList.remove('show'), 4000);
+    await loadOrders();
+  } else {
+    errEl.textContent = 'Failed to update order.';
+    errEl.classList.add('show');
   }
 }
 
