@@ -107,7 +107,16 @@ exports.handler = async (event) => {
       .eq("id", user.id)
       .then(({ error }) => { if (error) console.warn("reward_points column not yet migrated:", error.message); });
 
-    await sendOrderConfirmation({ order, items, dispensary });
+    // Attach image_url from products so emails show the correct image per product
+    const productIds = items.map((it) => it.product_id).filter(Boolean);
+    let imgMap = {};
+    if (productIds.length) {
+      const { data: prods } = await supabaseAdmin.from("wholesale_products").select("id, image_url").in("id", productIds);
+      if (prods) prods.forEach((p) => { imgMap[p.id] = p.image_url; });
+    }
+    const itemsWithImages = items.map((it) => ({ ...it, image_url: imgMap[it.product_id] || null }));
+
+    await sendOrderConfirmation({ order, items: itemsWithImages, dispensary });
 
     return {
       statusCode: 200,
