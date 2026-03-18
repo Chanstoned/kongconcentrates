@@ -262,6 +262,17 @@ const SUPABASE_URL      = 'https://ttdaweelpsiifobcjrji.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_aDFqNrKQwaCmWDm3gdPLBg_VhQTpKEC';
 /* ───────────────────────────────────────────────────────────────── */
 
+// Fallback images by product name (used until image_url is set on each product in admin)
+const PRODUCT_IMAGES = {
+  'pink runtz':                         '/images/pink runtz.png',
+  'bacio mints':                        '/images/bacio mints.png',
+  'hooch x white rainbow':              '/images/hooch x white rainbow.png',
+  'sticky buns':                        '/images/sticky buns.png',
+  'devil driver':                       '/images/devil driver.png',
+  'grape pie':                          '/images/grape pie.png',
+  'bacio mints vape':                   '/images/bacio mints vape.png',
+  'creme soda x pink runtz hash hole':  '/images/creme soda hash hole.jpg',
+};
 
 const { createClient } = window.supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -315,8 +326,9 @@ async function loadProducts(){
 function renderShopGrid(){
   const grid = document.getElementById('products-grid');
   grid.innerHTML = products.map(p=>{
-    const imgHtml = p.image_url
-      ? `<div class="prod-img-wrap"><img class="prod-img" src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none'"></div>`
+    const imgSrc = p.image_url || PRODUCT_IMAGES[p.name.toLowerCase()] || null;
+    const imgHtml = imgSrc
+      ? `<div class="prod-img-wrap"><img class="prod-img" src="${esc(imgSrc)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none'"></div>`
       : '<div class="prod-img-wrap"></div>';
     return `
     <div class="prod-card">
