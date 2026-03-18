@@ -342,6 +342,20 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
   </div>
 </div>
 
+<!-- POINTS HISTORY MODAL -->
+<div id="pts-history-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;overflow:auto;padding:40px 20px;">
+  <div class="acct-modal-inner" style="max-width:760px;">
+    <button class="acct-modal-close" onclick="closePtsHistory()">✕</button>
+    <h3 id="pts-history-title">Points History</h3>
+    <div id="pts-history-summary" style="font-family:'DM Mono',monospace;font-size:12px;color:rgba(240,234,216,0.55);margin-bottom:20px;line-height:1.8;"></div>
+    <div id="pts-history-table"></div>
+    <div style="margin-top:20px;display:flex;gap:10px;">
+      <button class="btn-save" onclick="adjustPointsFromHistory()">Adjust Points</button>
+      <button class="btn-cancel" onclick="closePtsHistory()">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- INVOICE MODAL -->
 <div id="inv-modal">
   <div class="inv-paper">
@@ -573,7 +587,7 @@ async function loadAccounts(){
           <td style="white-space:nowrap;">
             <span class="status-badge status-approved" style="margin-right:8px;">Active</span>
             <button class="btn-edit" onclick="openAcctEdit('${d.id}')">Edit</button>
-            <button class="btn-edit" onclick="adjustPoints('${d.id}','${esc(d.name)}',${d.reward_points||0})" title="Adjust points">Pts</button>
+            <button class="btn-edit" onclick="viewPointsHistory('${d.id}')" title="Points history">History</button>
             <button class="btn-del" onclick="deleteAccount('${d.id}','${esc(d.name)}',this)">Delete</button>
           </td>
         </tr>`).join('')}
@@ -613,6 +627,79 @@ async function adjustPoints(id, name, current){
       const cell = document.getElementById('pts-'+id);
       if(cell) cell.textContent = acct.reward_points + ' pts';
     }
+  }
+}
+
+// ──────────────────────── POINTS HISTORY ─────────────────────────
+let ptsHistoryAccountId = null;
+
+function viewPointsHistory(id){
+  const acct = allAccounts.find(a=>a.id===id);
+  if(!acct) return;
+  ptsHistoryAccountId = id;
+
+  const pts = acct.reward_points || 0;
+  const credit = ((pts / 100) * 5).toFixed(2);
+  document.getElementById('pts-history-title').textContent = acct.name + ' — Points History';
+  document.getElementById('pts-history-summary').innerHTML =
+    `Balance: <strong style="color:var(--gold);font-size:14px;">${pts} pts</strong>`
+    + (pts >= 100 ? ` &nbsp;·&nbsp; $${credit} credit available` : ' &nbsp;·&nbsp; Need ' + (100 - (pts % 100)) + ' more pts for next $5 credit');
+
+  const orders = allOrders.filter(o=>o.dispensary_id===id)
+    .sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+
+  if(!orders.length){
+    document.getElementById('pts-history-table').innerHTML='<div class="empty-state">No order history yet.</div>';
+  } else {
+    let running = 0;
+    const rowsData = orders.map(o=>{
+      const earned = o.points_earned || 0;
+      const creditUsed = Number(o.credit_applied || 0);
+      const redeemed = creditUsed > 0 ? Math.round((creditUsed / 5) * 100) : 0;
+      running += earned - redeemed;
+      const date = new Date(o.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      return {earned, redeemed, balance: running, date, o};
+    });
+    const rows = rowsData.slice().reverse().map(({earned,redeemed,balance,date,o})=>`
+      <tr>
+        <td class="mono">${date}</td>
+        <td class="mono" style="font-size:10px;">#${o.id.slice(-8).toUpperCase()}</td>
+        <td style="font-family:'Bebas Neue',sans-serif;color:var(--gold2);">$${Number(o.total).toFixed(2)}</td>
+        <td class="mono" style="color:#60cc80;">${earned>0?'+'+earned:'—'}</td>
+        <td class="mono" style="color:#d07070;">${redeemed>0?'-'+redeemed:'—'}</td>
+        <td class="mono" style="color:var(--gold);font-weight:bold;">${balance}</td>
+      </tr>`).join('');
+    document.getElementById('pts-history-table').innerHTML = `
+      <div class="tbl-wrap"><table class="data-tbl">
+        <thead><tr><th>Date</th><th>Order #</th><th>Total</th><th>Earned</th><th>Redeemed</th><th>Balance</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>`;
+  }
+
+  const modal = document.getElementById('pts-history-modal');
+  modal.style.display='flex'; modal.style.alignItems='flex-start'; modal.style.justifyContent='center';
+}
+
+function closePtsHistory(){
+  document.getElementById('pts-history-modal').style.display='none';
+  ptsHistoryAccountId = null;
+}
+
+async function adjustPointsFromHistory(){
+  if(!ptsHistoryAccountId) return;
+  const acct = allAccounts.find(a=>a.id===ptsHistoryAccountId);
+  if(!acct) return;
+  const input = prompt('Adjust points for ' + acct.name + '\nCurrent balance: ' + (acct.reward_points||0) + ' pts\n\nEnter amount (+ to add, - to remove):');
+  if(input === null) return;
+  const delta = parseInt(input);
+  if(isNaN(delta) || delta === 0){ alert('Enter a non-zero whole number.'); return; }
+  const res = await adminFetch('POST','',{action:'adjust-points',id:ptsHistoryAccountId,delta});
+  if(res){
+    acct.reward_points = res.reward_points;
+    const cell = document.getElementById('pts-'+ptsHistoryAccountId);
+    if(cell) cell.textContent = acct.reward_points + ' pts';
+    // Reopen with refreshed data
+    viewPointsHistory(ptsHistoryAccountId);
   }
 }
 
@@ -902,24 +989,27 @@ function addOrderLine(){
   const container = document.getElementById('co-items');
   const productOptions = allProducts.filter(p=>p.available).map(p=>`<option value="${p.id}" data-price="${p.price_wholesale}" data-name="${esc(p.name)}">${esc(p.name)} — $${Number(p.price_wholesale).toFixed(2)}/${esc(p.unit_label||'unit')}</option>`).join('');
   const row = document.createElement('div');
-  row.style.cssText='margin-bottom:10px;';
+  row.className = 'co-line';
+  row.style.cssText='border:1px solid #1e1e1e;padding:10px;margin-bottom:8px;background:#080808;';
   row.innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 80px 100px 90px 36px;gap:8px;align-items:center;">
-      <select class="fi co-prod" onchange="onProductChange(this)" style="font-size:13px;padding:8px 10px;">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+      <select class="fi co-prod" onchange="onProductChange(this)" style="flex:1;font-size:13px;padding:8px 10px;">
         <option value="">— Custom product —</option>
         ${productOptions}
       </select>
-      <input class="fi co-qty" type="number" min="1" value="1" placeholder="Qty" style="padding:8px 10px;text-align:center;" oninput="recalcLine(this.closest('div').parentElement)">
-      <input class="fi co-price" type="number" step="0.01" min="0" placeholder="Price" style="padding:8px 10px;" oninput="recalcLine(this.closest('div').parentElement)">
-      <input class="fi co-sub" type="text" placeholder="$0.00" style="padding:8px 10px;opacity:0.6;" readonly>
-      <button type="button" onclick="this.closest('div').parentElement.remove();recalcOrderTotal();" style="background:none;border:1px solid rgba(200,50,50,0.2);color:#d07070;padding:0;width:36px;height:38px;cursor:pointer;font-size:16px;line-height:1;">✕</button>
+      <button type="button" onclick="this.closest('.co-line').remove();recalcOrderTotal();" style="flex-shrink:0;background:none;border:1px solid rgba(200,50,50,0.2);color:#d07070;padding:0;width:36px;height:38px;cursor:pointer;font-size:16px;line-height:1;">✕</button>
     </div>
-    <input class="fi co-custom-name" type="text" placeholder="Custom product name (required if not selecting above)" style="margin-top:6px;font-size:13px;padding:8px 10px;display:none;" oninput="recalcLine(this.closest('div').parentElement)">`;
+    <div style="display:grid;grid-template-columns:80px 1fr 100px;gap:8px;align-items:center;">
+      <input class="fi co-qty" type="number" min="1" value="1" placeholder="Qty" style="padding:8px 10px;text-align:center;" oninput="recalcLine(this.closest('.co-line'))">
+      <input class="fi co-price" type="number" step="0.01" min="0" placeholder="Unit price ($)" style="padding:8px 10px;" oninput="recalcLine(this.closest('.co-line'))">
+      <input class="fi co-sub" type="text" placeholder="Subtotal" style="padding:8px 10px;opacity:0.6;" readonly>
+    </div>
+    <input class="fi co-custom-name" type="text" placeholder="Custom product name (required if not selecting above)" style="margin-top:8px;font-size:13px;padding:8px 10px;display:none;" oninput="recalcLine(this.closest('.co-line'))">`;
   container.appendChild(row);
 }
 
 function onProductChange(sel){
-  const row = sel.closest('div').parentElement;
+  const row = sel.closest('.co-line');
   const opt = sel.selectedOptions[0];
   const customInput = row.querySelector('.co-custom-name');
   if(opt && opt.dataset.price){
@@ -943,7 +1033,7 @@ function recalcLine(row){
 
 function recalcOrderTotal(){
   let total=0;
-  document.querySelectorAll('#co-items>div').forEach(row=>{
+  document.querySelectorAll('#co-items>.co-line').forEach(row=>{
     const qty = parseFloat(row.querySelector('.co-qty').value)||0;
     const price = parseFloat(row.querySelector('.co-price').value)||0;
     total += qty*price;
@@ -959,7 +1049,7 @@ async function submitCreateOrder(){
 
   const items = [];
   let valid=true;
-  document.querySelectorAll('#co-items>div').forEach(row=>{
+  document.querySelectorAll('#co-items>.co-line').forEach(row=>{
     const sel = row.querySelector('.co-prod');
     const qty = parseInt(row.querySelector('.co-qty').value)||0;
     const price = parseFloat(row.querySelector('.co-price').value)||0;
