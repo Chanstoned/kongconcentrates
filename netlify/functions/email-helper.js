@@ -344,19 +344,41 @@ const STATUS_LABELS = {
 async function sendOrderStatusUpdate({ dispensary, status, orderId }) {
   const label = STATUS_LABELS[status] || status;
   const shortId = orderId.slice(-8).toUpperCase();
+  const name = dispensary.contact_name || dispensary.name;
+
+  const statusMessages = {
+    processing: {
+      html: `<p style="font-family:sans-serif;">We are currently arranging delivery of your order. Delivery runs <strong>Monday–Friday</strong> and is subject to transporter availability.</p>
+      <p style="font-family:sans-serif;">If you have any specific days or times you prefer for delivery, please let us know by replying to this email or reaching out at <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a>.</p>`,
+      text: `We are currently arranging delivery of your order. Delivery runs Monday–Friday and is subject to transporter availability.\n\nIf you have any specific days or times you prefer for delivery, please let us know by replying to this email or reaching out at process@kongconcentrates.com.`,
+    },
+    out_for_delivery: {
+      html: `<p style="font-family:sans-serif;">A transporter is on the way to you with your order right now.</p>
+      <p style="font-family:sans-serif;">Please log in to <strong>Metrc</strong> and confirm that the information within the transportation manifest looks correct before the delivery arrives.</p>`,
+      text: `A transporter is on the way to you with your order right now.\n\nPlease log in to Metrc and confirm that the information within the transportation manifest looks correct before the delivery arrives.`,
+    },
+    complete: {
+      html: `<p style="font-family:sans-serif;">Thank you for your business — we truly appreciate your partnership!</p>
+      <p style="font-family:sans-serif;">If you have any questions or concerns about your order, please don't hesitate to contact us at <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a> and we will be glad to help.</p>`,
+      text: `Thank you for your business — we truly appreciate your partnership!\n\nIf you have any questions or concerns about your order, please don't hesitate to contact us at process@kongconcentrates.com and we will be glad to help.`,
+    },
+  };
+
+  const msg = statusMessages[status] || { html: '', text: '' };
 
   await sendEmail({
     to: dispensary.email,
     subject: `Order #${shortId} — ${label} · Kong Concentrates`,
     html: `
       <h2 style="font-family:sans-serif;">Order Update</h2>
-      <p style="font-family:sans-serif;">Hi ${dispensary.contact_name || dispensary.name},</p>
+      <p style="font-family:sans-serif;">Hi ${name},</p>
       <p style="font-family:sans-serif;">Your order <strong>#${shortId}</strong> status has been updated to <strong>${label}</strong>.</p>
+      ${msg.html}
       <p style="font-family:sans-serif;">
         <a href="https://kongconcentrates.com/wholesale/portal/" style="background:#c9a84c;color:#000;padding:10px 20px;text-decoration:none;font-weight:bold;">View Order Details</a>
       </p>
       <p style="font-family:sans-serif;color:#888;font-size:12px;">— Kong Concentrates LLC · 29141 S 647 Pl · Grove, OK 74344 · process@kongconcentrates.com</p>`,
-    text: `Hi ${dispensary.contact_name || dispensary.name},\n\nYour order #${shortId} status has been updated to: ${label}\n\nView at https://kongconcentrates.com/wholesale/portal/\n\n— Kong Concentrates LLC`,
+    text: `Hi ${name},\n\nYour order #${shortId} status has been updated to: ${label}\n\n${msg.text}\n\nView at https://kongconcentrates.com/wholesale/portal/\n\n— Kong Concentrates LLC`,
   });
 }
 
