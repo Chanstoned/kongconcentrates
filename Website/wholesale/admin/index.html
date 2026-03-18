@@ -253,6 +253,10 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
           <div class="fg"><label class="fl">Min Qty</label><input class="fi" type="number" id="f-min" placeholder="1" min="1" value="1"></div>
         </div>
         <div class="fg"><label class="fl">Product Image URL</label><input class="fi" type="text" id="f-image" placeholder="/images/pink runtz.png"></div>
+        <div class="frow">
+          <div class="fg"><label class="fl">Batch #</label><input class="fi" type="text" id="f-batch" placeholder="KC-26-KC-01"></div>
+          <div class="fg"><label class="fl">Metrc Tag</label><input class="fi" type="text" id="f-metrc" placeholder="1A40E0100002F6A000000001"></div>
+        </div>
         <div class="form-actions">
           <button class="btn-save" onclick="saveProduct()">Save Product</button>
           <button class="btn-cancel" onclick="hideProductForm()">Cancel</button>
@@ -619,9 +623,8 @@ async function loadAccounts(){
           <td class="mono" style="color:var(--gold);white-space:nowrap;" id="pts-${d.id}">${d.reward_points||0} pts</td>
           <td class="mono">${new Date(d.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</td>
           <td style="white-space:nowrap;">
-            <span class="status-badge status-approved" style="margin-right:8px;">Active</span>
+            <button class="btn-invoice" onclick="viewPointsHistory('${d.id}')" style="margin-right:6px;">Orders &amp; Pts</button>
             <button class="btn-edit" onclick="openAcctEdit('${d.id}')">Edit</button>
-            <button class="btn-edit" onclick="viewPointsHistory('${d.id}')" title="Points history">History</button>
             <button class="btn-del" onclick="deleteAccount('${d.id}','${esc(d.name)}',this)">Delete</button>
           </td>
         </tr>`).join('')}
@@ -674,7 +677,8 @@ function viewPointsHistory(id){
 
   const pts = acct.reward_points || 0;
   const credit = ((pts / 100) * 5).toFixed(2);
-  document.getElementById('pts-history-title').textContent = acct.name + ' — History';
+  const orderCount = allOrders.filter(o=>o.dispensary_id===id).length;
+  document.getElementById('pts-history-title').textContent = acct.name + ' — Orders & Points' + (orderCount ? ' ('+orderCount+')' : '');
   document.getElementById('pts-history-summary').innerHTML =
     `Points balance: <strong style="color:var(--gold);font-size:14px;">${pts} pts</strong>`
     + (pts >= 100 ? ` &nbsp;·&nbsp; $${credit} credit available` : ' &nbsp;·&nbsp; Need ' + (100 - (pts % 100)) + ' more pts for next $5 credit');
@@ -856,7 +860,7 @@ function showProductForm(){ document.getElementById('prod-form').classList.add('
 function hideProductForm(){ document.getElementById('prod-form').classList.remove('show'); clearForm(); }
 
 function clearForm(){
-  ['f-id','f-name','f-desc','f-cat','f-unit','f-image'].forEach(id=>document.getElementById(id).value='');
+  ['f-id','f-name','f-desc','f-cat','f-unit','f-image','f-batch','f-metrc'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-price').value='';
   document.getElementById('f-min').value='1';
   document.getElementById('form-title').textContent='New Product';
@@ -874,6 +878,8 @@ function editProduct(id){
   document.getElementById('f-unit').value=p.unit_label||'';
   document.getElementById('f-min').value=p.min_qty||1;
   document.getElementById('f-image').value=p.image_url||'';
+  document.getElementById('f-batch').value=p.batch_number||'';
+  document.getElementById('f-metrc').value=p.metrc_id||'';
   document.getElementById('form-title').textContent='Edit Product';
   editingProductId=id;
   showProductForm();
@@ -895,6 +901,8 @@ async function saveProduct(){
     unit_label: document.getElementById('f-unit').value.trim(),
     min_qty: parseInt(document.getElementById('f-min').value)||1,
     image_url: document.getElementById('f-image').value.trim() || null,
+    batch_number: document.getElementById('f-batch').value.trim() || null,
+    metrc_id: document.getElementById('f-metrc').value.trim() || null,
     available: true
   };
 
@@ -949,12 +957,23 @@ async function printInvoice(orderId){
     'creme soda x pink runtz hash hole': { batch:'KC-26-KC-03', metrc:'1A40E0100002F6A000000___' },
   };
   const itemRows = (order.wholesale_order_items||[]).map(it=>{
-    const lower = (it.product_name||'').toLowerCase();
-    const info = productInfo[lower] || Object.entries(productInfo).reduce((found,[key,val])=>{
-      if(found) return found;
-      return (lower.includes(key)||key.includes(lower)) ? val : null;
-    }, null);
-    const batchLine = info ? '<br><span style="font-size:10px;color:#999;">Batch: ' + info.batch + ' \u00b7 Metrc: ' + info.metrc + '</span>' : '';
+    // 1. Look up from allProducts by product_id (most reliable — survives renames)
+    const prod = it.product_id ? allProducts.find(p=>p.id===it.product_id) : null;
+    let batchLine = '';
+    if(prod && (prod.batch_number || prod.metrc_id)){
+      const parts = [];
+      if(prod.batch_number) parts.push('Batch: ' + prod.batch_number);
+      if(prod.metrc_id) parts.push('Metrc: ' + prod.metrc_id);
+      batchLine = '<br><span style="font-size:10px;color:#999;">' + parts.join(' \u00b7 ') + '</span>';
+    } else {
+      // 2. Fall back to hardcoded name map (for old orders without product_id)
+      const lower = (it.product_name||'').toLowerCase();
+      const info = productInfo[lower] || Object.entries(productInfo).reduce((found,[key,val])=>{
+        if(found) return found;
+        return (lower.includes(key)||key.includes(lower)) ? val : null;
+      }, null);
+      if(info && (info.batch || info.metrc)) batchLine = '<br><span style="font-size:10px;color:#999;">Batch: ' + info.batch + ' \u00b7 Metrc: ' + info.metrc + '</span>';
+    }
     return '<tr>'
       + '<td>' + esc(it.product_name) + batchLine + '</td>'
       + '<td>' + it.quantity + '</td>'
