@@ -467,6 +467,7 @@ function renderOrders(){
             <tbody>${itemsHtml||'<tr><td colspan="4" style="opacity:0.4;padding:10px 0;">No items</td></tr>'}</tbody>
           </table>
           ${order.notes?`<div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(240,234,216,0.35);margin-top:12px;">Notes: ${esc(order.notes)}</div>`:''}
+          ${(order.credit_applied > 0 || order.points_earned > 0) ? `<div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(201,168,76,0.65);margin-top:8px;">${order.credit_applied>0?'Credit applied: -$'+Number(order.credit_applied).toFixed(2):''}${order.credit_applied>0&&order.points_earned>0?' &nbsp;·&nbsp; ':''}${order.points_earned>0?'+'+order.points_earned+' pts earned':''}</div>` : ''}
           ${dispPhone?`<div style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(240,234,216,0.3);margin-top:6px;">${esc(dispPhone)}</div>`:''}
         </div>
       </div>`;
@@ -559,7 +560,7 @@ async function loadAccounts(){
   html += `<div>
     <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.3);margin-bottom:14px;">Active Accounts (${approved.length})</div>
     ${approved.length ? `<div class="tbl-wrap"><table class="data-tbl">
-      <thead><tr><th>Dispensary</th><th>Contact</th><th>Email</th><th>Phone</th><th>OMMA</th><th>OBNDD</th><th>Address</th><th>Since</th><th>Actions</th></tr></thead>
+      <thead><tr><th>Dispensary</th><th>Contact</th><th>Email</th><th>Phone</th><th>OMMA</th><th>OBNDD</th><th>Address</th><th>Points</th><th>Since</th><th>Actions</th></tr></thead>
       <tbody>${approved.map(d=>`
         <tr>
           <td><strong>${esc(d.name)}</strong></td>
@@ -569,10 +570,12 @@ async function loadAccounts(){
           <td class="mono">${esc(d.omma_license||'—')}</td>
           <td class="mono">${esc(d.obndd_license||'—')}</td>
           <td style="font-size:13px;">${esc(d.address||'')}</td>
+          <td class="mono" style="color:var(--gold);white-space:nowrap;" id="pts-${d.id}">${d.reward_points||0} pts</td>
           <td class="mono">${new Date(d.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</td>
           <td style="white-space:nowrap;">
             <span class="status-badge status-approved" style="margin-right:8px;">Active</span>
             <button class="btn-edit" onclick="openAcctEdit('${d.id}')">Edit</button>
+            <button class="btn-edit" onclick="adjustPoints('${d.id}','${esc(d.name)}',${d.reward_points||0})" title="Adjust points">Pts</button>
             <button class="btn-del" onclick="deleteAccount('${d.id}','${esc(d.name)}',this)">Delete</button>
           </td>
         </tr>`).join('')}
@@ -598,6 +601,22 @@ function openAcctEdit(id){
 }
 
 function closeAcctModal(){ document.getElementById('acct-modal').classList.remove('show'); }
+
+async function adjustPoints(id, name, current){
+  const input = prompt('Adjust points for ' + name + '\nCurrent balance: ' + current + ' pts\n\nEnter adjustment amount (positive to add, negative to remove):');
+  if(input === null) return;
+  const delta = parseInt(input);
+  if(isNaN(delta) || delta === 0){ alert('Enter a non-zero whole number.'); return; }
+  const res = await adminFetch('POST','',{action:'adjust-points',id,delta});
+  if(res){
+    const acct = allAccounts.find(a=>a.id===id);
+    if(acct){
+      acct.reward_points = Math.max(0, (acct.reward_points||0) + delta);
+      const cell = document.getElementById('pts-'+id);
+      if(cell) cell.textContent = acct.reward_points + ' pts';
+    }
+  }
+}
 
 async function saveAccountEdit(){
   const id = document.getElementById('acct-edit-id').value;
