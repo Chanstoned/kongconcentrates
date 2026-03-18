@@ -131,11 +131,11 @@ exports.handler = async (event) => {
         if (e) throw e;
         const { data: orderData } = await supabaseAdmin
           .from("wholesale_orders")
-          .select("dispensary_id, dispensaries(name, contact_name, email)")
+          .select("dispensary_id, total, dispensaries(name, contact_name, email)")
           .eq("id", body.orderId)
           .single();
         if (orderData?.dispensaries) {
-          await sendOrderStatusUpdate({ dispensary: orderData.dispensaries, status: body.status, orderId: body.orderId }).catch(console.error);
+          await sendOrderStatusUpdate({ dispensary: orderData.dispensaries, status: body.status, orderId: body.orderId, total: orderData.total }).catch(console.error);
         }
         return ok({ ok: true });
       }

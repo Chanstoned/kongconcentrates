@@ -341,10 +341,11 @@ const STATUS_LABELS = {
   complete: "Complete",
 };
 
-async function sendOrderStatusUpdate({ dispensary, status, orderId }) {
+async function sendOrderStatusUpdate({ dispensary, status, orderId, total }) {
   const label = STATUS_LABELS[status] || status;
   const shortId = orderId.slice(-8).toUpperCase();
   const name = dispensary.contact_name || dispensary.name;
+  const totalStr = total ? `$${Number(total).toFixed(2)}` : null;
 
   const statusMessages = {
     processing: {
@@ -353,8 +354,9 @@ async function sendOrderStatusUpdate({ dispensary, status, orderId }) {
       text: `We are currently arranging delivery of your order. Delivery runs Monday–Friday and is subject to transporter availability.\n\nIf you have any specific days or times you prefer for delivery, please let us know by replying to this email or reaching out at process@kongconcentrates.com.`,
     },
     out_for_delivery: {
-      html: `<p style="font-family:sans-serif;">A transporter is on the way to you with your order right now.</p>`,
-      text: `A transporter is on the way to you with your order right now.`,
+      html: `<p style="font-family:sans-serif;">A transporter is on the way to you with your order right now.</p>
+      ${totalStr ? `<p style="font-family:sans-serif;">Your order total is <strong>${totalStr}</strong>. Please have <strong>cash payment ready upon delivery</strong>.</p>` : ''}`,
+      text: `A transporter is on the way to you with your order right now.${totalStr ? `\n\nYour order total is ${totalStr}. Please have cash payment ready upon delivery.` : ''}`,
     },
     complete: {
       html: `<p style="font-family:sans-serif;">Thank you for your business — we truly appreciate your partnership!</p>
