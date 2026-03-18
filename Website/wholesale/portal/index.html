@@ -331,8 +331,8 @@ function renderShopGrid(){
   grid.innerHTML = products.map(p=>{
     const img = getProductImage(p.name);
     const imgHtml = img
-      ? `<div class="prod-img-wrap"><img class="prod-img" src="${img}" alt="${esc(p.name)}" loading="lazy" onerror="this.closest('.prod-img-wrap').style.display='none'"></div>`
-      : '';
+      ? `<div class="prod-img-wrap"><img class="prod-img" src="${img}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none'"></div>`
+      : '<div class="prod-img-wrap"></div>';
     return `
     <div class="prod-card">
       ${imgHtml}
