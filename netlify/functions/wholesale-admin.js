@@ -93,6 +93,16 @@ exports.handler = async (event) => {
         return ok(data);
       }
 
+      // Commission payments list
+      if (action === "commission-payments") {
+        const { data, error: e } = await supabaseAdmin
+          .from("wholesale_commission_payments")
+          .select("*")
+          .order("paid_at", { ascending: false });
+        if (e) throw e;
+        return ok(data || []);
+      }
+
       return err("Unknown action");
     }
 
@@ -311,6 +321,29 @@ exports.handler = async (event) => {
         const { error: e } = await supabaseAdmin.from("dispensaries").update({ reward_points: newPts }).eq("id", id);
         if (e) throw e;
         return ok({ ok: true, reward_points: newPts });
+      }
+
+      // Add a commission payment record
+      if (action === "add-commission-payment") {
+        const { amount, note, paid_at } = body;
+        if (!amount || Number(amount) <= 0) return err("Amount must be positive.");
+        const { error: e } = await supabaseAdmin
+          .from("wholesale_commission_payments")
+          .insert({ amount: Number(amount), note: note || null, paid_at: paid_at || new Date().toISOString() });
+        if (e) throw e;
+        return ok({ ok: true });
+      }
+
+      // Delete a commission payment record
+      if (action === "delete-commission-payment") {
+        const { id } = body;
+        if (!id) return err("id is required.");
+        const { error: e } = await supabaseAdmin
+          .from("wholesale_commission_payments")
+          .delete()
+          .eq("id", id);
+        if (e) throw e;
+        return ok({ ok: true });
       }
 
       return err("Unknown action");
