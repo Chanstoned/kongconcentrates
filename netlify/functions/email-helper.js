@@ -267,6 +267,38 @@ async function sendOrderConfirmation({ order, items, dispensary }) {
   ]);
 }
 
+// ── Shared branded email wrapper ──────────────────────────────────
+function brandEmail(title, bodyHtml) {
+  return `
+  <div style="font-family:sans-serif;max-width:600px;margin:0 auto;background:#fff;">
+    <div style="background:#111111;padding:28px 24px;text-align:center;">
+      <img src="https://kongconcentrates.com/images/MAIN-ROUND-1.png" alt="Kong Concentrates" height="90" style="height:90px;display:inline-block;">
+    </div>
+    <div style="background:#c9a84c;padding:16px 24px;text-align:center;">
+      <p style="margin:0;color:#111;font-size:19px;font-weight:bold;font-family:sans-serif;letter-spacing:0.02em;">${title}</p>
+    </div>
+    <div style="padding:32px 28px;background:#fff;">
+      ${bodyHtml}
+    </div>
+    <div style="background:#111111;padding:20px 24px;text-align:center;">
+      <p style="font-family:sans-serif;margin:0 0 6px;color:#fff;font-size:13px;font-weight:bold;">Kong Concentrates LLC</p>
+      <p style="font-family:sans-serif;margin:0;color:#888;font-size:12px;">29141 S 647 Pl · Grove, OK 74344</p>
+      <p style="font-family:sans-serif;margin:6px 0 0;font-size:12px;"><a href="mailto:process@kongconcentrates.com" style="color:#c9a84c;text-decoration:none;">process@kongconcentrates.com</a></p>
+    </div>
+  </div>`;
+}
+
+function brandedButton(url, label) {
+  return `
+  <table cellpadding="0" cellspacing="0" border="0" style="margin:24px auto;">
+    <tr>
+      <td style="background:#c9a84c;border-radius:3px;">
+        <a href="${url}" style="display:inline-block;padding:12px 28px;color:#111;font-family:sans-serif;font-weight:bold;font-size:14px;text-decoration:none;">${label}</a>
+      </td>
+    </tr>
+  </table>`;
+}
+
 // ── New application received ──────────────────────────────────────
 async function sendApplicationReceived({ name, contact_name, email, phone, address, omma_license, obndd_license }) {
   await sendEmail({
@@ -292,12 +324,11 @@ async function sendApplicationReceived({ name, contact_name, email, phone, addre
   await sendEmail({
     to: email,
     subject: "Application Received — Kong Concentrates Wholesale",
-    html: `
-      <h2 style="font-family:sans-serif;">Application Received</h2>
-      <p style="font-family:sans-serif;">Hi ${contact_name},</p>
-      <p style="font-family:sans-serif;">We've received your wholesale application for <strong>${name}</strong>. Our team will review it and get back to you within 1–2 business days.</p>
-      <p style="font-family:sans-serif;">Questions? Reply to this email or contact us at <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a>.</p>
-      <p style="font-family:sans-serif;color:#888;font-size:12px;">— Kong Concentrates LLC · 29141 S 647 Pl · Grove, OK 74344</p>`,
+    html: brandEmail("Application Received", `
+      <p style="font-family:sans-serif;font-size:15px;color:#111;">Hi ${contact_name},</p>
+      <p style="font-family:sans-serif;color:#444;">Thank you for applying for a wholesale account with Kong Concentrates. We've received your application for <strong>${name}</strong> and our team will review it and get back to you within 1–2 business days.</p>
+      <p style="font-family:sans-serif;color:#444;">If you have any questions in the meantime, feel free to reply to this email or reach out directly at <a href="mailto:process@kongconcentrates.com" style="color:#c9a84c;">process@kongconcentrates.com</a>.</p>
+    `),
     text: `Hi ${contact_name},\n\nWe've received your wholesale application for ${name}. Our team will review it within 1–2 business days.\n\nQuestions? Email process@kongconcentrates.com\n\n— Kong Concentrates LLC`,
   });
 }
@@ -307,14 +338,12 @@ async function sendAccountApproved({ name, contact_name, email }) {
   await sendEmail({
     to: email,
     subject: "Wholesale Account Approved — Kong Concentrates",
-    html: `
-      <h2 style="font-family:sans-serif;">You're Approved!</h2>
-      <p style="font-family:sans-serif;">Hi ${contact_name},</p>
-      <p style="font-family:sans-serif;">Great news — your wholesale account for <strong>${name}</strong> has been approved. You can now sign in to place orders.</p>
-      <p style="font-family:sans-serif;">
-        <a href="https://kongconcentrates.com/wholesale/" style="background:#c9a84c;color:#000;padding:10px 20px;text-decoration:none;font-weight:bold;">Sign In to Wholesale Portal</a>
-      </p>
-      <p style="font-family:sans-serif;color:#888;font-size:12px;">— Kong Concentrates LLC · 29141 S 647 Pl · Grove, OK 74344</p>`,
+    html: brandEmail("You're Approved!", `
+      <p style="font-family:sans-serif;font-size:15px;color:#111;">Hi ${contact_name},</p>
+      <p style="font-family:sans-serif;color:#444;">Great news — your wholesale account for <strong>${name}</strong> has been approved. You can now sign in to the portal to browse products and place orders.</p>
+      <p style="font-family:sans-serif;color:#444;">We look forward to working with you!</p>
+      ${brandedButton("https://kongconcentrates.com/wholesale/", "Sign In to Wholesale Portal")}
+    `),
     text: `Hi ${contact_name},\n\nYour wholesale account for ${name} has been approved! Sign in at https://kongconcentrates.com/wholesale/\n\n— Kong Concentrates LLC`,
   });
 }
@@ -323,12 +352,11 @@ async function sendAccountRejected({ name, contact_name, email }) {
   await sendEmail({
     to: email,
     subject: "Wholesale Application Update — Kong Concentrates",
-    html: `
-      <h2 style="font-family:sans-serif;">Application Update</h2>
-      <p style="font-family:sans-serif;">Hi ${contact_name},</p>
-      <p style="font-family:sans-serif;">Thank you for applying for a wholesale account. After review, we're unable to approve the application for <strong>${name}</strong> at this time.</p>
-      <p style="font-family:sans-serif;">If you have questions, please contact us at <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a>.</p>
-      <p style="font-family:sans-serif;color:#888;font-size:12px;">— Kong Concentrates LLC · 29141 S 647 Pl · Grove, OK 74344</p>`,
+    html: brandEmail("Application Update", `
+      <p style="font-family:sans-serif;font-size:15px;color:#111;">Hi ${contact_name},</p>
+      <p style="font-family:sans-serif;color:#444;">Thank you for your interest in partnering with Kong Concentrates. After reviewing your application for <strong>${name}</strong>, we are unable to approve the account at this time.</p>
+      <p style="font-family:sans-serif;color:#444;">If you have any questions or would like more information, please don't hesitate to reach out at <a href="mailto:process@kongconcentrates.com" style="color:#c9a84c;">process@kongconcentrates.com</a>.</p>
+    `),
     text: `Hi ${contact_name},\n\nWe're unable to approve the wholesale application for ${name} at this time. Questions? Email process@kongconcentrates.com\n\n— Kong Concentrates LLC`,
   });
 }
@@ -349,18 +377,25 @@ async function sendOrderStatusUpdate({ dispensary, status, orderId, total }) {
 
   const statusMessages = {
     processing: {
-      html: `<p style="font-family:sans-serif;">We are currently arranging delivery of your order. Delivery runs <strong>Monday–Friday</strong> and is subject to transporter availability.</p>
-      <p style="font-family:sans-serif;">If you have any specific days or times you prefer for delivery, please let us know by replying to this email or reaching out at <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a>.</p>`,
+      html: `
+        <p style="font-family:sans-serif;color:#444;">We are currently arranging delivery of your order. Delivery runs <strong>Monday–Friday</strong> and is subject to transporter availability.</p>
+        <p style="font-family:sans-serif;color:#444;">If you have any specific days or times you prefer for delivery, please let us know by replying to this email or reaching out at <a href="mailto:process@kongconcentrates.com" style="color:#c9a84c;">process@kongconcentrates.com</a>.</p>`,
       text: `We are currently arranging delivery of your order. Delivery runs Monday–Friday and is subject to transporter availability.\n\nIf you have any specific days or times you prefer for delivery, please let us know by replying to this email or reaching out at process@kongconcentrates.com.`,
     },
     out_for_delivery: {
-      html: `<p style="font-family:sans-serif;">A transporter is on the way to you with your order right now.</p>
-      ${totalStr ? `<p style="font-family:sans-serif;">Your order total is <strong>${totalStr}</strong>. Please have <strong>cash payment ready upon delivery</strong>.</p>` : ''}`,
-      text: `A transporter is on the way to you with your order right now.${totalStr ? `\n\nYour order total is ${totalStr}. Please have cash payment ready upon delivery.` : ''}`,
+      html: `
+        <p style="font-family:sans-serif;color:#444;">A transporter is on the way to you with your order right now.</p>
+        ${totalStr ? `
+        <div style="background:#f9f6ee;border-left:4px solid #c9a84c;padding:16px 20px;margin:20px 0;border-radius:0 6px 6px 0;">
+          <p style="font-family:sans-serif;margin:0 0 4px;font-weight:bold;color:#111;font-size:15px;">Order Total: ${totalStr}</p>
+          <p style="font-family:sans-serif;margin:0;color:#555;font-size:14px;">Please have <strong>cash payment ready upon delivery</strong>.</p>
+        </div>` : ''}`,
+      text: `A transporter is on the way to you with your order right now.${totalStr ? `\n\nOrder Total: ${totalStr}\nPlease have cash payment ready upon delivery.` : ''}`,
     },
     complete: {
-      html: `<p style="font-family:sans-serif;">Thank you for your business — we truly appreciate your partnership!</p>
-      <p style="font-family:sans-serif;">If you have any questions or concerns about your order, please don't hesitate to contact us at <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a> and we will be glad to help.</p>`,
+      html: `
+        <p style="font-family:sans-serif;color:#444;">Thank you for your business — we truly appreciate your partnership!</p>
+        <p style="font-family:sans-serif;color:#444;">If you have any questions or concerns about your order, please don't hesitate to contact us at <a href="mailto:process@kongconcentrates.com" style="color:#c9a84c;">process@kongconcentrates.com</a> and we will be glad to help.</p>`,
       text: `Thank you for your business — we truly appreciate your partnership!\n\nIf you have any questions or concerns about your order, please don't hesitate to contact us at process@kongconcentrates.com and we will be glad to help.`,
     },
   };
@@ -370,15 +405,12 @@ async function sendOrderStatusUpdate({ dispensary, status, orderId, total }) {
   await sendEmail({
     to: dispensary.email,
     subject: `Order #${shortId} — ${label} · Kong Concentrates`,
-    html: `
-      <h2 style="font-family:sans-serif;">Order Update</h2>
-      <p style="font-family:sans-serif;">Hi ${name},</p>
-      <p style="font-family:sans-serif;">Your order <strong>#${shortId}</strong> status has been updated to <strong>${label}</strong>.</p>
+    html: brandEmail(`Order Update — ${label}`, `
+      <p style="font-family:sans-serif;font-size:15px;color:#111;">Hi ${name},</p>
+      <p style="font-family:sans-serif;color:#444;">Your order <strong style="color:#111;">#${shortId}</strong> has been updated to <strong style="color:#111;">${label}</strong>.</p>
       ${msg.html}
-      <p style="font-family:sans-serif;text-align:center;">
-        <a href="https://kongconcentrates.com/wholesale/portal/" style="background:#c9a84c;color:#000;padding:10px 20px;text-decoration:none;font-weight:bold;">View Order Details</a>
-      </p>
-      <p style="font-family:sans-serif;color:#888;font-size:12px;">— Kong Concentrates LLC · 29141 S 647 Pl · Grove, OK 74344 · process@kongconcentrates.com</p>`,
+      ${brandedButton("https://kongconcentrates.com/wholesale/portal/", "View Order Details")}
+    `),
     text: `Hi ${name},\n\nYour order #${shortId} status has been updated to: ${label}\n\n${msg.text}\n\nView at https://kongconcentrates.com/wholesale/portal/\n\n— Kong Concentrates LLC`,
   });
 }
