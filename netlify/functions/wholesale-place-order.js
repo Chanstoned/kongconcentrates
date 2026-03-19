@@ -49,9 +49,6 @@ exports.handler = async (event) => {
       return { statusCode: 400, headers, body: JSON.stringify({ error: "Minimum order is $600." }) };
     }
 
-    // Delivery fee for orders under $900 (based on product subtotal before credit)
-    const deliveryFee = subtotal < 900 ? 50 : 0;
-
     // Validate requested credit — capped at product subtotal only; delivery fee is always charged
     const requestedCredit = Math.round((Number(rawCredit) || 0) * 100) / 100;
     const availableCredit = Math.floor((dispensary.reward_points || 0) / 100) * 5;
@@ -61,7 +58,11 @@ exports.handler = async (event) => {
       return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid credit amount" }) };
     }
 
-    const total = Math.round((subtotal + deliveryFee - creditApplied) * 100) / 100;
+    // Delivery fee — $50 when cash after credit is under $900
+    const cashAfterCredit = Math.round((subtotal - creditApplied) * 100) / 100;
+    const deliveryFee = cashAfterCredit < 900 ? 50 : 0;
+
+    const total = Math.round((cashAfterCredit + deliveryFee) * 100) / 100;
     const pointsToDeduct = Math.round((creditApplied / 5) * 100);
     const pointsToEarn = Math.floor(total);
     const newPoints = (dispensary.reward_points || 0) - pointsToDeduct + pointsToEarn;
