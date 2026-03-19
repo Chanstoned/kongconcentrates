@@ -1384,7 +1384,11 @@ function renderCommission(){
   const tableEl = document.getElementById('comm-table');
   spinner.style.display='none'; tableEl.style.display='block';
 
-  const totalComm = allOrders.reduce((s,o)=>s+Number(o.total)*0.10, 0);
+  const totalComm = allOrders.reduce((s,o)=>{
+    const deliveryFee = (o.wholesale_order_items||[]).find(it=>it.product_name==='Delivery Fee');
+    const commBase = Number(o.total) - (deliveryFee ? Number(deliveryFee.subtotal) : 0);
+    return s + commBase * 0.10;
+  }, 0);
   const totalPaid = commPayments.reduce((s,p)=>s+Number(p.amount), 0);
   const owed = Math.max(0, totalComm - totalPaid);
 
