@@ -506,7 +506,8 @@ async function submitOrder(){
   }));
 
   const subtotal = items.reduce((s,it)=>s+it.subtotal, 0);
-  const creditApplied = creditEnabled ? Math.min(availableCredit(), subtotal) : 0;
+  const deliveryFee = subtotal < 900 ? 50 : 0;
+  const creditApplied = creditEnabled ? Math.min(availableCredit(), subtotal + deliveryFee) : 0;
 
   btn.disabled=true; btn.textContent='Placing order…';
 
