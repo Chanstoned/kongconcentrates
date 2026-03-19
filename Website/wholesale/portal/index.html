@@ -236,13 +236,13 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
           <span class="order-total-label">Products</span>
           <span class="order-total-label" id="products-subtotal-val" style="color:rgba(240,234,216,0.7);">$0.00</span>
         </div>
-        <div class="order-total-row" id="delivery-fee-row" style="display:none;">
-          <span class="order-total-label">Delivery Fee <span style="font-size:9px;opacity:0.55;">(orders under $900)</span></span>
-          <span class="order-total-label" id="delivery-fee-val" style="color:rgba(240,234,216,0.7);">+$50.00</span>
-        </div>
         <div class="order-total-row" id="credit-applied-row" style="display:none;">
           <span class="order-total-label">Reward Credit</span>
           <span class="order-total-label" id="credit-applied-val" style="color:#60cc80;">−$0.00</span>
+        </div>
+        <div class="order-total-row" id="delivery-fee-row" style="display:none;">
+          <span class="order-total-label">Delivery Fee <span style="font-size:9px;opacity:0.55;">(cash payment under $900)</span></span>
+          <span class="order-total-label" id="delivery-fee-val" style="color:rgba(240,234,216,0.7);">+$50.00</span>
         </div>
         <div class="order-total-row" style="border-top:1px solid rgba(201,168,76,0.15);padding-top:12px;margin-top:4px;">
           <span class="order-total-label">Order Total</span>
@@ -466,11 +466,6 @@ function updateTotal(){
   if(subtotal > 0){ productsRow.style.display='flex'; productsVal.textContent='$'+subtotal.toFixed(2); }
   else { productsRow.style.display='none'; }
 
-  // Delivery fee — always $50 when product subtotal < $900, regardless of credit
-  const deliveryFee = subtotal > 0 && subtotal < 900 ? 50 : 0;
-  const deliveryRow = document.getElementById('delivery-fee-row');
-  deliveryRow.style.display = deliveryFee > 0 ? 'flex' : 'none';
-
   const credit = availableCredit();
   const rewardsSection = document.getElementById('rewards-section');
   if(credit > 0 && subtotal > 0){
@@ -492,7 +487,13 @@ function updateTotal(){
   if(applying > 0){ creditRow.style.display='flex'; document.getElementById('credit-applied-val').textContent='−$'+applying.toFixed(2); }
   else { creditRow.style.display='none'; }
 
-  const total = subtotal + deliveryFee - applying;
+  // Delivery fee — $50 when cash after credit is under $900
+  const cashAfterCredit = subtotal - applying;
+  const deliveryFee = subtotal > 0 && cashAfterCredit < 900 ? 50 : 0;
+  const deliveryRow = document.getElementById('delivery-fee-row');
+  deliveryRow.style.display = deliveryFee > 0 ? 'flex' : 'none';
+
+  const total = cashAfterCredit + deliveryFee;
   document.getElementById('order-total').textContent = '$'+total.toFixed(2);
 
   const ptsEarnRow = document.getElementById('pts-earn-row');
@@ -527,8 +528,9 @@ async function submitOrder(){
   }));
 
   const subtotal = items.reduce((s,it)=>s+it.subtotal, 0);
-  const deliveryFee = subtotal < 900 ? 50 : 0;
   const creditApplied = creditEnabled ? Math.min(availableCredit(), subtotal) : 0;
+  const cashAfterCredit = subtotal - creditApplied;
+  const deliveryFee = cashAfterCredit < 900 ? 50 : 0;
 
   btn.disabled=true; btn.textContent='Placing order…';
 
