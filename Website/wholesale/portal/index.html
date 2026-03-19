@@ -459,7 +459,7 @@ function updateTotal(){
   const credit = availableCredit();
   const rewardsSection = document.getElementById('rewards-section');
   if(credit > 0 && subtotal > 0){
-    const applying = Math.min(credit, subtotal + deliveryFee);
+    const applying = Math.min(credit, subtotal);
     document.getElementById('rewards-pts-info').textContent = (currentProfile?.reward_points||0) + ' pts available';
     document.getElementById('credit-toggle-label').textContent = 'Apply $'+applying.toFixed(2)+' reward credit toward this order';
     rewardsSection.style.display = 'block';
@@ -470,7 +470,7 @@ function updateTotal(){
     rewardsSection.style.display = 'none';
   }
 
-  const applying = creditEnabled ? Math.min(credit, subtotal + deliveryFee) : 0;
+  const applying = creditEnabled ? Math.min(credit, subtotal) : 0;
   const total = subtotal + deliveryFee - applying;
   document.getElementById('order-total').textContent = '$'+total.toFixed(2);
 
@@ -507,7 +507,7 @@ async function submitOrder(){
 
   const subtotal = items.reduce((s,it)=>s+it.subtotal, 0);
   const deliveryFee = subtotal < 900 ? 50 : 0;
-  const creditApplied = creditEnabled ? Math.min(availableCredit(), subtotal + deliveryFee) : 0;
+  const creditApplied = creditEnabled ? Math.min(availableCredit(), subtotal) : 0;
 
   btn.disabled=true; btn.textContent='Placing order…';
 
