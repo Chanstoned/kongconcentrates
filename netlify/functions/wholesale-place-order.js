@@ -52,10 +52,10 @@ exports.handler = async (event) => {
     // Delivery fee for orders under $900 (based on product subtotal before credit)
     const deliveryFee = subtotal < 900 ? 50 : 0;
 
-    // Validate requested credit (capped against subtotal + delivery, never negative)
+    // Validate requested credit — capped at product subtotal only; delivery fee is always charged
     const requestedCredit = Math.round((Number(rawCredit) || 0) * 100) / 100;
     const availableCredit = Math.floor((dispensary.reward_points || 0) / 100) * 5;
-    const creditApplied = Math.min(requestedCredit, availableCredit, subtotal + deliveryFee);
+    const creditApplied = Math.min(requestedCredit, availableCredit, subtotal);
 
     if (creditApplied < 0) {
       return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid credit amount" }) };
