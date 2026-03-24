@@ -401,8 +401,10 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
       <div class="fg"><label class="fl">OBNDD License #</label><input class="fi" type="text" id="acct-edit-obndd" placeholder="OBNDD-00000000"></div>
     </div>
     <div class="alert alert-err" id="acct-edit-err"></div>
+    <div class="alert alert-ok" id="acct-edit-ok"></div>
     <div class="form-actions" style="margin-top:16px;">
       <button class="btn-save" onclick="saveAccountEdit()">Save Changes</button>
+      <button class="btn-cancel" id="acct-reset-btn" onclick="sendPasswordResetLink()" style="margin-left:auto;">Send Password Reset</button>
       <button class="btn-cancel" onclick="closeAcctModal()">Cancel</button>
     </div>
   </div>
@@ -838,6 +840,23 @@ async function saveAccountEdit(){
   } else {
     errEl.textContent='Failed to update account.'; errEl.classList.add('show');
   }
+}
+
+async function sendPasswordResetLink(){
+  const id = document.getElementById('acct-edit-id').value;
+  const btn = document.getElementById('acct-reset-btn');
+  const okEl = document.getElementById('acct-edit-ok');
+  const errEl = document.getElementById('acct-edit-err');
+  okEl.classList.remove('show'); errEl.classList.remove('show');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  const res = await adminFetch('POST','',{action:'send-password-reset', id});
+  if(res){
+    okEl.textContent = 'Password reset email sent.'; okEl.classList.add('show');
+    setTimeout(()=>okEl.classList.remove('show'), 4000);
+  } else {
+    errEl.textContent = 'Failed to send reset email.'; errEl.classList.add('show');
+  }
+  btn.disabled = false; btn.textContent = 'Send Password Reset';
 }
 
 async function deleteAccount(id, name, btn){

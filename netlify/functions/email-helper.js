@@ -321,6 +321,23 @@ function brandedButton(url, label) {
   </table>`;
 }
 
+// ── Admin-created account welcome email ───────────────────────────
+async function sendAccountCreated({ name, contact_name, email, resetLink }) {
+  const recipientName = contact_name || name;
+  await sendEmail({
+    to: email,
+    subject: "Your Kong Concentrates Wholesale Account is Ready",
+    html: brandEmail("Welcome to Kong Concentrates Wholesale", `
+      <p style="font-family:sans-serif;font-size:15px;color:#111;">Hi ${recipientName},</p>
+      <p style="font-family:sans-serif;color:#444;">Your wholesale partner account with Kong Concentrates has been created and is ready to use.</p>
+      <p style="font-family:sans-serif;color:#444;">Click below to set your password and log in to the ordering portal:</p>
+      ${brandedButton(resetLink, "Set Password & Log In")}
+      <p style="font-family:sans-serif;font-size:13px;color:#888;">This link will expire in 24 hours. If you have any questions, reply to this email or contact us at <a href="mailto:process@kongconcentrates.com" style="color:#c9a84c;">process@kongconcentrates.com</a>.</p>
+    `),
+    text: `Hi ${recipientName},\n\nYour Kong Concentrates wholesale partner account is ready.\n\nSet your password and log in here:\n${resetLink}\n\nThis link expires in 24 hours. Questions? process@kongconcentrates.com\n\n— Kong Concentrates LLC`,
+  });
+}
+
 // ── New application received ──────────────────────────────────────
 async function sendApplicationReceived({ name, contact_name, email, phone, address, omma_license, obndd_license }) {
   await sendEmail({
@@ -551,6 +568,7 @@ async function sendOrderUpdated({ order, items, dispensary }) {
 
 module.exports = {
   sendApplicationReceived,
+  sendAccountCreated,
   sendAccountApproved,
   sendAccountRejected,
   sendOrderStatusUpdate,
