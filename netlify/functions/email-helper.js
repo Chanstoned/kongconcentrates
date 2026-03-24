@@ -78,17 +78,24 @@ function generateInvoicePDF({ order, items, dispensary }) {
     // ── Item rows
     let y = tTop + 22;
     items.forEach((it) => {
-      const info = getProductInfo(it.product_name);
+      const dbInfo = (it.batch_number || it.metrc_id)
+        ? { batch: it.batch_number || null, metrc: it.metrc_id || null }
+        : null;
+      const info = dbInfo || getProductInfo(it.product_name);
       doc.fontSize(11).font("Helvetica").fillColor("#222")
         .text(it.product_name, 50, y, { width: 300 });
       doc.text(String(it.quantity),                    370, y, { width: 50,  align: "right" });
       doc.text("$" + Number(it.unit_price).toFixed(2), 430, y, { width: 65,  align: "right" });
       doc.text("$" + Number(it.subtotal).toFixed(2),   500, y, { width: 62,  align: "right" });
-      if (info) {
+      const hasBatchInfo = info && (info.batch || info.metrc);
+      if (hasBatchInfo) {
+        const parts = [];
+        if (info.batch) parts.push(`Batch: ${info.batch}`);
+        if (info.metrc) parts.push(`Metrc: ${info.metrc}`);
         doc.fontSize(8).font("Helvetica").fillColor("#999")
-          .text(`Batch: ${info.batch}  ·  Metrc: ${info.metrc}`, 50, y + 14, { width: 400 });
+          .text(parts.join("  ·  "), 50, y + 14, { width: 400 });
       }
-      const rowH = info ? 38 : 26;
+      const rowH = hasBatchInfo ? 38 : 26;
       doc.moveTo(50, y + rowH - 3).lineTo(562, y + rowH - 3).lineWidth(0.3).strokeColor("#eee").stroke();
       y += rowH;
     });
