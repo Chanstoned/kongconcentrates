@@ -1,5 +1,5 @@
 const { createClient } = require("@supabase/supabase-js");
-const { sendAccountApproved, sendAccountRejected, sendOrderStatusUpdate, sendOrderConfirmation, sendOrderUpdated } = require("./email-helper");
+const { sendAccountCreated, sendAccountApproved, sendAccountRejected, sendOrderStatusUpdate, sendOrderConfirmation, sendOrderUpdated } = require("./email-helper");
 
 // Supabase admin client — uses service role key to bypass RLS
 const supabaseAdmin = createClient(
@@ -320,6 +320,33 @@ exports.handler = async (event) => {
           await supabaseAdmin.auth.admin.deleteUser(user.id);
           throw dbErr;
         }
+        // Generate a password-reset link and email it to the new dispensary
+        const { data: linkData } = await supabaseAdmin.auth.admin.generateLink({
+          type: "recovery",
+          email,
+          options: { redirectTo: "https://kongconcentrates.com/wholesale/" },
+        });
+        const resetLink = linkData?.properties?.action_link;
+        if (resetLink) {
+          await sendAccountCreated({ name, contact_name, email, resetLink }).catch(console.error);
+        }
+        return ok({ ok: true });
+      }
+
+      // Send a password-reset link to an existing dispensary account
+      if (action === "send-password-reset") {
+        const { id } = body;
+        if (!id) return err("Missing account id.");
+        const { data: disp } = await supabaseAdmin.from("dispensaries").select("email,name,contact_name").eq("id", id).single();
+        if (!disp) return err("Account not found.");
+        const { data: linkData } = await supabaseAdmin.auth.admin.generateLink({
+          type: "recovery",
+          email: disp.email,
+          options: { redirectTo: "https://kongconcentrates.com/wholesale/" },
+        });
+        const resetLink = linkData?.properties?.action_link;
+        if (!resetLink) return err("Failed to generate reset link.");
+        await sendAccountCreated({ name: disp.name, contact_name: disp.contact_name, email: disp.email, resetLink });
         return ok({ ok: true });
       }
 
