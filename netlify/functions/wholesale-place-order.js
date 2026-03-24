@@ -108,14 +108,19 @@ exports.handler = async (event) => {
       .eq("id", user.id)
       .then(({ error }) => { if (error) console.warn("reward_points column not yet migrated:", error.message); });
 
-    // Attach image_url from products so emails show the correct image per product
+    // Attach image_url, batch_number, metrc_id from products for emails and invoice
     const productIds = items.map((it) => it.product_id).filter(Boolean);
-    let imgMap = {};
+    let prodMap = {};
     if (productIds.length) {
-      const { data: prods } = await supabaseAdmin.from("wholesale_products").select("id, image_url").in("id", productIds);
-      if (prods) prods.forEach((p) => { imgMap[p.id] = p.image_url; });
+      const { data: prods } = await supabaseAdmin.from("wholesale_products").select("id, image_url, batch_number, metrc_id").in("id", productIds);
+      if (prods) prods.forEach((p) => { prodMap[p.id] = p; });
     }
-    const itemsWithImages = items.map((it) => ({ ...it, image_url: imgMap[it.product_id] || null }));
+    const itemsWithImages = items.map((it) => ({
+      ...it,
+      image_url:    prodMap[it.product_id]?.image_url    || null,
+      batch_number: prodMap[it.product_id]?.batch_number || null,
+      metrc_id:     prodMap[it.product_id]?.metrc_id     || null,
+    }));
 
     await sendOrderConfirmation({ order, items: itemsWithImages, dispensary });
 
