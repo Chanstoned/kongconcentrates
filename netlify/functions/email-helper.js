@@ -61,9 +61,10 @@ function generateInvoicePDF({ order, items, dispensary }) {
     doc.fontSize(15).font("Helvetica-Bold").fillColor("#111").text(dispensary.name, 50, 140);
     doc.fontSize(10).font("Helvetica").fillColor("#555");
     let billY = 160;
-    if (dispensary.address) { doc.text(dispensary.address, 50, billY); billY += 14; }
-    if (dispensary.phone)   { doc.text(dispensary.phone,   50, billY); billY += 14; }
-    if (dispensary.email)   { doc.text(dispensary.email,   50, billY); }
+    if (dispensary.address)      { doc.text(dispensary.address,                        50, billY); billY += 14; }
+    if (dispensary.phone)        { doc.text(dispensary.phone,                          50, billY); billY += 14; }
+    if (dispensary.email)        { doc.text(dispensary.email,                          50, billY); billY += 14; }
+    if (dispensary.omma_license) { doc.text("OMMA License: " + dispensary.omma_license, 50, billY); }
 
     // ── Items table header
     const tTop = 230;

@@ -723,7 +723,7 @@ async function printInvoice(orderId){
     <div>
       <div class="inv-bill-label">Bill To</div>
       <div class="inv-bill-name">${esc(d.name)}</div>
-      <div class="inv-bill-info">${esc(d.address||'')}<br>${esc(d.phone||'')} · ${esc(d.email||'')}</div>
+      <div class="inv-bill-info">${esc(d.address||'')}<br>${esc(d.phone||'')} · ${esc(d.email||'')}${d.omma_license?'<br>OMMA License: '+esc(d.omma_license):''}</div>
     </div>
     <table class="inv-table">
       <thead><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Subtotal</th></tr></thead>

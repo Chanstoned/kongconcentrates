@@ -129,6 +129,20 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 .divider .ln{flex:1;height:1px;background:#232323;}
 .divider span{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#555;white-space:nowrap;}
 
+/* ━━ EMAIL SIGNUP ━━ */
+.email-signup{border-top:1px solid #181818;padding:52px 40px;display:flex;justify-content:center;}
+.email-signup-inner{max-width:480px;width:100%;text-align:center;}
+.es-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:10px;}
+.es-sub{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;color:rgba(240,234,216,0.45);line-height:1.9;margin-bottom:24px;}
+.es-row{display:flex;gap:8px;}
+.es-input{flex:1;background:#0d0d0d;border:1px solid #242424;color:var(--off-white);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;padding:11px 14px;outline:none;transition:border-color 0.2s;min-width:0;}
+.es-input:focus{border-color:rgba(201,168,76,0.4);}
+.es-input::placeholder{color:#3a3a3a;}
+.es-btn{background:transparent;border:1px solid rgba(201,168,76,0.35);color:var(--gold);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:11px 20px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.es-btn:hover{background:rgba(201,168,76,0.08);border-color:var(--gold);}
+.es-msg{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-top:16px;display:none;}
+@media(max-width:520px){.es-row{flex-direction:column;}.email-signup{padding:40px 20px;}}
+
 /* footer */
 footer{margin-top:auto;padding:28px 40px;border-top:1px solid #181818;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
 footer p{font-family:'DM Mono',monospace;font-size:11px;color:#363636;letter-spacing:0.05em;}
@@ -261,6 +275,23 @@ footer a:hover{color:var(--gold)}
     </div>
   </main>
 
+  <!-- EMAIL SIGNUP -->
+  <div class="email-signup">
+    <div class="email-signup-inner">
+      <div class="es-label">Stay in the Loop</div>
+      <p class="es-sub">New drops, exclusive discounts, and giveaways.</p>
+      <form name="newsletter" netlify data-netlify-honeypot="bot-field" onsubmit="submitNewsletter(event,this)">
+        <input type="hidden" name="form-name" value="newsletter">
+        <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
+        <div class="es-row">
+          <input class="es-input" type="email" name="email" placeholder="your@email.com" required>
+          <button class="es-btn" type="submit">Subscribe</button>
+        </div>
+        <div class="es-msg" id="es-msg">You're on the list.</div>
+      </form>
+    </div>
+  </div>
+
   <footer>
     <p>&copy; 2026 Kong Concentrates LLC &nbsp;&middot;&nbsp; Grove, OK 74344</p>
     <p><a href="/wholesale/">Wholesale</a> &nbsp;&middot;&nbsp; <a href="/blog">Blog</a> &nbsp;&middot;&nbsp; <a href="/privacy-policy/">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="/terms-of-service/">Terms</a> &nbsp;&middot;&nbsp; <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a></p>
@@ -279,6 +310,20 @@ footer a:hover{color:var(--gold)}
     site.classList.add('show');
   }, delay);
 })();
+
+function submitNewsletter(e, form) {
+  e.preventDefault();
+  fetch(window.location.pathname, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: new URLSearchParams(new FormData(form)).toString()
+  }).then(() => {
+    form.querySelector('.es-row').style.display = 'none';
+    form.querySelector('.es-msg').style.display = 'block';
+  }).catch(() => {
+    form.querySelector('.es-btn').textContent = 'Try again';
+  });
+}
 
 // Gallery thumb switcher
 function switchThumb(mainId, thumbEl, src) {
