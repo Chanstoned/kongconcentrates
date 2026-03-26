@@ -64,7 +64,7 @@ exports.handler = async (event) => {
           .from("wholesale_orders")
           .select(
             `*,
-             dispensaries(name, address, phone, email),
+             dispensaries(name, address, phone, email, omma_license),
              wholesale_order_items(*)`
           )
           .order("created_at", { ascending: false });
