@@ -118,6 +118,10 @@ alter table dispensaries    add column if not exists reward_points  integer     
 alter table wholesale_orders add column if not exists credit_applied numeric(10,2) not null default 0;
 alter table wholesale_orders add column if not exists points_earned  integer      not null default 0;
 
+-- ── OMMA / OBNDD license migration (run if table already exists) ───
+alter table dispensaries add column if not exists omma_license  text;
+alter table dispensaries add column if not exists obndd_license text;
+
 -- ── Product image migration (run if table already exists) ──────────
 alter table wholesale_products add column if not exists image_url text;
 
