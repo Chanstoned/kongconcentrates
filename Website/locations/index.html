@@ -305,6 +305,50 @@ var LOCATIONS = [
     lng: -97.6147,
     mapsUrl: 'https://maps.google.com/?q=3820+N+Rockwell+Ave+Suite+C,+Bethany,+OK+73008',
     img: '/images/IMG_3405.png'
+  },
+  {
+    id: 'dab-n-go',
+    name: 'Dab & Go',
+    address: '5 SE 89th St',
+    city: 'Oklahoma City, OK 73149',
+    phone: '(405) 724-9235',
+    lat: 35.389,
+    lng: -97.505,
+    mapsUrl: 'https://maps.google.com/?q=5+SE+89th+St,+Oklahoma+City,+OK+73149',
+    img: null
+  },
+  {
+    id: 'pharm-788',
+    name: 'Pharm 788',
+    address: '480858 US-64',
+    city: 'Roland, OK 74954',
+    phone: '(918) 503-6023',
+    lat: 35.424,
+    lng: -94.517,
+    mapsUrl: 'https://maps.google.com/?q=480858+US-64,+Roland,+OK+74954',
+    img: '/images/pharm788.png'
+  },
+  {
+    id: 'joint-custody',
+    name: 'Joint Custody Cannabis',
+    address: '707 S Roland Rd',
+    city: 'Roland, OK 74954',
+    phone: '',
+    lat: 35.430,
+    lng: -94.514,
+    mapsUrl: 'https://maps.google.com/?q=707+S+Roland+Rd,+Roland,+OK+74954',
+    img: '/images/joint custody.jpg'
+  },
+  {
+    id: 'redbilly',
+    name: 'RedBilly Dispensary',
+    address: '3144 US-412',
+    city: 'Colcord, OK 74338',
+    phone: '(918) 226-1152',
+    lat: 36.539,
+    lng: -94.694,
+    mapsUrl: 'https://maps.google.com/?q=3144+US-412,+Colcord,+OK+74338',
+    img: '/images/redbilly.png'
   }
 ];
 
@@ -336,7 +380,7 @@ function initMap() {
   LOCATIONS.forEach(function(loc) {
     var m = L.marker([loc.lat, loc.lng], {icon: makeIcon(false)})
       .addTo(map)
-      .bindPopup('<strong>' + loc.name + '</strong><br>' + loc.address + '<br>' + loc.city + '<br>' + loc.phone);
+      .bindPopup('<strong>' + loc.name + '</strong><br>' + loc.address + '<br>' + loc.city + (loc.phone ? '<br>' + loc.phone : ''));
     storeMarkers.push(m);
   });
   renderCards(null, null);
@@ -379,10 +423,10 @@ function renderCards(userLat, userLng) {
     }
     html += '</div>';
     html += '<div class="loc-addr">' + loc.address + '<br>' + loc.city + '</div>';
-    html += '<div class="loc-phone"><a href="tel:' + loc.phone.replace(/\D/g,'') + '">' + loc.phone + '</a></div>';
+    if (loc.phone) html += '<div class="loc-phone"><a href="tel:' + loc.phone.replace(/\D/g,'') + '">' + loc.phone + '</a></div>';
     html += '<div class="loc-actions">';
     html += '<a class="loc-link" href="' + loc.mapsUrl + '" target="_blank" rel="noopener">Get Directions</a>';
-    html += '<a class="loc-link" href="tel:' + loc.phone.replace(/\D/g,'') + '">Call</a>';
+    if (loc.phone) html += '<a class="loc-link" href="tel:' + loc.phone.replace(/\D/g,'') + '">Call</a>';
     html += '</div>';
     html += '</div>';
   });
