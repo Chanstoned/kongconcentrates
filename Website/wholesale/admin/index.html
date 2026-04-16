@@ -351,6 +351,7 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
       <button type="button" onclick="addOrderLine()" style="margin-top:10px;background:none;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.7);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:7px 14px;cursor:pointer;">+ Add Line Item</button>
     </div>
     <div class="fg"><label class="fl">Notes</label><textarea class="fi" id="co-notes" placeholder="Any special instructions…" style="min-height:56px;"></textarea></div>
+    <div id="co-delivery-fee-row" style="display:none;text-align:right;font-family:'DM Mono',monospace;font-size:0.85rem;color:#888;margin:4px 0;">Delivery Fee: $50.00</div>
     <div style="text-align:right;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold2);margin:8px 0 16px;">Total: $<span id="co-total">0.00</span></div>
     <div class="alert alert-err" id="co-err"></div>
     <div class="form-actions">
@@ -1193,12 +1194,16 @@ function recalcLine(row){
 }
 
 function recalcOrderTotal(){
-  let total=0;
+  let subtotal=0;
   document.querySelectorAll('#co-items>.co-line').forEach(row=>{
     const qty = parseFloat(row.querySelector('.co-qty').value)||0;
     const price = parseFloat(row.querySelector('.co-price').value)||0;
-    total += qty*price;
+    subtotal += qty*price;
   });
+  const deliveryFee = subtotal > 0 && subtotal < 900 ? 50 : 0;
+  const total = subtotal + deliveryFee;
+  const feeEl = document.getElementById('co-delivery-fee-row');
+  if(feeEl) feeEl.style.display = deliveryFee > 0 ? '' : 'none';
   document.getElementById('co-total').textContent = total.toFixed(2);
 }
 
