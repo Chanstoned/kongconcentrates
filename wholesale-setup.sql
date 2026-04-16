@@ -139,3 +139,8 @@ create table if not exists wholesale_commission_payments (
 );
 alter table wholesale_commission_payments enable row level security;
 -- No public policies — only accessible via service role key (admin API)
+
+-- ── Status 'paid' migration (run once) ────────────────────────────
+alter table wholesale_orders drop constraint if exists wholesale_orders_status_check;
+alter table wholesale_orders add constraint wholesale_orders_status_check
+  check (status in ('received','processing','out_for_delivery','complete','paid'));

@@ -132,20 +132,23 @@ exports.handler = async (event) => {
 
       // Update order status
       if (action === "update-status") {
-        const allowed = ["received", "processing", "out_for_delivery", "complete"];
+        const allowed = ["received", "processing", "out_for_delivery", "complete", "paid"];
         if (!allowed.includes(body.status)) return err("Invalid status");
         const { error: e } = await supabaseAdmin
           .from("wholesale_orders")
           .update({ status: body.status, updated_at: new Date().toISOString() })
           .eq("id", body.orderId);
         if (e) throw e;
-        const { data: orderData } = await supabaseAdmin
-          .from("wholesale_orders")
-          .select("dispensary_id, total, dispensaries(name, contact_name, email)")
-          .eq("id", body.orderId)
-          .single();
-        if (orderData?.dispensaries) {
-          await sendOrderStatusUpdate({ dispensary: orderData.dispensaries, status: body.status, orderId: body.orderId, total: orderData.total }).catch(console.error);
+        // No email notification for 'paid' status
+        if (body.status !== "paid") {
+          const { data: orderData } = await supabaseAdmin
+            .from("wholesale_orders")
+            .select("dispensary_id, total, dispensaries(name, contact_name, email)")
+            .eq("id", body.orderId)
+            .single();
+          if (orderData?.dispensaries) {
+            await sendOrderStatusUpdate({ dispensary: orderData.dispensaries, status: body.status, orderId: body.orderId, total: orderData.total }).catch(console.error);
+          }
         }
         return ok({ ok: true });
       }
