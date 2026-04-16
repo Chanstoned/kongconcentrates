@@ -228,9 +228,9 @@ exports.handler = async (event) => {
         return ok({ ok: true });
       }
 
-      // Edit an existing order's items, notes, and total — then resend invoice
+      // Edit an existing order's items, notes, and total — optionally resend invoice
       if (action === "update-order") {
-        const { orderId, items, notes } = body;
+        const { orderId, items, notes, resend } = body;
         if (!orderId || !items || !items.length) return err("orderId and items are required.");
         const total = Math.round(items.reduce((sum, it) => sum + Number(it.subtotal), 0) * 100) / 100;
 
@@ -267,7 +267,7 @@ exports.handler = async (event) => {
           .eq("id", orderId)
           .single();
 
-        if (orderData?.dispensaries) {
+        if (resend && orderData?.dispensaries) {
           const productIds = items.map((it) => it.product_id).filter(Boolean);
           let prodMap = {};
           if (productIds.length) {

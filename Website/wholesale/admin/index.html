@@ -374,12 +374,14 @@ footer p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;co
       <label class="fl" style="display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;opacity:0.8;">Line Items</label>
       <div id="eo-items"></div>
       <button type="button" onclick="addEditOrderLine()" style="margin-top:10px;background:none;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.7);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:7px 14px;cursor:pointer;">+ Add Line Item</button>
+      <button type="button" id="eo-fee-btn" onclick="toggleDeliveryFee()" style="margin-top:10px;margin-left:8px;background:none;border:1px solid rgba(201,168,76,0.25);color:rgba(201,168,76,0.7);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:7px 14px;cursor:pointer;">+ Add Delivery Fee ($50)</button>
     </div>
     <div class="fg"><label class="fl">Notes</label><textarea class="fi" id="eo-notes" placeholder="Any special instructions…" style="min-height:56px;"></textarea></div>
     <div style="text-align:right;font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold2);margin:8px 0 16px;">Total: $<span id="eo-total">0.00</span></div>
     <div class="alert alert-err" id="eo-err"></div>
     <div class="form-actions">
-      <button class="btn-save" onclick="submitEditOrder()">Save &amp; Resend Invoice</button>
+      <button class="btn-save" onclick="submitEditOrder(false)" style="background:rgba(201,168,76,0.15);color:var(--gold2);">Save</button>
+      <button class="btn-save" onclick="submitEditOrder(true)">Save &amp; Resend Invoice</button>
       <button class="btn-cancel" onclick="closeEditOrder()">Cancel</button>
     </div>
   </div>
@@ -1352,9 +1354,42 @@ function recalcEditOrderTotal() {
     total += qty * price;
   });
   document.getElementById('eo-total').textContent = total.toFixed(2);
+  // Update fee button label based on whether a delivery fee line exists
+  const hasFee = hasDeliveryFeeLine();
+  const btn = document.getElementById('eo-fee-btn');
+  if (btn) btn.textContent = hasFee ? '− Remove Delivery Fee ($50)' : '+ Add Delivery Fee ($50)';
 }
 
-async function submitEditOrder() {
+function hasDeliveryFeeLine() {
+  let found = false;
+  document.querySelectorAll('#eo-items>.eo-line').forEach(row => {
+    const sel = row.querySelector('.eo-prod');
+    const customName = row.querySelector('.eo-custom-name');
+    const opt = sel ? sel.selectedOptions[0] : null;
+    const name = (opt && opt.dataset.name) ? opt.dataset.name : (customName ? customName.value.trim() : '');
+    if (name === 'Delivery Fee') found = true;
+  });
+  return found;
+}
+
+function toggleDeliveryFee() {
+  let feeRow = null;
+  document.querySelectorAll('#eo-items>.eo-line').forEach(row => {
+    const sel = row.querySelector('.eo-prod');
+    const customName = row.querySelector('.eo-custom-name');
+    const opt = sel ? sel.selectedOptions[0] : null;
+    const name = (opt && opt.dataset.name) ? opt.dataset.name : (customName ? customName.value.trim() : '');
+    if (name === 'Delivery Fee') feeRow = row;
+  });
+  if (feeRow) {
+    feeRow.remove();
+    recalcEditOrderTotal();
+  } else {
+    addEditOrderLine({ product_id: null, product_name: 'Delivery Fee', quantity: 1, unit_price: 50, subtotal: 50 });
+  }
+}
+
+async function submitEditOrder(resend) {
   const errEl = document.getElementById('eo-err');
   errEl.classList.remove('show');
 
@@ -1379,11 +1414,11 @@ async function submitEditOrder() {
   }
 
   const notes = document.getElementById('eo-notes').value.trim();
-  const result = await adminFetch('POST', '', { action: 'update-order', orderId: editingOrderId, items, notes: notes || null });
+  const result = await adminFetch('POST', '', { action: 'update-order', orderId: editingOrderId, items, notes: notes || null, resend: !!resend });
   if (result) {
     closeEditOrder();
     const okEl = document.getElementById('orders-ok');
-    okEl.textContent = 'Order updated and invoice emailed.';
+    okEl.textContent = resend ? 'Order updated and invoice emailed.' : 'Order updated.';
     okEl.classList.add('show');
     setTimeout(() => okEl.classList.remove('show'), 4000);
     await loadOrders();
