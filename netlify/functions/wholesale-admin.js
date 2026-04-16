@@ -359,7 +359,9 @@ exports.handler = async (event) => {
       if (action === "create-order") {
         const { dispensary_id, items, notes } = body;
         if (!dispensary_id || !items || !items.length) return err("dispensary_id and items are required.");
-        const total = items.reduce((sum, it) => sum + Number(it.subtotal), 0);
+        const subtotal = Math.round(items.reduce((sum, it) => sum + Number(it.subtotal), 0) * 100) / 100;
+        const deliveryFee = subtotal < 900 ? 50 : 0;
+        const total = Math.round((subtotal + deliveryFee) * 100) / 100;
         const pointsToEarn = Math.floor(total);
         const { data: order, error: orderErr } = await supabaseAdmin
           .from("wholesale_orders")
@@ -367,16 +369,20 @@ exports.handler = async (event) => {
           .select()
           .single();
         if (orderErr) throw orderErr;
+        const lineItems = items.map((it) => ({
+          order_id: order.id,
+          product_id: it.product_id || null,
+          product_name: it.product_name,
+          quantity: it.quantity,
+          unit_price: it.unit_price,
+          subtotal: it.subtotal,
+        }));
+        if (deliveryFee > 0) {
+          lineItems.push({ order_id: order.id, product_id: null, product_name: "Delivery Fee", quantity: 1, unit_price: 50, subtotal: 50 });
+        }
         const { error: itemsErr } = await supabaseAdmin
           .from("wholesale_order_items")
-          .insert(items.map((it) => ({
-            order_id: order.id,
-            product_id: it.product_id || null,
-            product_name: it.product_name,
-            quantity: it.quantity,
-            unit_price: it.unit_price,
-            subtotal: it.subtotal,
-          })));
+          .insert(lineItems);
         if (itemsErr) throw itemsErr;
         const { data: dispensary } = await supabaseAdmin
           .from("dispensaries")
