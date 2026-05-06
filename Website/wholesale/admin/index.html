@@ -556,7 +556,7 @@ function renderOrders(){
           <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;">${esc(dispName)}</span>
           <span style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(240,234,216,0.35);">${date}</span>
           <span style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold2);margin-left:auto;">$${Number(order.total).toFixed(2)}</span>
-          <select class="status-sel" onchange="updateStatus('${order.id}',this.value)" onclick="event.stopPropagation()">
+          <select class="status-sel" onchange="updateStatus('${order.id}',this.value,this)" onclick="event.stopPropagation()">
             ${['received','processing','out_for_delivery','complete','paid'].map(s=>`<option value="${s}" ${order.status===s?'selected':''}>${statusLabel[s]}</option>`).join('')}
           </select>
           <button class="btn-invoice" onclick="event.stopPropagation();printInvoice('${order.id}')">Invoice</button>
@@ -595,7 +595,7 @@ async function deleteOrder(id, btn){
   } else { btn.disabled=false; }
 }
 
-async function updateStatus(orderId, status){
+async function updateStatus(orderId, status, sel){
   const ok = await adminFetch('POST','',{action:'update-status',orderId,status});
   const okEl = document.getElementById('orders-ok');
   const errEl = document.getElementById('orders-err');
@@ -605,8 +605,11 @@ async function updateStatus(orderId, status){
     okEl.textContent='Order status updated.'; okEl.classList.add('show');
     setTimeout(()=>okEl.classList.remove('show'),3000);
   } else {
-    errEl.textContent='Failed to update status.'; errEl.classList.add('show');
-    setTimeout(()=>errEl.classList.remove('show'),4000);
+    // Revert the select back to the actual stored status so the UI stays consistent
+    const order = allOrders.find(o=>o.id===orderId);
+    if(order && sel) sel.value = order.status;
+    errEl.textContent='Failed to update status. If setting to Paid, run the database migration first.'; errEl.classList.add('show');
+    setTimeout(()=>errEl.classList.remove('show'),6000);
   }
 }
 
