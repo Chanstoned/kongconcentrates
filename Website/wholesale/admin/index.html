@@ -642,19 +642,15 @@ async function loadAccounts(){
   if(pending.length){
     html += `<div style="margin-bottom:28px;">
       <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,100,50,0.8);margin-bottom:14px;">Pending Approval (${pending.length})</div>
-      <div class="tbl-wrap"><table class="data-tbl">
-        <thead><tr><th>Dispensary</th><th>Contact</th><th>Email</th><th>Phone</th><th>OMMA</th><th>OBNDD</th><th>Address</th><th>Applied</th><th class="col-actions">Actions</th></tr></thead>
+      <table class="data-tbl">
+        <thead><tr><th>Dispensary</th><th>Contact</th><th>Licenses</th><th>Applied</th><th>Actions</th></tr></thead>
         <tbody>${pending.map(d=>`
           <tr>
-            <td><strong>${esc(d.name)}</strong></td>
-            <td class="mono">${esc(d.contact_name||'')}</td>
-            <td class="mono" style="font-size:11px;">${esc(d.email||'')}</td>
-            <td class="mono">${esc(d.phone||'')}</td>
-            <td class="mono">${esc(d.omma_license||'—')}</td>
-            <td class="mono">${esc(d.obndd_license||'—')}</td>
-            <td style="font-size:13px;">${esc(d.address||'')}</td>
+            <td><strong>${esc(d.name)}</strong>${d.address?`<br><span style="font-size:12px;color:rgba(240,234,216,0.35);">${esc(d.address)}</span>`:''}</td>
+            <td class="mono" style="font-size:11px;line-height:1.8;">${esc(d.contact_name||'')}<br>${esc(d.email||'')}<br>${esc(d.phone||'')}</td>
+            <td class="mono" style="font-size:11px;line-height:1.8;">${d.omma_license?`OMMA: ${esc(d.omma_license)}<br>`:''}${d.obndd_license?`OBNDD: ${esc(d.obndd_license)}`:'—'}</td>
             <td class="mono">${new Date(d.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</td>
-            <td class="col-actions" style="white-space:nowrap;">
+            <td style="white-space:nowrap;">
               <button class="btn-approve" onclick="approveAccount('${d.id}',true,this)">Approve</button>
               <button class="btn-reject" onclick="approveAccount('${d.id}',false,this)">Reject</button>
               <button class="btn-edit" style="margin-left:6px;" onclick="openAcctEdit('${d.id}')">Edit</button>
@@ -662,33 +658,28 @@ async function loadAccounts(){
             </td>
           </tr>`).join('')}
         </tbody>
-      </table></div>
+      </table>
     </div>`;
   }
 
   html += `<div>
     <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.3);margin-bottom:14px;">Active Accounts (${approved.length})</div>
-    ${approved.length ? `<div class="tbl-wrap"><table class="data-tbl">
-      <thead><tr><th>Dispensary</th><th>Contact</th><th>Email</th><th>Phone</th><th>OMMA</th><th>OBNDD</th><th>Address</th><th>Points</th><th>Since</th><th class="col-actions">Actions</th></tr></thead>
+    ${approved.length ? `<table class="data-tbl">
+      <thead><tr><th>Dispensary</th><th>Contact</th><th>Licenses</th><th>Points &middot; Since</th><th>Actions</th></tr></thead>
       <tbody>${approved.map(d=>`
         <tr>
-          <td><strong>${esc(d.name)}</strong></td>
-          <td class="mono">${esc(d.contact_name||'')}</td>
-          <td class="mono" style="font-size:11px;">${esc(d.email||'')}</td>
-          <td class="mono">${esc(d.phone||'')}</td>
-          <td class="mono">${esc(d.omma_license||'—')}</td>
-          <td class="mono">${esc(d.obndd_license||'—')}</td>
-          <td style="font-size:13px;">${esc(d.address||'')}</td>
-          <td class="mono" style="color:var(--gold);white-space:nowrap;" id="pts-${d.id}">${d.reward_points||0} pts</td>
-          <td class="mono">${new Date(d.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</td>
-          <td class="col-actions" style="white-space:nowrap;">
+          <td><strong>${esc(d.name)}</strong>${d.address?`<br><span style="font-size:12px;color:rgba(240,234,216,0.35);">${esc(d.address)}</span>`:''}</td>
+          <td class="mono" style="font-size:11px;line-height:1.8;">${esc(d.contact_name||'')}<br>${esc(d.email||'')}<br>${esc(d.phone||'')}</td>
+          <td class="mono" style="font-size:11px;line-height:1.8;">${d.omma_license?`OMMA: ${esc(d.omma_license)}<br>`:''}${d.obndd_license?`OBNDD: ${esc(d.obndd_license)}`:'—'}</td>
+          <td class="mono" style="white-space:nowrap;"><span style="color:var(--gold);" id="pts-${d.id}">${d.reward_points||0} pts</span><br><span style="color:rgba(240,234,216,0.35);font-size:10px;">${new Date(d.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span></td>
+          <td style="white-space:nowrap;">
             <button class="btn-invoice" onclick="viewPointsHistory('${d.id}')" style="margin-right:6px;">Orders &amp; Pts</button>
             <button class="btn-edit" onclick="openAcctEdit('${d.id}')">Edit</button>
             <button class="btn-del" onclick="deleteAccount('${d.id}','${esc(d.name)}',this)">Delete</button>
           </td>
         </tr>`).join('')}
       </tbody>
-    </table></div>` : '<div class="empty-state">No approved accounts yet.</div>'}
+    </table>` : '<div class="empty-state">No approved accounts yet.</div>'}
   </div>`;
 
   content.innerHTML = html;
