@@ -124,6 +124,16 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 .card-cta svg{width:10px;height:10px;stroke:currentColor;transition:transform 0.2s;}
 .product-card:hover .card-cta svg{transform:translateX(3px);}
 
+/* Sold out */
+.product-card.sold-out{pointer-events:none;opacity:0.65;}
+.sold-out-badge{
+  position:absolute;top:14px;right:14px;
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;
+  background:#1a1a1a;color:rgba(240,234,216,0.45);
+  border:1px solid #333;padding:5px 12px;
+}
+.card-gallery{position:relative;}
+
 /* ━━ DIVIDER ━━ */
 .divider{display:flex;align-items:center;gap:18px;padding:0 40px;margin:0 0 56px;}
 .divider .ln{flex:1;height:1px;background:#232323;}
@@ -210,8 +220,9 @@ footer a:hover{color:var(--gold)}
     <div class="shop-grid">
 
       <!-- Kong T-Shirt -->
-      <a class="product-card" href="/merch/kong-tshirt/">
+      <div class="product-card sold-out">
         <div class="card-gallery">
+          <div class="sold-out-badge">Sold Out</div>
           <img
             class="card-gallery-main"
             src="/images/kongshirt%20back%20512.png"
@@ -225,14 +236,15 @@ footer a:hover{color:var(--gold)}
           <div class="card-desc">Premium heavyweight tee featuring the iconic Kong Concentrates logo. Sizes S &amp; 2XL available. Quality you can feel.</div>
           <div class="card-footer">
             <span class="card-price">$40</span>
-            <span class="card-cta">View Product <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            <span class="card-cta" style="color:rgba(240,234,216,0.25)">Sold Out</span>
           </div>
         </div>
-      </a>
+      </div>
 
       <!-- Sticker Pack -->
-      <a class="product-card" href="/merch/sticker-pack/">
+      <div class="product-card sold-out">
         <div class="card-gallery">
+          <div class="sold-out-badge">Sold Out</div>
           <img
             class="card-gallery-main"
             src="/images/stickerpack.jpg"
@@ -246,10 +258,10 @@ footer a:hover{color:var(--gold)}
           <div class="card-desc">Official Kong Concentrates sticker pack. Show your love for solventless wherever you go. High-quality vinyl, weather-resistant.</div>
           <div class="card-footer">
             <span class="card-price">$10</span>
-            <span class="card-cta">View Product <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            <span class="card-cta" style="color:rgba(240,234,216,0.25)">Sold Out</span>
           </div>
         </div>
-      </a>
+      </div>
 
       <!-- Private Consultation -->
       <a class="product-card" href="/merch/private-consultation/">

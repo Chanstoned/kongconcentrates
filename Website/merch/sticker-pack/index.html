@@ -141,18 +141,15 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,0.97);backdrop-
 .pd-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(240,234,216,0.3);min-width:80px;}
 .pd-val{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;color:rgba(240,234,216,0.65);}
 
-/* Buy button */
-.buy-btn{
+/* Sold out */
+.sold-out-bar{
   width:100%;padding:18px;margin-bottom:14px;
-  background:transparent;border:1px solid var(--gold);color:var(--gold);
+  background:#141414;border:1px solid #2a2a2a;
   font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;
   letter-spacing:0.4em;text-transform:uppercase;
-  cursor:pointer;transition:background 0.25s,color 0.25s,box-shadow 0.25s;
+  color:rgba(240,234,216,0.3);text-align:center;
 }
-.buy-btn:hover{background:var(--gold);color:var(--black);box-shadow:0 0 24px rgba(201,168,76,0.2);}
-.buy-btn:disabled{opacity:0.4;cursor:not-allowed;}
-.buy-note{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,234,216,0.25);text-align:center;line-height:2;}
-.buy-error{display:none;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#c0392b;padding:12px 16px;border:1px solid rgba(192,57,43,0.3);margin-top:12px;text-align:center;}
+.sold-out-note{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,234,216,0.2);text-align:center;line-height:2;}
 
 /* back link */
 .back-link{display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,234,216,0.3);text-decoration:none;margin-bottom:24px;transition:color 0.2s;}
@@ -269,11 +266,8 @@ footer a:hover{color:var(--gold)}
         </div>
       </div>
 
-      <button class="buy-btn" id="buy-btn" onclick="checkout()">
-        Buy Now — $10
-      </button>
-      <p class="buy-note">Secure checkout via Stripe &nbsp;·&nbsp; Ships within 3–5 business days</p>
-      <div class="buy-error" id="buy-error"></div>
+      <div class="sold-out-bar">Sold Out</div>
+      <p class="sold-out-note">Currently unavailable &nbsp;·&nbsp; Check back soon</p>
     </div>
   </div>
 
@@ -341,33 +335,6 @@ document.addEventListener('keydown', function(e){
   if(e.key==='ArrowRight') lbNav(1);
 });
 
-// Checkout
-async function checkout() {
-  var btn = document.getElementById('buy-btn');
-  var errEl = document.getElementById('buy-error');
-  errEl.style.display = 'none';
-  btn.disabled = true;
-  btn.textContent = 'Redirecting…';
-
-  try {
-    var res = await fetch('/.netlify/functions/create-checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ productSlug: 'sticker-pack' })
-    });
-    var data = await res.json();
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      throw new Error(data.error || 'Could not start checkout.');
-    }
-  } catch (err) {
-    errEl.textContent = err.message;
-    errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Buy Now — $10';
-  }
-}
 </script>
 </body>
 </html>
