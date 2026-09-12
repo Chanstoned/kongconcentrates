@@ -172,13 +172,17 @@ header{
 
 /* COA grid */
 .coa-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
   gap:1px;
   background:var(--border);
   margin-top:28px;
   border-top:1px solid var(--border);
   border-bottom:1px solid var(--border);
+}
+@media(min-width:621px){
+  .coa-card{flex:1 0 280px;max-width:420px;}
 }
 
 /* COA card */
@@ -517,6 +521,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
 
     <div class="coa-card" onclick="openPDF('blue_cheese', 'Blue Cheese Hash Rosin', 'KC-26-ECE-07 &middot; #2937')">
+      <div class="card-img"><img src="../images/devil driver.png" alt="" loading="lazy"></div>
       <div class="card-type">Live Rosin</div>
       <div class="card-name">Blue Cheese Hash Rosin</div>
       <div class="card-batch">KC-26-ECE-07 &middot; #2937</div>
@@ -604,6 +609,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
 
     <div class="coa-card" onclick="openPDF('ztrawnana', 'Ztrawnana Rosin', 'KC-26-KC-04 &middot; #3727')">
+      <div class="card-img"><img src="../images/sticky buns.png" alt="" loading="lazy"></div>
       <div class="card-type">Live Rosin</div>
       <div class="card-name">Ztrawnana Rosin</div>
       <div class="card-batch">KC-26-KC-04 &middot; #3727</div>
@@ -647,6 +653,7 @@ footer a{color:#888;text-decoration:none;}
     </div>
 
     <div class="coa-card" onclick="openPDF('garlic_storm', 'Garlic Storm Rosin', 'KC-26-KC-05 &middot; #3728')">
+      <div class="card-img"><img src="../images/bacio mints.png" alt="" loading="lazy"></div>
       <div class="card-type">Live Rosin</div>
       <div class="card-name">Garlic Storm Rosin</div>
       <div class="card-batch">KC-26-KC-05 &middot; #3728</div>
