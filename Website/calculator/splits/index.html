@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Toll Processing Calculator | Kong Concentrates</title>
-<meta name="description" content="Estimate profit from cannabis toll processing operations. Calculate yield, revenue, costs, and margins for live rosin production.">
+<title>Split Deal Calculator | Kong Concentrates</title>
+<meta name="description" content="Calculate how cultivators and processors split revenue from a live rosin deal. Payout estimates, processor ROI, and full cost breakdown.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://kongconcentrates.com/calculator">
+<link rel="canonical" href="https://kongconcentrates.com/calculator/splits/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kong Concentrates">
-<meta property="og:title" content="Toll Processing Calculator | Kong Concentrates">
-<meta property="og:description" content="Estimate profit from cannabis toll processing operations.">
-<meta property="og:url" content="https://kongconcentrates.com/calculator">
+<meta property="og:title" content="Split Deal Calculator | Kong Concentrates">
+<meta property="og:description" content="Calculate how cultivators and processors split revenue from a live rosin deal.">
+<meta property="og:url" content="https://kongconcentrates.com/calculator/splits/">
 <meta property="og:image" content="https://kongconcentrates.com/images/MAIN-ROUND-1.png">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-5YMLL0G1WB"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-5YMLL0G1WB');</script>
@@ -23,9 +23,7 @@
   --gold:#c8a96e;
   --gold-light:#e8c46a;
   --white:#f5f0e8;
-  --gray:#111;
   --border:#242424;
-  --gray-text:#888;
   --panel:#0d0d0d;
   --input-bg:#111;
   --green:#4caf82;
@@ -64,9 +62,22 @@ header{position:sticky;top:0;z-index:50;background:rgba(8,8,8,0.97);backdrop-fil
 
 /* ── PAGE HEADER ── */
 .page-hdr{padding:52px 40px 32px;text-align:center;}
-.badge{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);opacity:0.65;border:1px solid rgba(200,169,110,0.2);padding:6px 16px;display:inline-block;margin-bottom:18px;}
 .page-hdr h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,9vw,80px);letter-spacing:0.07em;line-height:0.92;color:var(--white);margin-bottom:12px;}
 .page-hdr-sub{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,232,0.4);line-height:2;}
+
+/* ── CALC SWITCHER ── */
+.calc-switcher{display:flex;gap:6px;justify-content:center;margin-bottom:24px;}
+.switcher-btn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(245,240,232,0.4);text-decoration:none;padding:7px 16px;border:1px solid var(--border);transition:all 0.2s;}
+.switcher-btn:hover{color:var(--gold);border-color:rgba(200,169,110,0.35);}
+.switcher-btn.active{color:var(--gold);border-color:rgba(200,169,110,0.35);background:rgba(200,169,110,0.08);}
+
+/* ── ROLE TOGGLE ── */
+.role-wrap{display:flex;align-items:center;gap:12px;justify-content:center;margin-top:22px;}
+.role-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,232,0.35);}
+.role-toggle{display:flex;border:1px solid var(--border);}
+.role-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;background:transparent;border:none;border-right:1px solid var(--border);color:rgba(245,240,232,0.4);padding:9px 20px;cursor:pointer;transition:all 0.2s;}
+.role-btn:last-child{border-right:none;}
+.role-btn.active{background:var(--gold);color:#080808;font-weight:600;}
 
 /* ── LAYOUT ── */
 .calc-wrap{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1100px;margin:0 auto;padding:0 28px 80px;width:100%;}
@@ -85,23 +96,32 @@ header{position:sticky;top:0;z-index:50;background:rgba(8,8,8,0.97);backdrop-fil
 .field input[type=number]{width:100%;background:var(--input-bg);border:1px solid var(--border);color:var(--white);font-family:'DM Mono',monospace;font-size:13px;padding:10px 14px;outline:none;transition:border-color 0.2s;-moz-appearance:textfield;}
 .field input[type=number]::-webkit-inner-spin-button,.field input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;}
 .field input[type=number]:focus{border-color:rgba(200,169,110,0.45);}
-
+.field-note{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.04em;color:rgba(245,240,232,0.22);margin-top:5px;}
+.split-row{display:flex;align-items:center;gap:10px;}
+.split-row input{flex:1;min-width:0;}
+.proc-badge{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;color:var(--gold);white-space:nowrap;opacity:0.8;}
 
 /* ── RESULTS ── */
 .results-panel{display:flex;flex-direction:column;gap:16px;}
 
-/* Summary card */
-.summary-card{background:#0a0a0a;border:1px solid rgba(200,169,110,0.2);padding:22px;margin-bottom:4px;}
+/* ── SUMMARY CARD ── */
+.summary-card{background:#0a0a0a;border:1px solid rgba(200,169,110,0.2);padding:22px;}
 .summary-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);opacity:0.65;margin-bottom:16px;}
-.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.summary-item{}
-.summary-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(245,240,232,0.35);margin-bottom:4px;}
-.summary-val{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:0.05em;line-height:1;}
-.summary-val.pos{color:var(--green);}
-.summary-val.neg{color:var(--red);}
-.summary-val.neutral{color:var(--gold-light);}
+.summary-sides{display:flex;margin-bottom:16px;}
+.sum-col{flex:1;padding-right:20px;}
+.sum-col.proc-col{padding-right:0;padding-left:20px;border-left:1px solid rgba(200,169,110,0.15);}
+.col-hdr{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);opacity:0.5;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.sum-item{margin-bottom:14px;}
+.sum-item:last-child{margin-bottom:0;}
+.sum-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(245,240,232,0.35);margin-bottom:4px;}
+.sum-val{font-family:'Bebas Neue',sans-serif;font-size:1.85rem;letter-spacing:0.05em;line-height:1;}
+.sum-val.pos{color:var(--green);}
+.sum-val.neg{color:var(--red);}
+.sum-val.gold{color:var(--gold-light);}
+.summary-btm{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px solid var(--border);padding-top:14px;}
+.summary-btm .sum-val{font-size:1.35rem;}
 
-/* Receipt */
+/* ── RECEIPT ── */
 .receipt{background:#0a0a0a;border:1px solid var(--border);padding:22px;}
 .receipt-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(245,240,232,0.3);margin-bottom:16px;}
 .receipt-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid #161616;font-family:'DM Mono',monospace;font-size:12px;}
@@ -109,13 +129,14 @@ header{position:sticky;top:0;z-index:50;background:rgba(8,8,8,0.97);backdrop-fil
 .receipt-row.subtotal{border-top:1px solid var(--border);margin-top:6px;padding-top:10px;font-size:13px;}
 .receipt-row.total{border-top:1px solid rgba(200,169,110,0.3);margin-top:8px;padding-top:12px;}
 .receipt-label{color:rgba(245,240,232,0.45);letter-spacing:0.04em;}
-.receipt-label.indent{padding-left:14px;font-size:11px;}
+.receipt-label.indent{padding-left:14px;font-size:11px;color:rgba(245,240,232,0.3);}
 .receipt-val{color:var(--white);letter-spacing:0.06em;text-align:right;}
 .receipt-val.deduct{color:var(--red);}
-.receipt-val.highlight{color:var(--gold-light);font-size:14px;}
 .receipt-val.pos{color:var(--green);}
 .receipt-val.neg{color:var(--red);}
+.receipt-val.gold{color:var(--gold-light);}
 .receipt-val.big{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.05em;}
+.receipt-val.dim{color:rgba(245,240,232,0.3);}
 
 /* ── FOOTER ── */
 footer{margin-top:auto;padding:24px 40px;border-top:1px solid #181818;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
@@ -133,14 +154,10 @@ footer a:hover{color:var(--gold);}
   .hnav .hide-mobile{display:none;}
   .hnav a{padding:4px 7px;font-size:9px;}
   footer{padding:18px 16px;flex-direction:column;text-align:center;}
-  .summary-grid{grid-template-columns:1fr 1fr;}
+  .summary-sides{flex-direction:column;}
+  .sum-col.proc-col{padding-left:0;padding-top:16px;border-left:none;border-top:1px solid rgba(200,169,110,0.15);}
+  .role-wrap{flex-wrap:wrap;gap:8px;}
 }
-
-/* ── CALC SWITCHER ── */
-.calc-switcher{display:flex;gap:6px;justify-content:center;margin-bottom:24px;}
-.switcher-btn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(245,240,232,0.4);text-decoration:none;padding:7px 16px;border:1px solid var(--border);transition:all 0.2s;}
-.switcher-btn:hover{color:var(--gold);border-color:rgba(200,169,110,0.35);}
-.switcher-btn.active{color:var(--gold);border-color:rgba(200,169,110,0.35);background:rgba(200,169,110,0.08);}
 
 /* ── EXPORT BUTTON ── */
 .export-btn-wrap{display:flex;justify-content:center;padding:4px 28px 24px;}
@@ -148,7 +165,7 @@ footer a:hover{color:var(--gold);}
 .export-btn:hover{background:var(--gold-light);}
 .export-btn svg{flex-shrink:0;}
 
-/* ── PRINT-ONLY ELEMENTS (hidden on screen) ── */
+/* ── PRINT-ONLY ELEMENTS ── */
 .print-inputs-panel{display:none;}
 .print-hdr-title{display:none;}
 .print-page-footer{display:none;}
@@ -157,34 +174,33 @@ footer a:hover{color:var(--gold);}
 @media print{
   @page{size:letter portrait;margin:10mm 12mm;}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color:#000!important;background:transparent!important;border-color:#ccc!important;box-shadow:none!important;}
-  #intro,header .hnav,.export-btn-wrap,footer,.page-hdr,.panel,.receipt-meta-rows,.calc-switcher{display:none!important;}
+  #intro,header .hnav,.export-btn-wrap,footer,.page-hdr,.panel,.role-wrap,.calc-switcher{display:none!important;}
   html,body{background:#fff!important;}
   #site{display:flex!important;flex-direction:column!important;zoom:0.82;min-height:122vh;}
-  /* Header: logo+name left, print title right */
   header{display:flex!important;align-items:center!important;position:static!important;background:#fff!important;border-bottom:1.5px solid #000!important;padding:7px 0!important;}
   .htext h1{font-size:15px!important;}
   .hlogo{width:34px!important;height:34px!important;}
   .print-hdr-title{display:block!important;margin-left:auto!important;font-family:'Bebas Neue',sans-serif!important;font-size:22px!important;letter-spacing:0.07em!important;line-height:1.05!important;text-align:right!important;}
-  /* Two-column layout: left 38%, right fills remaining (prevents right-edge overflow) */
   .calc-wrap{display:grid!important;grid-template-columns:38% 1fr!important;gap:18px!important;max-width:100%!important;padding:0!important;margin-top:16px!important;}
   .print-inputs-panel{display:block!important;}
   .results-panel{display:flex!important;flex-direction:column!important;gap:10px!important;padding-right:6px!important;}
-  /* Print inputs panel */
   .pip-title{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;border-bottom:1.5px solid #000;padding-bottom:7px;margin-bottom:12px;}
   .pip-group{margin-bottom:12px;}
   .pip-group-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:5px;}
   .pip-row{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:14px;padding:4px 0;border-bottom:1px solid #ddd;}
   .pip-row:last-child{border-bottom:none;}
   .pip-val{font-weight:700;}
-  /* Footer: in-flow, pushed to bottom via margin-top:auto in the #site flex column */
   .print-page-footer{display:block!important;margin-top:auto!important;padding:16px 0 4px!important;text-align:center!important;font-family:'DM Mono',monospace!important;font-size:9px!important;letter-spacing:0.08em!important;}
-  /* Summary */
-  .summary-card{background:#f2f2f2!important;border:1px solid #bbb!important;padding:12px!important;margin-bottom:0!important;}
+  .summary-card{background:#f2f2f2!important;border:1px solid #bbb!important;padding:12px!important;}
   .summary-title{font-size:10px!important;margin-bottom:8px!important;}
-  .summary-grid{gap:8px!important;}
-  .summary-label{font-size:10px!important;}
-  .summary-val{font-size:1.35rem!important;}
-  /* Receipt */
+  .summary-sides{margin-bottom:10px!important;}
+  .sum-col{padding-right:10px!important;}
+  .sum-col.proc-col{padding-left:10px!important;}
+  .col-hdr{font-size:8px!important;margin-bottom:8px!important;padding-bottom:5px!important;}
+  .sum-label{font-size:9px!important;}
+  .sum-val{font-size:1.2rem!important;}
+  .summary-btm{padding-top:10px!important;gap:8px!important;}
+  .summary-btm .sum-val{font-size:1rem!important;}
   .receipt{background:#fff!important;border:1px solid #bbb!important;padding:12px!important;}
   .receipt-title{font-size:10px!important;margin-bottom:8px!important;}
   .receipt-row{padding:3px 0!important;border-bottom:1px solid #eee!important;font-size:11px!important;}
@@ -205,7 +221,7 @@ footer a:hover{color:var(--gold);}
     <div class="ring ring2"></div>
   </div>
   <div class="intro-text">
-    <p>Toll Processing Calculator</p>
+    <p>Split Deal Calculator</p>
   </div>
 </div>
 
@@ -227,63 +243,71 @@ footer a:hover{color:var(--gold);}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
       </a>
     </nav>
-    <div class="print-hdr-title">Toll Processing<br>Calculator</div>
+    <div class="print-hdr-title">Split Deal<br>Calculator</div>
   </header>
 
   <div class="page-hdr">
     <div class="calc-switcher">
-      <a href="/calculator/" class="switcher-btn active">Toll Processing</a>
-      <a href="/calculator/splits/" class="switcher-btn">Split Deal</a>
+      <a href="/calculator/" class="switcher-btn">Toll Processing</a>
+      <a href="/calculator/splits/" class="switcher-btn active">Split Deal</a>
     </div>
-    <h2>Toll Processing<br>Calculator</h2>
-    <p class="page-hdr-sub">Estimate yield, revenue, costs &amp; profit for solventless toll processing</p>
+    <h2>Split Deal<br>Calculator</h2>
+    <p class="page-hdr-sub">Cultivator supplies FF · Processor covers all costs · Revenue split on sale</p>
+    <div class="role-wrap">
+      <span class="role-label">I am the:</span>
+      <div class="role-toggle">
+        <button class="role-btn active" id="role-cult" onclick="setRole('cultivator')">Cultivator</button>
+        <button class="role-btn" id="role-proc" onclick="setRole('processor')">Processor</button>
+      </div>
+    </div>
   </div>
 
   <div class="calc-wrap">
 
-    <!-- ── INPUTS ── -->
+    <!-- INPUTS -->
     <div class="panel">
       <div class="panel-title">Inputs</div>
 
-      <!-- Input Material -->
       <div class="input-group">
-        <div class="group-label">Input Material</div>
+        <div class="group-label">Product Supplied</div>
         <div class="field">
           <label>Fresh Frozen (lbs)</label>
-          <input type="number" id="lbs" value="100" min="0" step="0.1">
+          <input type="number" id="lbs" value="20" min="0" step="0.1">
         </div>
-        <div class="field">
-          <label>Cost per lb of FF ($)</label>
-          <input type="number" id="cost_per_lb" value="100" min="0" step="1">
-        </div>
-      </div>
-
-      <!-- Yield & Sales -->
-      <div class="input-group">
-        <div class="group-label">Yield &amp; Sales</div>
         <div class="field">
           <label>Average Rosin Return (%)</label>
           <input type="number" id="return_pct" value="3" min="0" max="100" step="0.1">
         </div>
+      </div>
+
+      <div class="input-group">
+        <div class="group-label">Sale &amp; Split</div>
         <div class="field">
           <label>Sell Price per Gram ($)</label>
           <input type="number" id="sell_price" value="35" min="0" step="0.5">
+          <div class="field-note">Wholesale price to dispensary, pre-tax.</div>
+        </div>
+        <div class="field">
+          <label>Cultivator's Split (%)</label>
+          <div class="split-row">
+            <input type="number" id="cult_pct" value="50" min="0" max="100" step="1">
+            <span class="proc-badge">Processor: <span id="proc-pct-display">50</span>%</span>
+          </div>
         </div>
       </div>
 
-      <!-- Costs -->
       <div class="input-group">
-        <div class="group-label">Costs</div>
+        <div class="group-label">Processor Costs</div>
         <div class="field">
           <label>Packaging Cost per Gram ($)</label>
-          <input type="number" id="pkg_cost" value="1.5" min="0" step="0.01">
+          <input type="number" id="pkg_cost" value="2.50" min="0" step="0.01">
         </div>
         <div class="field">
-          <label>Packaging Labor ($/unit)</label>
-          <input type="number" id="labor_cost" value="1" min="0" step="0.01">
+          <label>Packaging Labor (flat fee, $)</label>
+          <input type="number" id="pkg_labor" value="0" min="0" step="1">
         </div>
         <div class="field">
-          <label>Toll Processing Rate ($/lb)</label>
+          <label>Toll Processing Rate ($/lb of FF)</label>
           <input type="number" id="toll_rate" value="50" min="0" step="5">
         </div>
         <div class="field">
@@ -292,75 +316,67 @@ footer a:hover{color:var(--gold);}
         </div>
         <div class="field">
           <label>Number of Strains Tested</label>
-          <input type="number" id="num_strains" value="1" min="0" step="1">
+          <input type="number" id="num_strains" value="1" min="1" step="1">
         </div>
       </div>
-
-      <!-- Taxes -->
-      <div class="input-group">
-        <div class="group-label">Taxes</div>
-        <div class="field">
-          <label>State Cannabis Tax (%)</label>
-          <input type="number" id="tax_cannabis" value="7" min="0" max="100" step="0.001">
-        </div>
-        <div class="field">
-          <label>State Sales Tax (%)</label>
-          <input type="number" id="tax_state" value="4.5" min="0" max="100" step="0.001">
-        </div>
-        <div class="field">
-          <label>County Sales Tax (%)</label>
-          <input type="number" id="tax_county" value="1.375" min="0" max="100" step="0.001">
-        </div>
-        <div class="field">
-          <label>City Sales Tax (%)</label>
-          <input type="number" id="tax_city" value="5" min="0" max="100" step="0.001">
-        </div>
-      </div>
-
     </div>
 
-    <!-- ── PRINT INPUTS (screen-hidden, shown in print left column) ── -->
+    <!-- PRINT INPUTS (populated by JS) -->
     <div class="print-inputs-panel" id="print-inputs"></div>
 
-    <!-- ── RESULTS ── -->
+    <!-- RESULTS -->
     <div class="results-panel">
 
-      <!-- Summary metrics -->
       <div class="summary-card">
-        <div class="summary-title">Summary Metrics</div>
-        <div class="summary-grid">
-          <div class="summary-item">
-            <div class="summary-label">Net Profit</div>
-            <div class="summary-val neutral" id="s-profit">—</div>
+        <div class="summary-title">Split Deal Summary</div>
+        <div class="summary-sides">
+          <div class="sum-col">
+            <div class="col-hdr">Cultivator</div>
+            <div class="sum-item">
+              <div class="sum-label">Payout</div>
+              <div class="sum-val pos" id="s-cult-payout">—</div>
+            </div>
+            <div class="sum-item">
+              <div class="sum-label">Per Lb of FF</div>
+              <div class="sum-val gold" id="s-cult-plb">—</div>
+            </div>
           </div>
-          <div class="summary-item">
-            <div class="summary-label">Net Margin</div>
-            <div class="summary-val neutral" id="s-margin">—</div>
+          <div class="sum-col proc-col processor-only">
+            <div class="col-hdr">Processor</div>
+            <div class="sum-item">
+              <div class="sum-label">Net After Costs</div>
+              <div class="sum-val" id="s-proc-net">—</div>
+            </div>
+            <div class="sum-item">
+              <div class="sum-label">ROI</div>
+              <div class="sum-val" id="s-proc-roi">—</div>
+            </div>
           </div>
-          <div class="summary-item">
-            <div class="summary-label">ROI</div>
-            <div class="summary-val neutral" id="s-roi">—</div>
+        </div>
+        <div class="summary-btm">
+          <div class="sum-item processor-only">
+            <div class="sum-label">Processor Gross Share</div>
+            <div class="sum-val gold" id="s-proc-gross">—</div>
           </div>
-          <div class="summary-item">
-            <div class="summary-label">Cost / Gram</div>
-            <div class="summary-val neutral" id="s-cpg">—</div>
+          <div class="sum-item processor-only">
+            <div class="sum-label">Cost per Gram Produced</div>
+            <div class="sum-val gold" id="s-cpg">—</div>
           </div>
-          <div class="summary-item">
-            <div class="summary-label">Profit / lb FF</div>
-            <div class="summary-val neutral" id="s-plb">—</div>
+          <div class="sum-item">
+            <div class="sum-label">Gross Revenue</div>
+            <div class="sum-val gold" id="s-gross">—</div>
           </div>
-          <div class="summary-item">
-            <div class="summary-label">Yield (grams)</div>
-            <div class="summary-val neutral" id="s-yield">—</div>
+          <div class="sum-item">
+            <div class="sum-label">Yield</div>
+            <div class="sum-val gold" id="s-yield">—</div>
           </div>
         </div>
       </div>
 
-      <!-- Receipt breakdown -->
       <div class="receipt">
-        <div class="receipt-title">Cost &amp; Revenue Breakdown</div>
+        <div class="receipt-title">Revenue &amp; Cost Breakdown</div>
         <div id="receipt-body">
-          <div class="receipt-row"><span class="receipt-label">Enter inputs to see breakdown</span></div>
+          <div class="receipt-row"><span class="receipt-label">Enter inputs to see breakdown</span><span class="receipt-val"></span></div>
         </div>
       </div>
 
@@ -395,189 +411,160 @@ footer a:hover{color:var(--gold);}
   }, delay);
 })();
 
+// ── Role toggle
+var currentRole = 'cultivator';
+function setRole(role) {
+  currentRole = role;
+  document.getElementById('role-cult').classList.toggle('active', role === 'cultivator');
+  document.getElementById('role-proc').classList.toggle('active', role === 'processor');
+  document.querySelectorAll('.processor-only').forEach(function(el) {
+    el.style.display = (role === 'processor') ? '' : 'none';
+  });
+}
+setRole('cultivator');
+
 // ── Helpers
-function v(id){ return parseFloat(document.getElementById(id).value) || 0; }
-function fmt$(n){ return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
-function fmtPct(n){ return n.toFixed(1) + '%'; }
-function fmtG(n){ return Math.round(n).toLocaleString() + 'g'; }
-
-function row(label, val, cls, indent){
-  cls = cls || '';
-  return `<div class="receipt-row">
-    <span class="receipt-label${indent?' indent':''}">${label}</span>
-    <span class="receipt-val ${cls}">${val}</span>
-  </div>`;
-}
-function divider(label, val, cls){
-  return `<div class="receipt-row subtotal">
-    <span class="receipt-label">${label}</span>
-    <span class="receipt-val ${cls||''}">${val}</span>
-  </div>`;
-}
-function total(label, val, cls){
-  return `<div class="receipt-row total">
-    <span class="receipt-label" style="color:var(--white);font-size:13px;">${label}</span>
-    <span class="receipt-val big ${cls||''}">${val}</span>
-  </div>`;
+function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function fmt$(n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+function fmtInt(n) { return Math.round(n).toLocaleString('en-US'); }
+function row(lbl, val, rowCls, valCls, indent) {
+  return '<div class="receipt-row' + (rowCls ? ' ' + rowCls : '') + '">' +
+    '<span class="receipt-label' + (indent ? ' indent' : '') + '">' + lbl + '</span>' +
+    '<span class="receipt-val' + (valCls ? ' ' + valCls : '') + '">' + val + '</span>' +
+    '</div>';
 }
 
-function setSummary(id, text, polarity) {
-  var el = document.getElementById(id);
-  el.textContent = text;
-  el.className = 'summary-val ' + (polarity === 1 ? 'pos' : polarity === -1 ? 'neg' : 'neutral');
-}
-
-// ── Main calculation
+// ── Recalc
 function recalc() {
-  var lbs          = v('lbs');
-  var costPerLb    = v('cost_per_lb');
-  var returnPct    = v('return_pct');
-  var sellPrice    = v('sell_price');
-  var pkgCost      = v('pkg_cost');
-  var laborCost    = v('labor_cost');
-  var tollRate     = v('toll_rate');
-  var testCost     = v('test_cost');
-  var numStrains   = v('num_strains');
-  var taxCannabis  = v('tax_cannabis');
-  var taxState     = v('tax_state');
-  var taxCounty    = v('tax_county');
-  var taxCity      = v('tax_city');
+  var lbs       = v('lbs');
+  var retPct    = v('return_pct');
+  var sellPrice = v('sell_price');
+  var cultPct   = Math.min(100, Math.max(0, v('cult_pct')));
+  var procPct   = 100 - cultPct;
+  var pkgCost   = v('pkg_cost');
+  var pkgLabor  = v('pkg_labor');
+  var tollRate  = v('toll_rate');
+  var testCost  = v('test_cost');
+  var numStrains= Math.max(1, v('num_strains'));
 
-  // Core calcs
-  var totalFF      = lbs * costPerLb;
-  var yieldG       = lbs * 448 * (returnPct / 100);
-  var grossRev     = yieldG * sellPrice;
-  var pkgTotal     = yieldG * pkgCost;
-  var laborTotal   = laborCost * yieldG;
-  var testTotal    = testCost * numStrains;
-  var tollTotal    = tollRate * lbs;
-  var totalTaxRate = (taxCannabis + taxState + taxCounty + taxCity) / 100;
-  var taxTotal     = grossRev * totalTaxRate;
-  var totalCosts   = totalFF + pkgTotal + laborTotal + testTotal + tollTotal + taxTotal;
-  var netProfit    = grossRev - totalCosts;
-  var netMargin    = grossRev > 0 ? (netProfit / grossRev) * 100 : 0;
-  var roi          = totalCosts > 0 ? (netProfit / totalCosts) * 100 : 0;
-  var cpg          = yieldG > 0 ? totalCosts / yieldG : 0;
-  var profitPerLb  = lbs > 0 ? netProfit / lbs : 0;
+  // 1. Yield
+  var yieldG = lbs * 448 * (retPct / 100);
 
-  var pol = function(n){ return n > 0 ? 1 : n < 0 ? -1 : 0; };
+  // 2. Gross revenue
+  var grossRev = yieldG * sellPrice;
 
-  // Summary
-  setSummary('s-profit', fmt$(netProfit), pol(netProfit));
-  setSummary('s-margin', fmtPct(netMargin), pol(netMargin));
-  setSummary('s-roi',    fmtPct(roi),       pol(roi));
-  setSummary('s-cpg',    fmt$(cpg),         0);
-  setSummary('s-plb',    fmt$(profitPerLb), pol(profitPerLb));
-  setSummary('s-yield',  fmtG(yieldG),      0);
+  // 3. Split
+  var cultPayout = grossRev * (cultPct / 100);
+  var procGross  = grossRev * (procPct / 100);
 
-  var html = '';
+  // 4. Processor costs
+  var pkgTotal   = yieldG * pkgCost + pkgLabor;
+  var testTotal  = testCost * numStrains;
+  var tollTotal  = tollRate * lbs;
+  var totalCosts = pkgTotal + testTotal + tollTotal;
 
-  // Revenue section
-  html += row('Fresh Frozen Input', lbs.toLocaleString() + ' lbs');
-  html += row('Conversion rate', '448 g/lb', '', true);
-  html += row('Rosin return', fmtPct(returnPct), '', true);
-  html += row('Yield', fmtG(yieldG), 'highlight');
-  html += row('Sell price', fmt$(sellPrice) + '/g', '', true);
-  html += divider('Gross Revenue', fmt$(grossRev), 'highlight');
+  // 5. Processor net & metrics
+  var procNet    = procGross - totalCosts;
+  var procROI    = totalCosts > 0 ? (procNet / totalCosts) * 100 : 0;
+  var cpg        = yieldG > 0 ? totalCosts / yieldG : 0;
+  var cultPerLb  = lbs > 0 ? cultPayout / lbs : 0;
 
-  // Costs section
-  html += row('Fresh Frozen cost', lbs.toLocaleString() + ' lbs × ' + fmt$(costPerLb) + '/lb');
-  html += row('', fmt$(totalFF), 'deduct', true);
-  html += row('Packaging', fmtG(yieldG) + ' × ' + fmt$(pkgCost) + '/g');
-  html += row('', fmt$(pkgTotal), 'deduct', true);
-  html += row('Packaging labor', fmtG(yieldG) + ' × ' + fmt$(laborCost) + '/unit');
-  html += row('', fmt$(laborTotal), 'deduct', true);
-  html += row('Testing', numStrains + ' strain' + (numStrains !== 1 ? 's' : '') + ' × ' + fmt$(testCost));
-  html += row('', fmt$(testTotal), 'deduct', true);
-  html += row('Toll processing', lbs.toLocaleString() + ' lbs × ' + fmt$(tollRate) + '/lb');
-  html += row('', fmt$(tollTotal), 'deduct', true);
-  var preTaxCosts = totalFF + pkgTotal + laborTotal + testTotal + tollTotal;
-  html += divider('Costs Before Tax', fmt$(preTaxCosts), 'deduct');
-  html += row('Taxes (' + (totalTaxRate * 100).toFixed(3) + '% of gross)', '');
-  html += row('State cannabis tax (' + taxCannabis.toFixed(3) + '%)', fmt$(grossRev * taxCannabis / 100), 'deduct', true);
-  html += row('State sales tax (' + taxState.toFixed(3) + '%)', fmt$(grossRev * taxState / 100), 'deduct', true);
-  html += row('County sales tax (' + taxCounty.toFixed(3) + '%)', fmt$(grossRev * taxCounty / 100), 'deduct', true);
-  html += row('City sales tax (' + taxCity.toFixed(3) + '%)', fmt$(grossRev * taxCity / 100), 'deduct', true);
-  html += row('', fmt$(taxTotal), 'deduct', true);
-  html += divider('Total Costs', fmt$(totalCosts), 'deduct');
+  // ── Processor % badge
+  document.getElementById('proc-pct-display').textContent =
+    Number.isInteger(procPct) ? procPct : procPct.toFixed(1);
 
-  // Net
-  html += total('Net Profit', fmt$(netProfit), pol(netProfit) === 1 ? 'pos' : pol(netProfit) === -1 ? 'neg' : '');
+  // ── Summary
+  document.getElementById('s-cult-payout').textContent = fmt$(cultPayout);
+  document.getElementById('s-cult-plb').textContent    = fmt$(cultPerLb) + '/lb';
+  document.getElementById('s-proc-net').textContent    = fmt$(procNet);
+  document.getElementById('s-proc-roi').textContent    = (procROI >= 0 ? '+' : '') + procROI.toFixed(1) + '%';
+  document.getElementById('s-proc-gross').textContent  = fmt$(procGross);
+  document.getElementById('s-cpg').textContent         = fmt$(cpg) + '/g';
+  document.getElementById('s-gross').textContent       = fmt$(grossRev);
+  document.getElementById('s-yield').textContent       = fmtInt(yieldG) + ' g';
 
-  // Margin rows (hidden in print — already shown in summary card above)
-  html += '<div class="receipt-meta-rows">';
-  html += `<div class="receipt-row" style="padding-top:14px;">
-    <span class="receipt-label">Net margin</span>
-    <span class="receipt-val ${pol(netMargin)===1?'pos':pol(netMargin)===-1?'neg':''}">${fmtPct(netMargin)}</span>
-  </div>`;
-  html += `<div class="receipt-row">
-    <span class="receipt-label">ROI</span>
-    <span class="receipt-val ${pol(roi)===1?'pos':pol(roi)===-1?'neg':''}">${fmtPct(roi)}</span>
-  </div>`;
-  html += `<div class="receipt-row">
-    <span class="receipt-label">Cost per gram produced</span>
-    <span class="receipt-val">${fmt$(cpg)}/g</span>
-  </div>`;
-  html += `<div class="receipt-row">
-    <span class="receipt-label">Profit per lb FF</span>
-    <span class="receipt-val ${pol(profitPerLb)===1?'pos':pol(profitPerLb)===-1?'neg':''}">${fmt$(profitPerLb)}</span>
-  </div>`;
-  html += '</div>';
+  var netEl = document.getElementById('s-proc-net');
+  netEl.className = 'sum-val ' + (procNet >= 0 ? 'pos' : 'neg');
+  var roiEl = document.getElementById('s-proc-roi');
+  roiEl.className = 'sum-val ' + (procROI >= 0 ? 'pos' : 'neg');
 
-  document.getElementById('receipt-body').innerHTML = html;
+  // ── Receipt
+  var r = '';
+  r += row('Fresh Frozen Supplied', fmtInt(lbs) + ' lbs');
+  r += row('Rosin Yield (448 g/lb × ' + retPct.toFixed(1) + '%)', fmtInt(yieldG) + ' g');
+  r += row('Sell Price per Gram', fmt$(sellPrice));
+  r += row('Gross Revenue', fmt$(grossRev), 'subtotal', 'gold');
+
+  r += row('Cultivator Share (' + cultPct.toFixed(0) + '%)', fmt$(cultPayout), 'total', 'pos');
+  r += row('Cultivator Per Lb of FF', fmt$(cultPerLb), '', 'gold');
+
+  // Processor section
+  r += '<div class="processor-only">';
+  r += row('Processor Gross Share (' + procPct.toFixed(0) + '%)', fmt$(procGross), 'subtotal');
+  r += row('Packaging (' + fmtInt(yieldG) + ' g × ' + fmt$(pkgCost) + '/g)',
+           '−' + fmt$(yieldG * pkgCost), '', 'deduct', true);
+  if (pkgLabor > 0) {
+    r += row('Packaging Labor (flat fee)', '−' + fmt$(pkgLabor), '', 'deduct', true);
+  }
+  r += row('Toll Processing (' + fmtInt(lbs) + ' lbs × ' + fmt$(tollRate) + '/lb)',
+           '−' + fmt$(tollTotal), '', 'deduct', true);
+  r += row('Testing (' + fmtInt(numStrains) + ' strain' + (numStrains !== 1 ? 's' : '') + ' × ' + fmt$(testCost) + ')',
+           '−' + fmt$(testTotal), '', 'deduct', true);
+  r += row('Total Processor Costs', '−' + fmt$(totalCosts), 'subtotal', 'deduct');
+  r += row('Processor Net', fmt$(procNet), 'total', procNet >= 0 ? 'pos big' : 'neg big');
+  r += row('Processor ROI', (procROI >= 0 ? '+' : '') + procROI.toFixed(1) + '%', '', procROI >= 0 ? 'pos' : 'neg');
+  r += row('Cost per Gram Produced', fmt$(cpg) + '/g', '', 'dim');
+  r += '</div>';
+
+  document.getElementById('receipt-body').innerHTML = r;
+  setRole(currentRole);
 }
+
+// ── Wire inputs
+document.querySelectorAll('input[type=number]').forEach(function(el) {
+  el.addEventListener('input', recalc);
+});
+
+recalc();
 
 // ── Export PDF
 function exportPDF() {
   var now = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
-  var lbs = v('lbs');
+  document.getElementById('print-meta').textContent = 'Generated ' + now + '  ·  kongconcentrates.com/calculator/splits';
 
-  // Populate print footer
-  document.getElementById('print-meta').textContent = 'Generated ' + now + '  ·  kongconcentrates.com/calculator';
+  var cultPct = Math.min(100, Math.max(0, v('cult_pct')));
+  var procPct = 100 - cultPct;
+  var roleLabel = currentRole === 'cultivator' ? 'Cultivator View' : 'Processor View';
 
-  // Build print-inputs summary panel
-  function pipRow(label, val) {
-    return '<div class="pip-row"><span class="pip-label">' + label + '</span><span class="pip-val">' + val + '</span></div>';
+  function pipRow(lbl, val) {
+    return '<div class="pip-row"><span>' + lbl + '</span><span class="pip-val">' + val + '</span></div>';
   }
-  function pipGroup(label, rows) {
-    return '<div class="pip-group"><div class="pip-group-label">' + label + '</div>' + rows + '</div>';
+  function pipGroup(lbl, rows) {
+    return '<div class="pip-group"><div class="pip-group-label">' + lbl + '</div>' + rows + '</div>';
   }
-  var taxTotal = v('tax_cannabis') + v('tax_state') + v('tax_county') + v('tax_city');
-  var html = '<div class="pip-title">Inputs</div>';
-  html += pipGroup('Input Material',
-    pipRow('Fresh Frozen', v('lbs').toLocaleString() + ' lbs') +
-    pipRow('Cost per lb', fmt$(v('cost_per_lb')) + '/lb')
+
+  var html = '<div class="pip-title">Inputs — ' + roleLabel + '</div>';
+  html += pipGroup('Product Supplied',
+    pipRow('Fresh Frozen', v('lbs') + ' lbs') +
+    pipRow('Rosin Return', v('return_pct').toFixed(1) + '%')
   );
-  html += pipGroup('Yield &amp; Sales',
-    pipRow('Rosin Return', v('return_pct').toFixed(1) + '%') +
-    pipRow('Sell Price', fmt$(v('sell_price')) + '/g')
+  html += pipGroup('Sale &amp; Split',
+    pipRow('Sell Price', fmt$(v('sell_price')) + '/g') +
+    pipRow('Cultivator', cultPct.toFixed(0) + '%') +
+    pipRow('Processor', procPct.toFixed(0) + '%')
   );
-  html += pipGroup('Costs',
-    pipRow('Packaging', fmt$(v('pkg_cost')) + '/g') +
-    pipRow('Labor', fmt$(v('labor_cost')) + '/unit') +
-    pipRow('Toll Rate', fmt$(v('toll_rate')) + '/lb') +
-    pipRow('Testing', fmt$(v('test_cost')) + '/strain') +
-    pipRow('Strains', v('num_strains'))
-  );
-  html += pipGroup('Taxes',
-    pipRow('State Cannabis', v('tax_cannabis').toFixed(3) + '%') +
-    pipRow('State Sales', v('tax_state').toFixed(3) + '%') +
-    pipRow('County Sales', v('tax_county').toFixed(3) + '%') +
-    pipRow('City Sales', v('tax_city').toFixed(3) + '%') +
-    pipRow('Total Tax Rate', taxTotal.toFixed(3) + '%')
-  );
+  if (currentRole === 'processor') {
+    html += pipGroup('Processor Costs',
+      pipRow('Pkg / gram', fmt$(v('pkg_cost')) + '/g') +
+      pipRow('Pkg Labor', fmt$(v('pkg_labor'))) +
+      pipRow('Toll Rate', fmt$(v('toll_rate')) + '/lb') +
+      pipRow('Testing', fmt$(v('test_cost')) + '/strain') +
+      pipRow('Strains', v('num_strains'))
+    );
+  }
   document.getElementById('print-inputs').innerHTML = html;
-
   window.print();
 }
-
-// ── Wire inputs
-document.querySelectorAll('input[type=number]').forEach(function(el){
-  el.addEventListener('input', recalc);
-});
-
-// ── Initial calc
-recalc();
 </script>
 </body>
 </html>
