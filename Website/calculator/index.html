@@ -417,6 +417,8 @@ function recalc() {
   html += row('', fmt$(testTotal), 'deduct', true);
   html += row('Toll processing', lbs.toLocaleString() + ' lbs × ' + fmt$(tollRate) + '/lb');
   html += row('', fmt$(tollTotal), 'deduct', true);
+  var preTaxCosts = totalFF + pkgTotal + laborTotal + testTotal + tollTotal;
+  html += divider('Costs Before Tax', fmt$(preTaxCosts), 'deduct');
   html += row('Taxes (' + (totalTaxRate * 100).toFixed(3) + '% of gross)', '');
   html += row('State cannabis tax (' + taxCannabis.toFixed(3) + '%)', fmt$(grossRev * taxCannabis / 100), 'deduct', true);
   html += row('State sales tax (' + taxState.toFixed(3) + '%)', fmt$(grossRev * taxState / 100), 'deduct', true);
