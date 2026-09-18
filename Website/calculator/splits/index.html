@@ -101,6 +101,19 @@ header{position:sticky;top:0;z-index:50;background:rgba(8,8,8,0.97);backdrop-fil
 .split-row input{flex:1;min-width:0;}
 .proc-badge{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;color:var(--gold);white-space:nowrap;opacity:0.8;}
 
+/* ── LABOR MODE TABS ── */
+.labor-tabs{display:flex;gap:0;margin-bottom:8px;border:1px solid var(--border);}
+.labor-tab{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;background:transparent;border:none;border-right:1px solid var(--border);color:rgba(245,240,232,0.35);padding:6px 12px;cursor:pointer;flex:1;transition:all 0.15s;}
+.labor-tab:last-child{border-right:none;}
+.labor-tab.active{background:rgba(200,169,110,0.12);color:var(--gold);}
+
+/* ── INLINE CALC ROWS ── */
+.calc-pair,.calc-triple{display:flex;align-items:flex-end;gap:6px;margin-top:2px;}
+.calc-pair>div,.calc-triple>div{flex:1;min-width:0;}
+.calc-op{font-family:'DM Mono',monospace;font-size:12px;color:rgba(245,240,232,0.3);padding-bottom:11px;flex-shrink:0;}
+.calc-sub-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.06em;color:rgba(245,240,232,0.3);margin-bottom:4px;}
+.calc-result{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:var(--gold);opacity:0.7;margin-top:6px;text-align:right;}
+
 /* ── RESULTS ── */
 .results-panel{display:flex;flex-direction:column;gap:16px;}
 
@@ -303,12 +316,48 @@ footer a:hover{color:var(--gold);}
           <input type="number" id="pkg_cost" value="2.50" min="0" step="0.01">
         </div>
         <div class="field">
-          <label>Packaging Labor (flat fee, $)</label>
-          <input type="number" id="pkg_labor" value="0" min="0" step="1">
-        </div>
-        <div class="field">
-          <label>Toll Processing Rate ($/lb of FF)</label>
-          <input type="number" id="toll_rate" value="50" min="0" step="5">
+          <label>Packaging Labor</label>
+          <div class="labor-tabs">
+            <button class="labor-tab active" onclick="setLaborMode('total')">Total ($)</button>
+            <button class="labor-tab" onclick="setLaborMode('unit')">Per Unit</button>
+            <button class="labor-tab" onclick="setLaborMode('hourly')">Hourly</button>
+          </div>
+          <div id="labor-mode-total">
+            <input type="number" id="labor_total" value="0" min="0" step="1">
+          </div>
+          <div id="labor-mode-unit" style="display:none">
+            <div class="calc-pair">
+              <div>
+                <div class="calc-sub-label">Rate ($/unit)</div>
+                <input type="number" id="labor_rate_unit" value="0" min="0" step="0.01">
+              </div>
+              <span class="calc-op">×</span>
+              <div>
+                <div class="calc-sub-label">Units</div>
+                <input type="number" id="labor_units" value="0" min="0" step="1">
+              </div>
+            </div>
+            <div class="calc-result" id="labor-unit-result">= $0.00</div>
+          </div>
+          <div id="labor-mode-hourly" style="display:none">
+            <div class="calc-triple">
+              <div>
+                <div class="calc-sub-label">$/hr</div>
+                <input type="number" id="labor_rate_hr" value="0" min="0" step="0.5">
+              </div>
+              <span class="calc-op">×</span>
+              <div>
+                <div class="calc-sub-label">Hours</div>
+                <input type="number" id="labor_hours" value="0" min="0" step="0.5">
+              </div>
+              <span class="calc-op">×</span>
+              <div>
+                <div class="calc-sub-label">Workers</div>
+                <input type="number" id="labor_workers" value="1" min="1" step="1">
+              </div>
+            </div>
+            <div class="calc-result" id="labor-hourly-result">= $0.00</div>
+          </div>
         </div>
         <div class="field">
           <label>Testing Cost per Strain ($)</label>
@@ -317,6 +366,21 @@ footer a:hover{color:var(--gold);}
         <div class="field">
           <label>Number of Strains Tested</label>
           <input type="number" id="num_strains" value="1" min="1" step="1">
+        </div>
+        <div class="field">
+          <label>Delivery Cost</label>
+          <div class="calc-pair">
+            <div>
+              <div class="calc-sub-label">Cost per delivery ($)</div>
+              <input type="number" id="delivery_cost" value="0" min="0" step="1">
+            </div>
+            <span class="calc-op">×</span>
+            <div>
+              <div class="calc-sub-label">Deliveries</div>
+              <input type="number" id="num_deliveries" value="1" min="0" step="1">
+            </div>
+          </div>
+          <div class="calc-result" id="delivery-result">= $0.00</div>
         </div>
       </div>
     </div>
@@ -411,6 +475,19 @@ footer a:hover{color:var(--gold);}
   }, delay);
 })();
 
+// ── Labor mode toggle
+var currentLaborMode = 'total';
+function setLaborMode(mode) {
+  currentLaborMode = mode;
+  ['total','unit','hourly'].forEach(function(m) {
+    document.getElementById('labor-mode-' + m).style.display = (m === mode) ? '' : 'none';
+  });
+  document.querySelectorAll('.labor-tab').forEach(function(btn, i) {
+    btn.classList.toggle('active', ['total','unit','hourly'][i] === mode);
+  });
+  recalc();
+}
+
 // ── Role toggle
 var currentRole = 'cultivator';
 function setRole(role) {
@@ -442,8 +519,6 @@ function recalc() {
   var cultPct   = Math.min(100, Math.max(0, v('cult_pct')));
   var procPct   = 100 - cultPct;
   var pkgCost   = v('pkg_cost');
-  var pkgLabor  = v('pkg_labor');
-  var tollRate  = v('toll_rate');
   var testCost  = v('test_cost');
   var numStrains= Math.max(1, v('num_strains'));
 
@@ -458,10 +533,31 @@ function recalc() {
   var procGross  = grossRev * (procPct / 100);
 
   // 4. Processor costs
-  var pkgTotal   = yieldG * pkgCost + pkgLabor;
+  var pkgTotal = yieldG * pkgCost;
+
+  var laborTotal;
+  var laborDesc;
+  if (currentLaborMode === 'unit') {
+    var rUnit = v('labor_rate_unit'), units = v('labor_units');
+    laborTotal = rUnit * units;
+    laborDesc = fmt$(rUnit) + '/unit × ' + fmtInt(units) + ' units';
+    document.getElementById('labor-unit-result').textContent = '= ' + fmt$(laborTotal);
+  } else if (currentLaborMode === 'hourly') {
+    var rHr = v('labor_rate_hr'), hrs = v('labor_hours'), workers = v('labor_workers');
+    laborTotal = rHr * hrs * workers;
+    laborDesc = fmt$(rHr) + '/hr × ' + hrs + ' hrs × ' + fmtInt(workers) + ' workers';
+    document.getElementById('labor-hourly-result').textContent = '= ' + fmt$(laborTotal);
+  } else {
+    laborTotal = v('labor_total');
+    laborDesc = 'flat total';
+  }
+
+  var deliveryCost = v('delivery_cost'), numDeliveries = v('num_deliveries');
+  var deliveryTotal = deliveryCost * numDeliveries;
+  document.getElementById('delivery-result').textContent = '= ' + fmt$(deliveryTotal);
+
   var testTotal  = testCost * numStrains;
-  var tollTotal  = tollRate * lbs;
-  var totalCosts = pkgTotal + testTotal + tollTotal;
+  var totalCosts = pkgTotal + laborTotal + testTotal + deliveryTotal;
 
   // 5. Processor net & metrics
   var procNet    = procGross - totalCosts;
@@ -502,14 +598,16 @@ function recalc() {
   r += '<div class="processor-only">';
   r += row('Processor Gross Share (' + procPct.toFixed(0) + '%)', fmt$(procGross), 'subtotal');
   r += row('Packaging (' + fmtInt(yieldG) + ' g × ' + fmt$(pkgCost) + '/g)',
-           '−' + fmt$(yieldG * pkgCost), '', 'deduct', true);
-  if (pkgLabor > 0) {
-    r += row('Packaging Labor (flat fee)', '−' + fmt$(pkgLabor), '', 'deduct', true);
+           '−' + fmt$(pkgTotal), '', 'deduct', true);
+  if (laborTotal > 0) {
+    r += row('Labor (' + laborDesc + ')', '−' + fmt$(laborTotal), '', 'deduct', true);
   }
-  r += row('Toll Processing (' + fmtInt(lbs) + ' lbs × ' + fmt$(tollRate) + '/lb)',
-           '−' + fmt$(tollTotal), '', 'deduct', true);
   r += row('Testing (' + fmtInt(numStrains) + ' strain' + (numStrains !== 1 ? 's' : '') + ' × ' + fmt$(testCost) + ')',
            '−' + fmt$(testTotal), '', 'deduct', true);
+  if (deliveryTotal > 0) {
+    r += row('Delivery (' + fmtInt(numDeliveries) + ' × ' + fmt$(deliveryCost) + ')',
+             '−' + fmt$(deliveryTotal), '', 'deduct', true);
+  }
   r += row('Total Processor Costs', '−' + fmt$(totalCosts), 'subtotal', 'deduct');
   r += row('Processor Net', fmt$(procNet), 'total', procNet >= 0 ? 'pos big' : 'neg big');
   r += row('Processor ROI', (procROI >= 0 ? '+' : '') + procROI.toFixed(1) + '%', '', procROI >= 0 ? 'pos' : 'neg');
@@ -554,12 +652,16 @@ function exportPDF() {
     pipRow('Processor', procPct.toFixed(0) + '%')
   );
   if (currentRole === 'processor') {
+    var laborSummary;
+    if (currentLaborMode === 'unit') laborSummary = fmt$(v('labor_rate_unit')) + '/unit × ' + v('labor_units') + ' units';
+    else if (currentLaborMode === 'hourly') laborSummary = fmt$(v('labor_rate_hr')) + '/hr × ' + v('labor_hours') + 'h × ' + v('labor_workers') + ' workers';
+    else laborSummary = fmt$(v('labor_total'));
     html += pipGroup('Processor Costs',
       pipRow('Pkg / gram', fmt$(v('pkg_cost')) + '/g') +
-      pipRow('Pkg Labor', fmt$(v('pkg_labor'))) +
-      pipRow('Toll Rate', fmt$(v('toll_rate')) + '/lb') +
+      pipRow('Labor', laborSummary) +
       pipRow('Testing', fmt$(v('test_cost')) + '/strain') +
-      pipRow('Strains', v('num_strains'))
+      pipRow('Strains', v('num_strains')) +
+      (v('delivery_cost') > 0 ? pipRow('Delivery', fmt$(v('delivery_cost')) + ' × ' + v('num_deliveries')) : '')
     );
   }
   document.getElementById('print-inputs').innerHTML = html;
