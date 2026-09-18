@@ -404,6 +404,10 @@ footer a:hover{color:var(--gold);}
               <div class="sum-label">Per Lb of FF</div>
               <div class="sum-val gold" id="s-cult-plb">—</div>
             </div>
+            <div class="sum-item">
+              <div class="sum-label">Per Gram</div>
+              <div class="sum-val gold" id="s-cult-pg">—</div>
+            </div>
           </div>
           <div class="sum-col proc-col processor-only">
             <div class="col-hdr">Processor</div>
@@ -564,6 +568,7 @@ function recalc() {
   var procROI    = totalCosts > 0 ? (procNet / totalCosts) * 100 : 0;
   var cpg        = yieldG > 0 ? totalCosts / yieldG : 0;
   var cultPerLb  = lbs > 0 ? cultPayout / lbs : 0;
+  var cultPerG   = yieldG > 0 ? cultPayout / yieldG : 0;
 
   // ── Processor % badge
   document.getElementById('proc-pct-display').textContent =
@@ -572,6 +577,7 @@ function recalc() {
   // ── Summary
   document.getElementById('s-cult-payout').textContent = fmt$(cultPayout);
   document.getElementById('s-cult-plb').textContent    = fmt$(cultPerLb) + '/lb';
+  document.getElementById('s-cult-pg').textContent     = fmt$(cultPerG) + '/g';
   document.getElementById('s-proc-net').textContent    = fmt$(procNet);
   document.getElementById('s-proc-roi').textContent    = (procROI >= 0 ? '+' : '') + procROI.toFixed(1) + '%';
   document.getElementById('s-proc-gross').textContent  = fmt$(procGross);
@@ -593,6 +599,7 @@ function recalc() {
 
   r += row('Cultivator Share (' + cultPct.toFixed(0) + '%)', fmt$(cultPayout), 'total', 'pos');
   r += row('Cultivator Per Lb of FF', fmt$(cultPerLb), '', 'gold');
+  r += row('Cultivator Per Gram', fmt$(cultPerG) + '/g', '', 'gold');
 
   // Processor section
   r += '<div class="processor-only">';
