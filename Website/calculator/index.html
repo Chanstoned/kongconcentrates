@@ -137,7 +137,8 @@ footer a:hover{color:var(--gold);}
 }
 
 /* ── EXPORT BUTTON ── */
-.export-btn{width:100%;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;background:var(--gold);border:none;color:#080808;font-weight:600;padding:14px 16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:20px;}
+.export-btn-wrap{display:flex;justify-content:center;padding:28px 28px 0;}
+.export-btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;background:var(--gold);border:none;color:#080808;font-weight:600;padding:14px 32px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:9px;min-width:220px;}
 .export-btn:hover{background:var(--gold-light);}
 .export-btn svg{flex-shrink:0;}
 
@@ -308,10 +309,6 @@ footer a:hover{color:var(--gold);}
         </div>
       </div>
 
-      <button class="export-btn" onclick="exportPDF()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Export as PDF
-      </button>
     </div>
 
     <!-- ── PRINT INPUTS (screen-hidden, shown in print left column) ── -->
@@ -360,6 +357,13 @@ footer a:hover{color:var(--gold);}
       </div>
 
     </div>
+  </div>
+
+  <div class="export-btn-wrap">
+    <button class="export-btn" onclick="exportPDF()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export as PDF
+    </button>
   </div>
 
   <footer>
