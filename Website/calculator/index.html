@@ -137,7 +137,8 @@ footer a:hover{color:var(--gold);}
 }
 
 /* ── EXPORT BUTTON ── */
-.export-btn{width:100%;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;background:var(--gold);border:none;color:#080808;font-weight:600;padding:14px 16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:20px;}
+.export-btn-wrap{display:flex;justify-content:center;padding:28px 28px 0;}
+.export-btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;background:var(--gold);border:none;color:#080808;font-weight:600;padding:14px 32px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:9px;min-width:220px;}
 .export-btn:hover{background:var(--gold-light);}
 .export-btn svg{flex-shrink:0;}
 
@@ -150,42 +151,42 @@ footer a:hover{color:var(--gold);}
 @media print{
   @page{size:letter portrait;margin:10mm 12mm;}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color:#000!important;background:transparent!important;border-color:#ccc!important;box-shadow:none!important;}
-  #intro,header .hnav,.export-btn,footer,.page-hdr,.panel{display:none!important;}
-  html,body{background:#fff!important;overflow:hidden!important;}
-  body{zoom:0.78;}
-  #site{display:flex!important;overflow:hidden!important;}
+  #intro,header .hnav,.export-btn,footer,.page-hdr,.panel,.receipt-meta-rows{display:none!important;}
+  html,body{background:#fff!important;}
+  body{zoom:0.82;}
+  #site{display:flex!important;flex-direction:column!important;min-height:100vh!important;}
   /* Header: logo+name left, print title right */
-  header{display:flex!important;align-items:center!important;position:static!important;background:#fff!important;border-bottom:1.5px solid #000!important;padding:6px 0!important;}
-  .htext h1{font-size:14px!important;}
-  .hlogo{width:32px!important;height:32px!important;}
-  .print-hdr-title{display:block!important;margin-left:auto!important;font-family:'Bebas Neue',sans-serif!important;font-size:20px!important;letter-spacing:0.07em!important;line-height:1.05!important;text-align:right!important;}
-  /* Two-column layout */
-  .calc-wrap{display:grid!important;grid-template-columns:1fr 1fr!important;gap:16px!important;max-width:100%!important;padding:0!important;overflow:hidden!important;}
-  .print-inputs-panel{display:block!important;overflow:hidden!important;}
-  .results-panel{display:flex!important;flex-direction:column!important;gap:10px!important;overflow:hidden!important;}
+  header{display:flex!important;align-items:center!important;position:static!important;background:#fff!important;border-bottom:1.5px solid #000!important;padding:7px 0!important;}
+  .htext h1{font-size:15px!important;}
+  .hlogo{width:34px!important;height:34px!important;}
+  .print-hdr-title{display:block!important;margin-left:auto!important;font-family:'Bebas Neue',sans-serif!important;font-size:22px!important;letter-spacing:0.07em!important;line-height:1.05!important;text-align:right!important;}
+  /* Two-column layout: left 38%, right 62% */
+  .calc-wrap{display:grid!important;grid-template-columns:38% 62%!important;gap:18px!important;max-width:100%!important;padding:0!important;margin-top:16px!important;}
+  .print-inputs-panel{display:block!important;}
+  .results-panel{display:flex!important;flex-direction:column!important;gap:10px!important;}
   /* Print inputs panel */
-  .pip-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;border-bottom:1px solid #000;padding-bottom:6px;margin-bottom:12px;}
+  .pip-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;border-bottom:1.5px solid #000;padding-bottom:7px;margin-bottom:12px;}
   .pip-group{margin-bottom:12px;}
-  .pip-group-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:5px;}
-  .pip-row{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:12px;padding:4px 0;border-bottom:1px solid #eee;}
+  .pip-group-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:5px;}
+  .pip-row{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:13px;padding:4px 0;border-bottom:1px solid #ddd;}
   .pip-row:last-child{border-bottom:none;}
-  .pip-val{font-weight:600;}
-  /* Bottom centered meta */
-  .print-page-footer{display:block!important;position:fixed!important;bottom:0!important;left:0!important;right:0!important;text-align:center!important;font-family:'DM Mono',monospace!important;font-size:9px!important;letter-spacing:0.08em!important;padding-bottom:4mm!important;}
+  .pip-val{font-weight:700;}
+  /* Bottom centered generated line */
+  .print-page-footer{display:block!important;margin-top:auto!important;text-align:center!important;font-family:'DM Mono',monospace!important;font-size:9px!important;letter-spacing:0.08em!important;padding:10px 0 4px!important;}
   /* Summary */
   .summary-card{background:#f2f2f2!important;border:1px solid #bbb!important;padding:12px!important;margin-bottom:0!important;}
   .summary-title{font-size:9px!important;margin-bottom:8px!important;}
   .summary-grid{gap:8px!important;}
   .summary-label{font-size:9px!important;}
-  .summary-val{font-size:1.25rem!important;}
+  .summary-val{font-size:1.3rem!important;}
   /* Receipt */
-  .receipt{background:#fff!important;border:1px solid #bbb!important;padding:12px!important;overflow:hidden!important;}
+  .receipt{background:#fff!important;border:1px solid #bbb!important;padding:12px!important;}
   .receipt-title{font-size:9px!important;margin-bottom:8px!important;}
-  .receipt-row{padding:3px 0!important;border-bottom:1px solid #eee!important;font-size:10px!important;overflow:hidden!important;}
-  .receipt-row.subtotal{border-top:1px solid #888!important;margin-top:3px!important;padding-top:5px!important;font-size:11px!important;}
+  .receipt-row{padding:3px 0!important;border-bottom:1px solid #eee!important;font-size:10.5px!important;}
+  .receipt-row.subtotal{border-top:1px solid #888!important;margin-top:3px!important;padding-top:5px!important;font-size:11.5px!important;}
   .receipt-row.total{border-top:1.5px solid #000!important;margin-top:3px!important;padding-top:6px!important;}
-  .receipt-label.indent{font-size:9px!important;}
-  .receipt-val.big{font-size:1.1rem!important;}
+  .receipt-label.indent{font-size:9.5px!important;}
+  .receipt-val.big{font-size:1.15rem!important;}
 }
 </style>
 </head>
@@ -308,10 +309,6 @@ footer a:hover{color:var(--gold);}
         </div>
       </div>
 
-      <button class="export-btn" onclick="exportPDF()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Export as PDF
-      </button>
     </div>
 
     <!-- ── PRINT INPUTS (screen-hidden, shown in print left column) ── -->
@@ -360,6 +357,13 @@ footer a:hover{color:var(--gold);}
       </div>
 
     </div>
+  </div>
+
+  <div class="export-btn-wrap">
+    <button class="export-btn" onclick="exportPDF()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export as PDF
+    </button>
   </div>
 
   <footer>
@@ -492,7 +496,8 @@ function recalc() {
   // Net
   html += total('Net Profit', fmt$(netProfit), pol(netProfit) === 1 ? 'pos' : pol(netProfit) === -1 ? 'neg' : '');
 
-  // Margin row
+  // Margin rows (hidden in print — already shown in summary card above)
+  html += '<div class="receipt-meta-rows">';
   html += `<div class="receipt-row" style="padding-top:14px;">
     <span class="receipt-label">Net margin</span>
     <span class="receipt-val ${pol(netMargin)===1?'pos':pol(netMargin)===-1?'neg':''}">${fmtPct(netMargin)}</span>
@@ -509,6 +514,7 @@ function recalc() {
     <span class="receipt-label">Profit per lb FF</span>
     <span class="receipt-val ${pol(profitPerLb)===1?'pos':pol(profitPerLb)===-1?'neg':''}">${fmt$(profitPerLb)}</span>
   </div>`;
+  html += '</div>';
 
   document.getElementById('receipt-body').innerHTML = html;
 }
