@@ -346,6 +346,14 @@ footer a:hover{color:var(--gold);}
             <div class="summary-val neutral" id="s-cpg">—</div>
           </div>
           <div class="summary-item">
+            <div class="summary-label">Tax / Gram</div>
+            <div class="summary-val neutral" id="s-tpg">—</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Cost / Gram (w/ tax)</div>
+            <div class="summary-val neutral" id="s-cpg-post">—</div>
+          </div>
+          <div class="summary-item">
             <div class="summary-label">Profit / lb FF</div>
             <div class="summary-val neutral" id="s-plb">—</div>
           </div>
@@ -459,6 +467,8 @@ function recalc() {
   var netMargin    = grossRev > 0 ? (netProfit / grossRev) * 100 : 0;
   var roi          = totalCosts > 0 ? (netProfit / totalCosts) * 100 : 0;
   var cpg          = yieldG > 0 ? preTaxCosts / yieldG : 0;
+  var taxPerGram   = yieldG > 0 ? taxTotal / yieldG : 0;
+  var cpgPostTax   = yieldG > 0 ? totalCosts / yieldG : 0;
   var profitPerLb  = lbs > 0 ? netProfit / lbs : 0;
 
   var pol = function(n){ return n > 0 ? 1 : n < 0 ? -1 : 0; };
@@ -467,7 +477,9 @@ function recalc() {
   setSummary('s-profit', fmt$(netProfit), pol(netProfit));
   setSummary('s-margin', fmtPct(netMargin), pol(netMargin));
   setSummary('s-roi',    fmtPct(roi),       pol(roi));
-  setSummary('s-cpg',    fmt$(cpg),         0);
+  setSummary('s-cpg',      fmt$(cpg),         0);
+  setSummary('s-tpg',      fmt$(taxPerGram),  0);
+  setSummary('s-cpg-post', fmt$(cpgPostTax),  0);
   setSummary('s-plb',    fmt$(profitPerLb), pol(profitPerLb));
   setSummary('s-yield',  fmtG(yieldG),      0);
 
@@ -500,7 +512,9 @@ function recalc() {
   html += row('County sales tax (' + taxCounty.toFixed(3) + '%)', fmt$(grossRev * taxCounty / 100), 'deduct', true);
   html += row('City sales tax (' + taxCity.toFixed(3) + '%)', fmt$(grossRev * taxCity / 100), 'deduct', true);
   html += row('', fmt$(taxTotal), 'deduct', true);
+  html += row('Tax per gram', fmt$(taxPerGram) + '/g', '', false, true);
   html += divider('Total Costs', fmt$(totalCosts), 'deduct');
+  html += row('Cost per gram (w/ tax)', fmt$(cpgPostTax) + '/g', '', false, true);
 
   // Net
   html += total('Net Profit', fmt$(netProfit), pol(netProfit) === 1 ? 'pos' : pol(netProfit) === -1 ? 'neg' : '');
