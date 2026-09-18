@@ -153,7 +153,7 @@ footer a:hover{color:var(--gold);}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color:#000!important;background:transparent!important;border-color:#ccc!important;box-shadow:none!important;}
   #intro,header .hnav,.export-btn-wrap,footer,.page-hdr,.panel,.receipt-meta-rows{display:none!important;}
   html,body{background:#fff!important;}
-  #site{display:flex!important;flex-direction:column!important;zoom:0.85;min-height:118vh;}
+  #site{display:flex!important;flex-direction:column!important;zoom:0.82;min-height:122vh;}
   /* Header: logo+name left, print title right */
   header{display:flex!important;align-items:center!important;position:static!important;background:#fff!important;border-bottom:1.5px solid #000!important;padding:7px 0!important;}
   .htext h1{font-size:15px!important;}
@@ -525,15 +525,6 @@ function exportPDF() {
 
   // Populate print footer
   document.getElementById('print-meta').textContent = 'Generated ' + now + '  ·  kongconcentrates.com/calculator';
-
-  // On mobile the print viewport is the phone width (~390px), which collapses the
-  // two-column layout and makes the page much taller. Force a minimum render width
-  // so content height matches desktop, then restore after the print dialog closes.
-  var htmlEl = document.documentElement;
-  htmlEl.style.minWidth = '820px';
-  window.addEventListener('afterprint', function() {
-    htmlEl.style.minWidth = '';
-  }, {once: true});
 
   // Build print-inputs summary panel
   function pipRow(label, val) {
