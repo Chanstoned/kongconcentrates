@@ -342,7 +342,7 @@ footer a:hover{color:var(--gold);}
             <div class="summary-val neutral" id="s-roi">—</div>
           </div>
           <div class="summary-item">
-            <div class="summary-label">Cost / Gram</div>
+            <div class="summary-label">Cost / Gram (pre-tax)</div>
             <div class="summary-val neutral" id="s-cpg">—</div>
           </div>
           <div class="summary-item">
@@ -453,11 +453,12 @@ function recalc() {
   var tollTotal    = tollRate * lbs;
   var totalTaxRate = (taxCannabis + taxState + taxCounty + taxCity) / 100;
   var taxTotal     = grossRev * totalTaxRate;
-  var totalCosts   = totalFF + pkgTotal + laborTotal + testTotal + tollTotal + taxTotal;
+  var preTaxCosts  = totalFF + pkgTotal + laborTotal + testTotal + tollTotal;
+  var totalCosts   = preTaxCosts + taxTotal;
   var netProfit    = grossRev - totalCosts;
   var netMargin    = grossRev > 0 ? (netProfit / grossRev) * 100 : 0;
   var roi          = totalCosts > 0 ? (netProfit / totalCosts) * 100 : 0;
-  var cpg          = yieldG > 0 ? totalCosts / yieldG : 0;
+  var cpg          = yieldG > 0 ? preTaxCosts / yieldG : 0;
   var profitPerLb  = lbs > 0 ? netProfit / lbs : 0;
 
   var pol = function(n){ return n > 0 ? 1 : n < 0 ? -1 : 0; };
@@ -491,8 +492,8 @@ function recalc() {
   html += row('', fmt$(testTotal), 'deduct', true);
   html += row('Toll processing', lbs.toLocaleString() + ' lbs × ' + fmt$(tollRate) + '/lb');
   html += row('', fmt$(tollTotal), 'deduct', true);
-  var preTaxCosts = totalFF + pkgTotal + laborTotal + testTotal + tollTotal;
   html += divider('Costs Before Tax', fmt$(preTaxCosts), 'deduct');
+  html += row('Cost per gram (pre-tax)', fmt$(cpg) + '/g', '', false, true);
   html += row('Taxes (' + (totalTaxRate * 100).toFixed(3) + '% of gross)', '');
   html += row('State cannabis tax (' + taxCannabis.toFixed(3) + '%)', fmt$(grossRev * taxCannabis / 100), 'deduct', true);
   html += row('State sales tax (' + taxState.toFixed(3) + '%)', fmt$(grossRev * taxState / 100), 'deduct', true);
