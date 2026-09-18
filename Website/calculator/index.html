@@ -153,7 +153,7 @@ footer a:hover{color:var(--gold);}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color:#000!important;background:transparent!important;border-color:#ccc!important;box-shadow:none!important;}
   #intro,header .hnav,.export-btn-wrap,footer,.page-hdr,.panel,.receipt-meta-rows{display:none!important;}
   html,body{background:#fff!important;}
-  #site{display:flex!important;flex-direction:column!important;zoom:0.85;}
+  #site{display:flex!important;flex-direction:column!important;zoom:0.82;min-height:122vh;}
   /* Header: logo+name left, print title right */
   header{display:flex!important;align-items:center!important;position:static!important;background:#fff!important;border-bottom:1.5px solid #000!important;padding:7px 0!important;}
   .htext h1{font-size:15px!important;}
@@ -170,8 +170,8 @@ footer a:hover{color:var(--gold);}
   .pip-row{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:14px;padding:4px 0;border-bottom:1px solid #ddd;}
   .pip-row:last-child{border-bottom:none;}
   .pip-val{font-weight:700;}
-  /* Footer: outside zoomed #site so position:fixed anchors to true page bottom */
-  .print-page-footer{display:block!important;position:fixed!important;bottom:0!important;left:0!important;right:0!important;text-align:center!important;padding:6px 0 8px!important;font-family:'DM Mono',monospace!important;font-size:9px!important;letter-spacing:0.08em!important;background:#fff!important;}
+  /* Footer: in-flow, pushed to bottom via margin-top:auto in the #site flex column */
+  .print-page-footer{display:block!important;margin-top:auto!important;padding:16px 0 4px!important;text-align:center!important;font-family:'DM Mono',monospace!important;font-size:9px!important;letter-spacing:0.08em!important;}
   /* Summary */
   .summary-card{background:#f2f2f2!important;border:1px solid #bbb!important;padding:12px!important;margin-bottom:0!important;}
   .summary-title{font-size:10px!important;margin-bottom:8px!important;}
@@ -369,8 +369,8 @@ footer a:hover{color:var(--gold);}
     <p>&copy; 2026 Kong Concentrates LLC &nbsp;&middot;&nbsp; Grove, OK 74344</p>
     <p><a href="/wholesale/">Wholesale</a> &nbsp;&middot;&nbsp; <a href="/blog">Blog</a> &nbsp;&middot;&nbsp; <a href="/calculator">Calculator</a> &nbsp;&middot;&nbsp; <a href="/privacy-policy/">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="/terms-of-service/">Terms</a> &nbsp;&middot;&nbsp; <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a></p>
   </footer>
+  <div id="print-meta" class="print-page-footer"></div>
 </div>
-<div id="print-meta" class="print-page-footer"></div>
 
 <script>
 // ── Intro
