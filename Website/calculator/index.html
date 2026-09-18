@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toll Processing Calculator | Kong Concentrates</title>
+<meta name="description" content="Estimate profit from cannabis toll processing operations. Calculate yield, revenue, costs, and margins for live rosin production.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kongconcentrates.com/calculator">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kong Concentrates">
+<meta property="og:title" content="Toll Processing Calculator | Kong Concentrates">
+<meta property="og:description" content="Estimate profit from cannabis toll processing operations.">
+<meta property="og:url" content="https://kongconcentrates.com/calculator">
+<meta property="og:image" content="https://kongconcentrates.com/images/MAIN-ROUND-1.png">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5YMLL0G1WB"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-5YMLL0G1WB');</script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#080808;
+  --gold:#c8a96e;
+  --gold-light:#e8c46a;
+  --white:#f5f0e8;
+  --gray:#111;
+  --border:#242424;
+  --gray-text:#888;
+  --panel:#0d0d0d;
+  --input-bg:#111;
+  --green:#4caf82;
+  --red:#d07070;
+}
+html,body{overflow-x:hidden;min-height:100%;}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── INTRO ── */
+#intro{position:fixed;inset:0;background:#000;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.7s ease;}
+#intro.fade-out{opacity:0;pointer-events:none;}
+.logo-wrap{position:relative;width:min(200px,58vw);display:flex;align-items:center;justify-content:center;}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(200,169,110,0.2);animation:pulse 2.4s ease-in-out infinite alternate;pointer-events:none;}
+.ring1{inset:-14px;animation-delay:0s}
+.ring2{inset:-28px;animation-delay:0.5s;border-color:rgba(200,169,110,0.09)}
+#intro-logo{width:180px;height:180px;border-radius:50%;object-fit:cover;position:relative;z-index:1;opacity:0;transform:scale(0.8);animation:logoIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;border:1px solid rgba(200,169,110,0.18);filter:drop-shadow(0 0 50px rgba(200,169,110,0.4));}
+@keyframes logoIn{to{opacity:1;transform:scale(1);}}
+@keyframes pulse{0%,100%{opacity:0.5;transform:scale(1);}50%{opacity:1;transform:scale(1.035);}}
+.intro-text{margin-top:32px;text-align:center;opacity:0;animation:fadeUp 0.7s ease 1s forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.intro-text p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-top:6px;}
+
+/* ── SITE ── */
+#site{display:none;flex-direction:column;min-height:100vh;}
+#site.show{display:flex;}
+
+/* ── HEADER ── */
+header{position:sticky;top:0;z-index:50;background:rgba(8,8,8,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 28px;flex-wrap:wrap;}
+.hlogo{width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(200,169,110,0.25);}
+.htext h1{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.1em;line-height:1;}
+.htext p{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.22em;color:var(--gold);text-transform:uppercase;margin-top:2px;}
+.hnav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
+.hnav a{font-family:'DM Mono',monospace;font-size:clamp(9px,1.4vw,11px);letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,240,232,0.5);text-decoration:none;padding:6px clamp(6px,1vw,10px);border:1px solid var(--border);transition:all 0.2s;}
+.hnav a:hover,.hnav a.active{color:var(--gold);border-color:rgba(200,169,110,0.35);}
+.hnav-ig{display:flex;align-items:center;justify-content:center;padding:7px 9px;}
+
+/* ── PAGE HEADER ── */
+.page-hdr{padding:52px 40px 32px;text-align:center;}
+.badge{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);opacity:0.65;border:1px solid rgba(200,169,110,0.2);padding:6px 16px;display:inline-block;margin-bottom:18px;}
+.page-hdr h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,9vw,80px);letter-spacing:0.07em;line-height:0.92;color:var(--white);margin-bottom:12px;}
+.page-hdr-sub{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,240,232,0.4);line-height:2;}
+
+/* ── LAYOUT ── */
+.calc-wrap{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1100px;margin:0 auto;padding:0 28px 80px;width:100%;}
+
+/* ── PANELS ── */
+.panel{background:var(--panel);border:1px solid var(--border);padding:28px;}
+.panel-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+
+/* ── INPUT GROUPS ── */
+.input-group{margin-bottom:28px;}
+.input-group:last-child{margin-bottom:0;}
+.group-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:rgba(245,240,232,0.3);margin-bottom:14px;}
+.field{margin-bottom:14px;}
+.field:last-child{margin-bottom:0;}
+.field label{display:block;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;color:rgba(245,240,232,0.55);margin-bottom:6px;}
+.field input[type=number]{width:100%;background:var(--input-bg);border:1px solid var(--border);color:var(--white);font-family:'DM Mono',monospace;font-size:13px;padding:10px 14px;outline:none;transition:border-color 0.2s;-moz-appearance:textfield;}
+.field input[type=number]::-webkit-inner-spin-button,.field input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;}
+.field input[type=number]:focus{border-color:rgba(200,169,110,0.45);}
+
+/* Labor toggle */
+.labor-wrap{display:flex;gap:10px;align-items:flex-start;}
+.labor-toggle{display:flex;flex-direction:column;gap:6px;padding-top:22px;flex-shrink:0;}
+.toggle-btn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;background:none;border:1px solid var(--border);color:rgba(245,240,232,0.35);padding:5px 10px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.toggle-btn.active{border-color:rgba(200,169,110,0.4);color:var(--gold);}
+.labor-field{flex:1;}
+
+/* ── RESULTS ── */
+.results-panel{display:flex;flex-direction:column;gap:16px;}
+
+/* Summary card */
+.summary-card{background:#0a0a0a;border:1px solid rgba(200,169,110,0.2);padding:22px;margin-bottom:4px;}
+.summary-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);opacity:0.65;margin-bottom:16px;}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.summary-item{}
+.summary-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(245,240,232,0.35);margin-bottom:4px;}
+.summary-val{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:0.05em;line-height:1;}
+.summary-val.pos{color:var(--green);}
+.summary-val.neg{color:var(--red);}
+.summary-val.neutral{color:var(--gold-light);}
+
+/* Receipt */
+.receipt{background:#0a0a0a;border:1px solid var(--border);padding:22px;}
+.receipt-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(245,240,232,0.3);margin-bottom:16px;}
+.receipt-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid #161616;font-family:'DM Mono',monospace;font-size:12px;}
+.receipt-row:last-child{border-bottom:none;}
+.receipt-row.subtotal{border-top:1px solid var(--border);margin-top:6px;padding-top:10px;font-size:13px;}
+.receipt-row.total{border-top:1px solid rgba(200,169,110,0.3);margin-top:8px;padding-top:12px;}
+.receipt-label{color:rgba(245,240,232,0.45);letter-spacing:0.04em;}
+.receipt-label.indent{padding-left:14px;font-size:11px;}
+.receipt-val{color:var(--white);letter-spacing:0.06em;text-align:right;}
+.receipt-val.deduct{color:var(--red);}
+.receipt-val.highlight{color:var(--gold-light);font-size:14px;}
+.receipt-val.pos{color:var(--green);}
+.receipt-val.neg{color:var(--red);}
+.receipt-val.big{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.05em;}
+
+/* ── FOOTER ── */
+footer{margin-top:auto;padding:24px 40px;border-top:1px solid #181818;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+footer p{font-family:'DM Mono',monospace;font-size:11px;color:#363636;letter-spacing:0.04em;}
+footer a{color:#555;text-decoration:none;}
+footer a:hover{color:var(--gold);}
+.disclaimer{width:100%;font-family:'DM Mono',monospace;font-size:10px;color:#333;letter-spacing:0.04em;line-height:1.8;padding-top:10px;border-top:1px solid #161616;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  .calc-wrap{grid-template-columns:1fr;padding:0 16px 60px;}
+  .page-hdr{padding:40px 20px 24px;}
+}
+@media(max-width:620px){
+  header{padding:10px 16px;}
+  .hnav .hide-mobile{display:none;}
+  .hnav a{padding:4px 7px;font-size:9px;}
+  footer{padding:18px 16px;flex-direction:column;text-align:center;}
+  .summary-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+  <div class="logo-wrap">
+    <img id="intro-logo" src="/images/MAIN-ROUND-1.png" alt="Kong Concentrates">
+    <div class="ring ring1"></div>
+    <div class="ring ring2"></div>
+  </div>
+  <div class="intro-text">
+    <p>Toll Processing Calculator</p>
+  </div>
+</div>
+
+<!-- SITE -->
+<div id="site">
+  <header>
+    <a href="/"><img src="/images/MAIN-ROUND-1.png" alt="Kong" class="hlogo"></a>
+    <div class="htext">
+      <h1>Kong Concentrates</h1>
+      <p>Grove, Oklahoma</p>
+    </div>
+    <nav class="hnav">
+      <a href="/menu" class="hide-mobile">Menu</a>
+      <a href="/coa" class="hide-mobile">Lab Results</a>
+      <a href="/locations" class="hide-mobile">Locations</a>
+      <a href="/merch" class="hide-mobile">Merch</a>
+      <a href="/contact">Contact</a>
+      <a href="https://instagram.com/kongconcentrates" target="_blank" rel="noopener" class="hnav-ig" title="Instagram" aria-label="Instagram">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:block"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </nav>
+  </header>
+
+  <div class="page-hdr">
+    <div class="badge">Tool</div>
+    <h2>Toll Processing<br>Calculator</h2>
+    <p class="page-hdr-sub">Estimate yield, revenue, costs &amp; profit for solventless toll processing</p>
+  </div>
+
+  <div class="calc-wrap">
+
+    <!-- ── INPUTS ── -->
+    <div class="panel">
+      <div class="panel-title">Inputs</div>
+
+      <!-- Input Material -->
+      <div class="input-group">
+        <div class="group-label">Input Material</div>
+        <div class="field">
+          <label>Fresh Frozen (lbs)</label>
+          <input type="number" id="lbs" value="10" min="0" step="0.1">
+        </div>
+        <div class="field">
+          <label>Cost per lb of FF ($)</label>
+          <input type="number" id="cost_per_lb" value="400" min="0" step="1">
+        </div>
+      </div>
+
+      <!-- Yield & Sales -->
+      <div class="input-group">
+        <div class="group-label">Yield &amp; Sales</div>
+        <div class="field">
+          <label>Average Rosin Return (%)</label>
+          <input type="number" id="return_pct" value="3.5" min="0" max="100" step="0.1">
+        </div>
+        <div class="field">
+          <label>Sell Price per Gram ($)</label>
+          <input type="number" id="sell_price" value="30" min="0" step="0.5">
+        </div>
+      </div>
+
+      <!-- Costs -->
+      <div class="input-group">
+        <div class="group-label">Costs</div>
+        <div class="field">
+          <label>Packaging Cost per Gram ($)</label>
+          <input type="number" id="pkg_cost" value="0.25" min="0" step="0.01">
+        </div>
+        <div class="field">
+          <label>Packaging Labor</label>
+          <div class="labor-wrap">
+            <div class="labor-toggle">
+              <button class="toggle-btn active" id="labor-flat-btn" onclick="setLaborMode('flat')">Flat $</button>
+              <button class="toggle-btn" id="labor-per-btn" onclick="setLaborMode('per')">$/gram</button>
+            </div>
+            <div class="labor-field">
+              <input type="number" id="labor_cost" value="50" min="0" step="1" style="margin-top:0;">
+            </div>
+          </div>
+          <div id="labor-hint" style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(245,240,232,0.25);margin-top:6px;letter-spacing:0.04em;">Flat dollar amount for all packaging labor</div>
+        </div>
+        <div class="field">
+          <label>Toll Processing Rate ($/lb)</label>
+          <input type="number" id="toll_rate" value="150" min="0" step="5">
+        </div>
+        <div class="field">
+          <label>Testing Cost per Strain ($)</label>
+          <input type="number" id="test_cost" value="400" min="0" step="10">
+        </div>
+        <div class="field">
+          <label>Number of Strains Tested</label>
+          <input type="number" id="num_strains" value="1" min="0" step="1">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RESULTS ── -->
+    <div class="results-panel">
+
+      <!-- Summary metrics -->
+      <div class="summary-card">
+        <div class="summary-title">Summary Metrics</div>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-label">Net Profit</div>
+            <div class="summary-val neutral" id="s-profit">—</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Net Margin</div>
+            <div class="summary-val neutral" id="s-margin">—</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">ROI</div>
+            <div class="summary-val neutral" id="s-roi">—</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Cost / Gram</div>
+            <div class="summary-val neutral" id="s-cpg">—</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Profit / lb FF</div>
+            <div class="summary-val neutral" id="s-plb">—</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Yield (grams)</div>
+            <div class="summary-val neutral" id="s-yield">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Receipt breakdown -->
+      <div class="receipt">
+        <div class="receipt-title">Cost &amp; Revenue Breakdown</div>
+        <div id="receipt-body">
+          <div class="receipt-row"><span class="receipt-label">Enter inputs to see breakdown</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Kong Concentrates LLC &nbsp;&middot;&nbsp; Grove, OK 74344</p>
+    <p><a href="/wholesale/">Wholesale</a> &nbsp;&middot;&nbsp; <a href="/blog">Blog</a> &nbsp;&middot;&nbsp; <a href="/calculator">Calculator</a> &nbsp;&middot;&nbsp; <a href="/privacy-policy/">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="/terms-of-service/">Terms</a> &nbsp;&middot;&nbsp; <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a></p>
+    <p class="disclaimer">Estimates only &mdash; actual yields, prices, and costs vary by strain, equipment, and market conditions.</p>
+  </footer>
+</div>
+
+<script>
+// ── Intro
+(function(){
+  var intro = document.getElementById('intro');
+  var site  = document.getElementById('site');
+  var delay = sessionStorage.getItem('seen') ? 0 : 1800;
+  sessionStorage.setItem('seen','1');
+  setTimeout(function(){
+    intro.classList.add('fade-out');
+    site.classList.add('show');
+    setTimeout(function(){ intro.style.display='none'; }, 700);
+  }, delay);
+})();
+
+// ── Labor mode
+var laborMode = 'flat';
+function setLaborMode(mode) {
+  laborMode = mode;
+  document.getElementById('labor-flat-btn').classList.toggle('active', mode === 'flat');
+  document.getElementById('labor-per-btn').classList.toggle('active', mode === 'per');
+  document.getElementById('labor-hint').textContent = mode === 'flat'
+    ? 'Flat dollar amount for all packaging labor'
+    : 'Per-gram labor cost added to packaging';
+  recalc();
+}
+
+// ── Helpers
+function v(id){ return parseFloat(document.getElementById(id).value) || 0; }
+function fmt$(n){ return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+function fmtPct(n){ return n.toFixed(1) + '%'; }
+function fmtG(n){ return Math.round(n).toLocaleString() + 'g'; }
+
+function row(label, val, cls, indent){
+  cls = cls || '';
+  return `<div class="receipt-row">
+    <span class="receipt-label${indent?' indent':''}">${label}</span>
+    <span class="receipt-val ${cls}">${val}</span>
+  </div>`;
+}
+function divider(label, val, cls){
+  return `<div class="receipt-row subtotal">
+    <span class="receipt-label">${label}</span>
+    <span class="receipt-val ${cls||''}">${val}</span>
+  </div>`;
+}
+function total(label, val, cls){
+  return `<div class="receipt-row total">
+    <span class="receipt-label" style="color:var(--white);font-size:13px;">${label}</span>
+    <span class="receipt-val big ${cls||''}">${val}</span>
+  </div>`;
+}
+
+function setSummary(id, text, polarity) {
+  var el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'summary-val ' + (polarity === 1 ? 'pos' : polarity === -1 ? 'neg' : 'neutral');
+}
+
+// ── Main calculation
+function recalc() {
+  var lbs        = v('lbs');
+  var costPerLb  = v('cost_per_lb');
+  var returnPct  = v('return_pct');
+  var sellPrice  = v('sell_price');
+  var pkgCost    = v('pkg_cost');
+  var laborCost  = v('labor_cost');
+  var tollRate   = v('toll_rate');
+  var testCost   = v('test_cost');
+  var numStrains = v('num_strains');
+
+  // Core calcs
+  var totalFF      = lbs * costPerLb;
+  var yieldG       = lbs * 448 * (returnPct / 100);
+  var grossRev     = yieldG * sellPrice;
+  var pkgTotal     = yieldG * pkgCost + (laborMode === 'flat' ? laborCost : laborCost * yieldG);
+  var testTotal    = testCost * numStrains;
+  var tollTotal    = tollRate * lbs;
+  var totalCosts   = totalFF + pkgTotal + testTotal + tollTotal;
+  var netProfit    = grossRev - totalCosts;
+  var netMargin    = grossRev > 0 ? (netProfit / grossRev) * 100 : 0;
+  var roi          = totalCosts > 0 ? (netProfit / totalCosts) * 100 : 0;
+  var cpg          = yieldG > 0 ? totalCosts / yieldG : 0;
+  var profitPerLb  = lbs > 0 ? netProfit / lbs : 0;
+
+  var pol = function(n){ return n > 0 ? 1 : n < 0 ? -1 : 0; };
+
+  // Summary
+  setSummary('s-profit', fmt$(netProfit), pol(netProfit));
+  setSummary('s-margin', fmtPct(netMargin), pol(netMargin));
+  setSummary('s-roi',    fmtPct(roi),       pol(roi));
+  setSummary('s-cpg',    fmt$(cpg),         0);
+  setSummary('s-plb',    fmt$(profitPerLb), pol(profitPerLb));
+  setSummary('s-yield',  fmtG(yieldG),      0);
+
+  // Receipt
+  var laborDesc = laborMode === 'flat'
+    ? 'Flat labor'
+    : '$/gram labor (' + fmt$(laborCost) + '/g)';
+
+  var html = '';
+
+  // Revenue section
+  html += row('Fresh Frozen Input', lbs.toLocaleString() + ' lbs');
+  html += row('Conversion rate', '448 g/lb', '', true);
+  html += row('Rosin return', fmtPct(returnPct), '', true);
+  html += row('Yield', fmtG(yieldG), 'highlight');
+  html += row('Sell price', fmt$(sellPrice) + '/g', '', true);
+  html += divider('Gross Revenue', fmt$(grossRev), 'highlight');
+
+  // Costs section
+  html += row('Fresh Frozen cost', lbs.toLocaleString() + ' lbs × ' + fmt$(costPerLb) + '/lb');
+  html += row('', fmt$(totalFF), 'deduct', true);
+  html += row('Packaging', fmtG(yieldG) + ' × ' + fmt$(pkgCost) + '/g');
+  html += row('', fmt$(yieldG * pkgCost), 'deduct', true);
+  html += row(laborDesc, '');
+  html += row('', fmt$(laborMode === 'flat' ? laborCost : laborCost * yieldG), 'deduct', true);
+  html += row('Testing', numStrains + ' strain' + (numStrains !== 1 ? 's' : '') + ' × ' + fmt$(testCost));
+  html += row('', fmt$(testTotal), 'deduct', true);
+  html += row('Toll processing', lbs.toLocaleString() + ' lbs × ' + fmt$(tollRate) + '/lb');
+  html += row('', fmt$(tollTotal), 'deduct', true);
+  html += divider('Total Costs', fmt$(totalCosts), 'deduct');
+
+  // Net
+  html += total('Net Profit', fmt$(netProfit), pol(netProfit) === 1 ? 'pos' : pol(netProfit) === -1 ? 'neg' : '');
+
+  // Margin row
+  html += `<div class="receipt-row" style="padding-top:14px;">
+    <span class="receipt-label">Net margin</span>
+    <span class="receipt-val ${pol(netMargin)===1?'pos':pol(netMargin)===-1?'neg':''}">${fmtPct(netMargin)}</span>
+  </div>`;
+  html += `<div class="receipt-row">
+    <span class="receipt-label">ROI</span>
+    <span class="receipt-val ${pol(roi)===1?'pos':pol(roi)===-1?'neg':''}">${fmtPct(roi)}</span>
+  </div>`;
+  html += `<div class="receipt-row">
+    <span class="receipt-label">Cost per gram produced</span>
+    <span class="receipt-val">${fmt$(cpg)}/g</span>
+  </div>`;
+  html += `<div class="receipt-row">
+    <span class="receipt-label">Profit per lb FF</span>
+    <span class="receipt-val ${pol(profitPerLb)===1?'pos':pol(profitPerLb)===-1?'neg':''}">${fmt$(profitPerLb)}</span>
+  </div>`;
+
+  document.getElementById('receipt-body').innerHTML = html;
+}
+
+// ── Wire inputs
+document.querySelectorAll('input[type=number]').forEach(function(el){
+  el.addEventListener('input', recalc);
+});
+
+// ── Initial calc
+recalc();
+</script>
+</body>
+</html>
