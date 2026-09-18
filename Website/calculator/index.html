@@ -86,12 +86,6 @@ header{position:sticky;top:0;z-index:50;background:rgba(8,8,8,0.97);backdrop-fil
 .field input[type=number]::-webkit-inner-spin-button,.field input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;}
 .field input[type=number]:focus{border-color:rgba(200,169,110,0.45);}
 
-/* Labor toggle */
-.labor-wrap{display:flex;gap:10px;align-items:flex-start;}
-.labor-toggle{display:flex;flex-direction:column;gap:6px;padding-top:22px;flex-shrink:0;}
-.toggle-btn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;background:none;border:1px solid var(--border);color:rgba(245,240,232,0.35);padding:5px 10px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
-.toggle-btn.active{border-color:rgba(200,169,110,0.4);color:var(--gold);}
-.labor-field{flex:1;}
 
 /* ── RESULTS ── */
 .results-panel{display:flex;flex-direction:column;gap:16px;}
@@ -128,7 +122,6 @@ footer{margin-top:auto;padding:24px 40px;border-top:1px solid #181818;display:fl
 footer p{font-family:'DM Mono',monospace;font-size:11px;color:#363636;letter-spacing:0.04em;}
 footer a{color:#555;text-decoration:none;}
 footer a:hover{color:var(--gold);}
-.disclaimer{width:100%;font-family:'DM Mono',monospace;font-size:10px;color:#333;letter-spacing:0.04em;line-height:1.8;padding-top:10px;border-top:1px solid #161616;}
 
 /* ── RESPONSIVE ── */
 @media(max-width:860px){
@@ -195,11 +188,11 @@ footer a:hover{color:var(--gold);}
         <div class="group-label">Input Material</div>
         <div class="field">
           <label>Fresh Frozen (lbs)</label>
-          <input type="number" id="lbs" value="10" min="0" step="0.1">
+          <input type="number" id="lbs" value="100" min="0" step="0.1">
         </div>
         <div class="field">
           <label>Cost per lb of FF ($)</label>
-          <input type="number" id="cost_per_lb" value="400" min="0" step="1">
+          <input type="number" id="cost_per_lb" value="100" min="0" step="1">
         </div>
       </div>
 
@@ -208,11 +201,11 @@ footer a:hover{color:var(--gold);}
         <div class="group-label">Yield &amp; Sales</div>
         <div class="field">
           <label>Average Rosin Return (%)</label>
-          <input type="number" id="return_pct" value="3.5" min="0" max="100" step="0.1">
+          <input type="number" id="return_pct" value="3" min="0" max="100" step="0.1">
         </div>
         <div class="field">
           <label>Sell Price per Gram ($)</label>
-          <input type="number" id="sell_price" value="30" min="0" step="0.5">
+          <input type="number" id="sell_price" value="35" min="0" step="0.5">
         </div>
       </div>
 
@@ -221,32 +214,44 @@ footer a:hover{color:var(--gold);}
         <div class="group-label">Costs</div>
         <div class="field">
           <label>Packaging Cost per Gram ($)</label>
-          <input type="number" id="pkg_cost" value="0.25" min="0" step="0.01">
+          <input type="number" id="pkg_cost" value="1.5" min="0" step="0.01">
         </div>
         <div class="field">
-          <label>Packaging Labor</label>
-          <div class="labor-wrap">
-            <div class="labor-toggle">
-              <button class="toggle-btn active" id="labor-flat-btn" onclick="setLaborMode('flat')">Flat $</button>
-              <button class="toggle-btn" id="labor-per-btn" onclick="setLaborMode('per')">$/gram</button>
-            </div>
-            <div class="labor-field">
-              <input type="number" id="labor_cost" value="50" min="0" step="1" style="margin-top:0;">
-            </div>
-          </div>
-          <div id="labor-hint" style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(245,240,232,0.25);margin-top:6px;letter-spacing:0.04em;">Flat dollar amount for all packaging labor</div>
+          <label>Packaging Labor ($/unit)</label>
+          <input type="number" id="labor_cost" value="1" min="0" step="0.01">
         </div>
         <div class="field">
           <label>Toll Processing Rate ($/lb)</label>
-          <input type="number" id="toll_rate" value="150" min="0" step="5">
+          <input type="number" id="toll_rate" value="50" min="0" step="5">
         </div>
         <div class="field">
           <label>Testing Cost per Strain ($)</label>
-          <input type="number" id="test_cost" value="400" min="0" step="10">
+          <input type="number" id="test_cost" value="250" min="0" step="10">
         </div>
         <div class="field">
           <label>Number of Strains Tested</label>
           <input type="number" id="num_strains" value="1" min="0" step="1">
+        </div>
+      </div>
+
+      <!-- Taxes -->
+      <div class="input-group">
+        <div class="group-label">Taxes</div>
+        <div class="field">
+          <label>State Cannabis Tax (%)</label>
+          <input type="number" id="tax_cannabis" value="7" min="0" max="100" step="0.001">
+        </div>
+        <div class="field">
+          <label>State Sales Tax (%)</label>
+          <input type="number" id="tax_state" value="4.5" min="0" max="100" step="0.001">
+        </div>
+        <div class="field">
+          <label>County Sales Tax (%)</label>
+          <input type="number" id="tax_county" value="1.375" min="0" max="100" step="0.001">
+        </div>
+        <div class="field">
+          <label>City Sales Tax (%)</label>
+          <input type="number" id="tax_city" value="5" min="0" max="100" step="0.001">
         </div>
       </div>
     </div>
@@ -299,7 +304,6 @@ footer a:hover{color:var(--gold);}
   <footer>
     <p>&copy; 2026 Kong Concentrates LLC &nbsp;&middot;&nbsp; Grove, OK 74344</p>
     <p><a href="/wholesale/">Wholesale</a> &nbsp;&middot;&nbsp; <a href="/blog">Blog</a> &nbsp;&middot;&nbsp; <a href="/calculator">Calculator</a> &nbsp;&middot;&nbsp; <a href="/privacy-policy/">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="/terms-of-service/">Terms</a> &nbsp;&middot;&nbsp; <a href="mailto:process@kongconcentrates.com">process@kongconcentrates.com</a></p>
-    <p class="disclaimer">Estimates only &mdash; actual yields, prices, and costs vary by strain, equipment, and market conditions.</p>
   </footer>
 </div>
 
@@ -316,18 +320,6 @@ footer a:hover{color:var(--gold);}
     setTimeout(function(){ intro.style.display='none'; }, 700);
   }, delay);
 })();
-
-// ── Labor mode
-var laborMode = 'flat';
-function setLaborMode(mode) {
-  laborMode = mode;
-  document.getElementById('labor-flat-btn').classList.toggle('active', mode === 'flat');
-  document.getElementById('labor-per-btn').classList.toggle('active', mode === 'per');
-  document.getElementById('labor-hint').textContent = mode === 'flat'
-    ? 'Flat dollar amount for all packaging labor'
-    : 'Per-gram labor cost added to packaging';
-  recalc();
-}
 
 // ── Helpers
 function v(id){ return parseFloat(document.getElementById(id).value) || 0; }
@@ -363,24 +355,31 @@ function setSummary(id, text, polarity) {
 
 // ── Main calculation
 function recalc() {
-  var lbs        = v('lbs');
-  var costPerLb  = v('cost_per_lb');
-  var returnPct  = v('return_pct');
-  var sellPrice  = v('sell_price');
-  var pkgCost    = v('pkg_cost');
-  var laborCost  = v('labor_cost');
-  var tollRate   = v('toll_rate');
-  var testCost   = v('test_cost');
-  var numStrains = v('num_strains');
+  var lbs          = v('lbs');
+  var costPerLb    = v('cost_per_lb');
+  var returnPct    = v('return_pct');
+  var sellPrice    = v('sell_price');
+  var pkgCost      = v('pkg_cost');
+  var laborCost    = v('labor_cost');
+  var tollRate     = v('toll_rate');
+  var testCost     = v('test_cost');
+  var numStrains   = v('num_strains');
+  var taxCannabis  = v('tax_cannabis');
+  var taxState     = v('tax_state');
+  var taxCounty    = v('tax_county');
+  var taxCity      = v('tax_city');
 
   // Core calcs
   var totalFF      = lbs * costPerLb;
   var yieldG       = lbs * 448 * (returnPct / 100);
   var grossRev     = yieldG * sellPrice;
-  var pkgTotal     = yieldG * pkgCost + (laborMode === 'flat' ? laborCost : laborCost * yieldG);
+  var pkgTotal     = yieldG * pkgCost;
+  var laborTotal   = laborCost * yieldG;
   var testTotal    = testCost * numStrains;
   var tollTotal    = tollRate * lbs;
-  var totalCosts   = totalFF + pkgTotal + testTotal + tollTotal;
+  var totalTaxRate = (taxCannabis + taxState + taxCounty + taxCity) / 100;
+  var taxTotal     = grossRev * totalTaxRate;
+  var totalCosts   = totalFF + pkgTotal + laborTotal + testTotal + tollTotal + taxTotal;
   var netProfit    = grossRev - totalCosts;
   var netMargin    = grossRev > 0 ? (netProfit / grossRev) * 100 : 0;
   var roi          = totalCosts > 0 ? (netProfit / totalCosts) * 100 : 0;
@@ -397,11 +396,6 @@ function recalc() {
   setSummary('s-plb',    fmt$(profitPerLb), pol(profitPerLb));
   setSummary('s-yield',  fmtG(yieldG),      0);
 
-  // Receipt
-  var laborDesc = laborMode === 'flat'
-    ? 'Flat labor'
-    : '$/gram labor (' + fmt$(laborCost) + '/g)';
-
   var html = '';
 
   // Revenue section
@@ -416,13 +410,19 @@ function recalc() {
   html += row('Fresh Frozen cost', lbs.toLocaleString() + ' lbs × ' + fmt$(costPerLb) + '/lb');
   html += row('', fmt$(totalFF), 'deduct', true);
   html += row('Packaging', fmtG(yieldG) + ' × ' + fmt$(pkgCost) + '/g');
-  html += row('', fmt$(yieldG * pkgCost), 'deduct', true);
-  html += row(laborDesc, '');
-  html += row('', fmt$(laborMode === 'flat' ? laborCost : laborCost * yieldG), 'deduct', true);
+  html += row('', fmt$(pkgTotal), 'deduct', true);
+  html += row('Packaging labor', fmtG(yieldG) + ' × ' + fmt$(laborCost) + '/unit');
+  html += row('', fmt$(laborTotal), 'deduct', true);
   html += row('Testing', numStrains + ' strain' + (numStrains !== 1 ? 's' : '') + ' × ' + fmt$(testCost));
   html += row('', fmt$(testTotal), 'deduct', true);
   html += row('Toll processing', lbs.toLocaleString() + ' lbs × ' + fmt$(tollRate) + '/lb');
   html += row('', fmt$(tollTotal), 'deduct', true);
+  html += row('Taxes (' + (totalTaxRate * 100).toFixed(3) + '% of gross)', '');
+  html += row('State cannabis tax (' + taxCannabis.toFixed(3) + '%)', fmt$(grossRev * taxCannabis / 100), 'deduct', true);
+  html += row('State sales tax (' + taxState.toFixed(3) + '%)', fmt$(grossRev * taxState / 100), 'deduct', true);
+  html += row('County sales tax (' + taxCounty.toFixed(3) + '%)', fmt$(grossRev * taxCounty / 100), 'deduct', true);
+  html += row('City sales tax (' + taxCity.toFixed(3) + '%)', fmt$(grossRev * taxCity / 100), 'deduct', true);
+  html += row('', fmt$(taxTotal), 'deduct', true);
   html += divider('Total Costs', fmt$(totalCosts), 'deduct');
 
   // Net
