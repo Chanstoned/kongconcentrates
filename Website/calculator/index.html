@@ -135,6 +135,48 @@ footer a:hover{color:var(--gold);}
   footer{padding:18px 16px;flex-direction:column;text-align:center;}
   .summary-grid{grid-template-columns:1fr 1fr;}
 }
+
+/* ── EXPORT BUTTON ── */
+.export-btn{width:100%;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;background:none;border:1px solid rgba(200,169,110,0.3);color:rgba(200,169,110,0.7);padding:11px 16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;}
+.export-btn:hover{border-color:rgba(200,169,110,0.6);color:var(--gold);}
+.export-btn svg{flex-shrink:0;}
+
+/* ── PRINT ── */
+@media print{
+  @page{margin:20mm 18mm;}
+  #intro,header .hnav,.export-btn,footer{display:none!important;}
+  body{background:#fff!important;color:#111!important;}
+  #site{display:flex!important;}
+  .page-hdr{padding:0 0 18px;text-align:left;}
+  .page-hdr .badge{display:none;}
+  .page-hdr h2{font-size:36px;color:#111!important;margin-bottom:4px;}
+  .page-hdr-sub{color:#555!important;}
+  .calc-wrap{display:block;max-width:100%;padding:0;}
+  .panel{display:none;}
+  .results-panel{display:block;}
+  .summary-card{background:#f5f5f5!important;border:1px solid #ddd!important;break-inside:avoid;}
+  .summary-title{color:#888!important;}
+  .summary-label{color:#666!important;}
+  .summary-val{color:#111!important;}
+  .summary-val.pos{color:#2a7a52!important;}
+  .summary-val.neg{color:#b04040!important;}
+  .summary-val.neutral{color:#7a6030!important;}
+  .receipt{background:#fff!important;border:1px solid #ddd!important;break-inside:avoid;}
+  .receipt-title{color:#888!important;}
+  .receipt-label{color:#555!important;}
+  .receipt-val{color:#111!important;}
+  .receipt-val.deduct{color:#b04040!important;}
+  .receipt-val.highlight{color:#7a6030!important;}
+  .receipt-val.pos{color:#2a7a52!important;}
+  .receipt-val.neg{color:#b04040!important;}
+  .receipt-row{border-bottom-color:#eee!important;}
+  .receipt-row.subtotal{border-top-color:#ccc!important;}
+  .receipt-row.total{border-top-color:#bbb!important;}
+  header{display:flex!important;position:static!important;background:#fff!important;border-bottom:1px solid #ddd!important;}
+  .htext h1{color:#111!important;}
+  .htext p{color:#888!important;}
+  .print-meta{display:block!important;}
+}
 </style>
 </head>
 <body>
@@ -258,6 +300,13 @@ footer a:hover{color:var(--gold);}
 
     <!-- ── RESULTS ── -->
     <div class="results-panel">
+
+      <div class="print-meta" style="display:none;font-family:'DM Mono',monospace;font-size:10px;color:#888;letter-spacing:0.08em;margin-bottom:12px;" id="print-meta"></div>
+
+      <button class="export-btn" onclick="exportPDF()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export as PDF
+      </button>
 
       <!-- Summary metrics -->
       <div class="summary-card">
@@ -449,6 +498,14 @@ function recalc() {
   </div>`;
 
   document.getElementById('receipt-body').innerHTML = html;
+}
+
+// ── Export PDF
+function exportPDF() {
+  var lbs = parseFloat(document.getElementById('lbs').value) || 0;
+  var now = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('print-meta').textContent = 'Generated ' + now + '  ·  ' + lbs.toLocaleString() + ' lbs fresh frozen  ·  kongconcentrates.com/calculator';
+  window.print();
 }
 
 // ── Wire inputs
