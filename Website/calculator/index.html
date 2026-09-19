@@ -236,7 +236,7 @@ footer a:hover{color:var(--gold);}
       <a href="/calculator/splits/" class="switcher-btn">Split Deal</a>
     </div>
     <h2>Toll Processing<br>Calculator</h2>
-    <p class="page-hdr-sub">Estimate yield, revenue, costs &amp; profit for solventless toll processing</p>
+    <p class="page-hdr-sub">Estimate yield, revenue, costs &amp; profit for toll processing</p>
   </div>
 
   <div class="calc-wrap">
@@ -262,7 +262,7 @@ footer a:hover{color:var(--gold);}
       <div class="input-group">
         <div class="group-label">Yield &amp; Sales</div>
         <div class="field">
-          <label>Average Rosin Return (%)</label>
+          <label>Average Return (%)</label>
           <input type="number" id="return_pct" value="3" min="0" max="100" step="0.1">
         </div>
         <div class="field">
@@ -494,7 +494,7 @@ function recalc() {
   // Revenue section
   html += row('Material Input', lbs.toLocaleString() + ' lbs');
   html += row('Conversion rate', '448 g/lb', '', true);
-  html += row('Rosin return', fmtPct(returnPct), '', true);
+  html += row('Average return', fmtPct(returnPct), '', true);
   html += row('Yield', fmtG(yieldG), 'highlight');
   html += row('Sell price', fmt$(sellPrice) + '/g', '', true);
   html += divider('Gross Revenue', fmt$(grossRev), 'highlight');
@@ -570,7 +570,7 @@ function exportPDF() {
     pipRow('Cost per lb', fmt$(v('cost_per_lb')) + '/lb')
   );
   html += pipGroup('Yield &amp; Sales',
-    pipRow('Rosin Return', v('return_pct').toFixed(1) + '%') +
+    pipRow('Average Return', v('return_pct').toFixed(1) + '%') +
     pipRow('Sell Price', fmt$(v('sell_price')) + '/g')
   );
   html += pipGroup('Costs',

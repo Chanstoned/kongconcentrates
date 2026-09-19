@@ -265,7 +265,7 @@ footer a:hover{color:var(--gold);}
       <a href="/calculator/splits/" class="switcher-btn active">Split Deal</a>
     </div>
     <h2>Split Deal<br>Calculator</h2>
-    <p class="page-hdr-sub">Cultivator supplies FF · Processor covers all costs · Revenue split on sale</p>
+    <p class="page-hdr-sub">Cultivator supplies material · Processor covers all costs · Revenue split on sale</p>
     <div class="role-wrap">
       <span class="role-label">I am the:</span>
       <div class="role-toggle">
@@ -284,11 +284,11 @@ footer a:hover{color:var(--gold);}
       <div class="input-group">
         <div class="group-label">Product Supplied</div>
         <div class="field">
-          <label>Fresh Frozen (lbs)</label>
+          <label>Material (lbs)</label>
           <input type="number" id="lbs" value="20" min="0" step="0.1">
         </div>
         <div class="field">
-          <label>Average Rosin Return (%)</label>
+          <label>Average Return (%)</label>
           <input type="number" id="return_pct" value="3" min="0" max="100" step="0.1">
         </div>
       </div>
@@ -405,7 +405,7 @@ footer a:hover{color:var(--gold);}
               <div class="sum-val pos" id="s-cult-payout">—</div>
             </div>
             <div class="sum-item">
-              <div class="sum-label">Per Lb of FF</div>
+              <div class="sum-label">Per Lb</div>
               <div class="sum-val gold" id="s-cult-plb">—</div>
             </div>
             <div class="sum-item">
@@ -598,13 +598,13 @@ function recalc() {
 
   // ── Receipt
   var r = '';
-  r += row('Fresh Frozen Supplied', fmtInt(lbs) + ' lbs');
+  r += row('Material Supplied', fmtInt(lbs) + ' lbs');
   r += row('Rosin Yield (448 g/lb × ' + retPct.toFixed(1) + '%)', fmtInt(yieldG) + ' g');
   r += row('Sell Price per Gram', fmt$(sellPrice));
   r += row('Gross Revenue', fmt$(grossRev), 'subtotal', 'gold');
 
   r += row('Cultivator Share (' + cultPct.toFixed(0) + '%)', fmt$(cultPayout), 'total', 'pos');
-  r += row('Cultivator Per Lb of FF', fmt$(cultPerLb), '', 'gold');
+  r += row('Cultivator Per Lb', fmt$(cultPerLb), '', 'gold');
   r += row('Cultivator Per Gram', fmt$(cultPerG) + '/g', '', 'gold');
 
   // Processor section
@@ -655,9 +655,9 @@ function exportPDF() {
   }
 
   var html = '<div class="pip-title">Inputs — ' + roleLabel + '</div>';
-  html += pipGroup('Product Supplied',
-    pipRow('Fresh Frozen', v('lbs') + ' lbs') +
-    pipRow('Rosin Return', v('return_pct').toFixed(1) + '%')
+  html += pipGroup('Material Supplied',
+    pipRow('Material', v('lbs') + ' lbs') +
+    pipRow('Average Return', v('return_pct').toFixed(1) + '%')
   );
   html += pipGroup('Sale &amp; Split',
     pipRow('Sell Price', fmt$(v('sell_price')) + '/g') +
