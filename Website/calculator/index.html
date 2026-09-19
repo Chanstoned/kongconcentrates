@@ -249,11 +249,11 @@ footer a:hover{color:var(--gold);}
       <div class="input-group">
         <div class="group-label">Input Material</div>
         <div class="field">
-          <label>Fresh Frozen (lbs)</label>
+          <label>Material (lbs)</label>
           <input type="number" id="lbs" value="100" min="0" step="0.1">
         </div>
         <div class="field">
-          <label>Cost per lb of FF ($)</label>
+          <label>Cost per lb ($)</label>
           <input type="number" id="cost_per_lb" value="100" min="0" step="1">
         </div>
       </div>
@@ -275,7 +275,11 @@ footer a:hover{color:var(--gold);}
       <div class="input-group">
         <div class="group-label">Costs</div>
         <div class="field">
-          <label>Packaging Cost per Gram ($)</label>
+          <label>Grams per Unit</label>
+          <input type="number" id="grams_per_unit" value="1" min="0.01" step="0.01">
+        </div>
+        <div class="field">
+          <label>Packaging Cost per Unit ($)</label>
           <input type="number" id="pkg_cost" value="1.5" min="0" step="0.01">
         </div>
         <div class="field">
@@ -354,7 +358,7 @@ footer a:hover{color:var(--gold);}
             <div class="summary-val neutral" id="s-cpg-post">—</div>
           </div>
           <div class="summary-item">
-            <div class="summary-label">Profit / lb FF</div>
+            <div class="summary-label">Profit / lb Material</div>
             <div class="summary-val neutral" id="s-plb">—</div>
           </div>
           <div class="summary-item">
@@ -441,6 +445,7 @@ function recalc() {
   var costPerLb    = v('cost_per_lb');
   var returnPct    = v('return_pct');
   var sellPrice    = v('sell_price');
+  var gramsPerUnit = v('grams_per_unit') || 1;
   var pkgCost      = v('pkg_cost');
   var laborCost    = v('labor_cost');
   var tollRate     = v('toll_rate');
@@ -454,9 +459,10 @@ function recalc() {
   // Core calcs
   var totalFF      = lbs * costPerLb;
   var yieldG       = lbs * 448 * (returnPct / 100);
+  var numUnits     = yieldG / gramsPerUnit;
   var grossRev     = yieldG * sellPrice;
-  var pkgTotal     = yieldG * pkgCost;
-  var laborTotal   = laborCost * yieldG;
+  var pkgTotal     = numUnits * pkgCost;
+  var laborTotal   = laborCost * numUnits;
   var testTotal    = testCost * numStrains;
   var tollTotal    = tollRate * lbs;
   var totalTaxRate = (taxCannabis + taxState + taxCounty + taxCity) / 100;
@@ -486,7 +492,7 @@ function recalc() {
   var html = '';
 
   // Revenue section
-  html += row('Fresh Frozen Input', lbs.toLocaleString() + ' lbs');
+  html += row('Material Input', lbs.toLocaleString() + ' lbs');
   html += row('Conversion rate', '448 g/lb', '', true);
   html += row('Rosin return', fmtPct(returnPct), '', true);
   html += row('Yield', fmtG(yieldG), 'highlight');
@@ -494,11 +500,11 @@ function recalc() {
   html += divider('Gross Revenue', fmt$(grossRev), 'highlight');
 
   // Costs section
-  html += row('Fresh Frozen cost', lbs.toLocaleString() + ' lbs × ' + fmt$(costPerLb) + '/lb');
+  html += row('Material cost', lbs.toLocaleString() + ' lbs × ' + fmt$(costPerLb) + '/lb');
   html += row('', fmt$(totalFF), 'deduct', true);
-  html += row('Packaging', fmtG(yieldG) + ' × ' + fmt$(pkgCost) + '/g');
+  html += row('Packaging', Math.round(numUnits) + ' units × ' + fmt$(pkgCost) + '/unit');
   html += row('', fmt$(pkgTotal), 'deduct', true);
-  html += row('Packaging labor', fmtG(yieldG) + ' × ' + fmt$(laborCost) + '/unit');
+  html += row('Packaging labor', Math.round(numUnits) + ' units × ' + fmt$(laborCost) + '/unit');
   html += row('', fmt$(laborTotal), 'deduct', true);
   html += row('Testing', numStrains + ' strain' + (numStrains !== 1 ? 's' : '') + ' × ' + fmt$(testCost));
   html += row('', fmt$(testTotal), 'deduct', true);
@@ -534,7 +540,7 @@ function recalc() {
     <span class="receipt-val">${fmt$(cpg)}/g</span>
   </div>`;
   html += `<div class="receipt-row">
-    <span class="receipt-label">Profit per lb FF</span>
+    <span class="receipt-label">Profit per lb Material</span>
     <span class="receipt-val ${pol(profitPerLb)===1?'pos':pol(profitPerLb)===-1?'neg':''}">${fmt$(profitPerLb)}</span>
   </div>`;
   html += '</div>';
@@ -559,8 +565,8 @@ function exportPDF() {
   }
   var taxTotal = v('tax_cannabis') + v('tax_state') + v('tax_county') + v('tax_city');
   var html = '<div class="pip-title">Inputs</div>';
-  html += pipGroup('Input Material',
-    pipRow('Fresh Frozen', v('lbs').toLocaleString() + ' lbs') +
+  html += pipGroup('Material',
+    pipRow('Material', v('lbs').toLocaleString() + ' lbs') +
     pipRow('Cost per lb', fmt$(v('cost_per_lb')) + '/lb')
   );
   html += pipGroup('Yield &amp; Sales',
@@ -568,7 +574,7 @@ function exportPDF() {
     pipRow('Sell Price', fmt$(v('sell_price')) + '/g')
   );
   html += pipGroup('Costs',
-    pipRow('Packaging', fmt$(v('pkg_cost')) + '/g') +
+    pipRow('Packaging', fmt$(v('pkg_cost')) + '/unit') +
     pipRow('Labor', fmt$(v('labor_cost')) + '/unit') +
     pipRow('Toll Rate', fmt$(v('toll_rate')) + '/lb') +
     pipRow('Testing', fmt$(v('test_cost')) + '/strain') +
